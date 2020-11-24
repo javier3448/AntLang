@@ -1,0 +1,3 @@
+@TODO:
+write a macro that asserts something and prints a message when the assertion fails.
+this would be a good excercise to learn a more about c macros
