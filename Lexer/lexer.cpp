@@ -2,6 +2,10 @@
 
 #include "mystring.h"
 
+//@TODO: hacer un lexBuffer.cloneIntoMyString
+
+//@Improvement?: wrap all the global state into 1 struct
+
 //@Improvement?: split this file into multiple files, particularly the class
 //defs
 
@@ -122,38 +126,32 @@ Token Lexer::getNextToken()
 			case First:
 			{
                 //special case if end of file
-                if(lexPointer == hllSource.length){
+                if(lexPointer == hllSource.length)
                     return Token{TokenKind::Eof};
-                }
-                char currChar = hllSource[lexPointer];
+
+                char currChar = peek();
                 if(isDigit(currChar))
                 {
-                    lexBuffer.append(currChar);
+                    advanceAndAppend();
                     currState = State::Numing;
-                    lexPointer++;
                 }
-                else if(isLetter(currChar)||
-                   currChar == '_')
+                else if(isLetter(currChar) || currChar == '_')
                 {
-                    lexBuffer.append(currChar);
-                    lexPointer++;
+                    advanceAndAppend();
                     currState = State::Identing1;
                 }
-                else if(currChar == '+'){
-                    lexPointer++;
-                    return Token(TokenKind::Plus);
-                }
-                else if(currChar == '-'){
-                    lexPointer++;
-                    return Token(TokenKind::Minus);
+                //cases where char == TokenKind
+                else if(currChar == '+' || currChar == '-'){
+                    advanceAndSkip();
+                    return Token((TokenKind)currChar);
                 }
                 //All the ignored chars
                 else if(isWhiteSpace(currChar)){
-                    lexPointer++;
+                    advanceAndSkip();
                 }
                 else{
-                    lexPointer++;
-                    return Token(TokenKind::Error, MyString(1, &hllSource.buffer[lexPointer - 1]));
+                    advanceAndAppend();
+                    return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
                 }
 
 			}break;
@@ -165,27 +163,19 @@ Token Lexer::getNextToken()
                     //@Volatile: finish Identing1
                     //By this point we know the first char is either a letter or a
                     //'_'. A '_' alone is not a valid identifier so we must return
-                    if(lexBuffer.length == 1 && lexBuffer.buffer[0] == '_'){
-                        return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
-                    }
-                    return Token(TokenKind::Identifier, MyString(lexBuffer.length, lexBuffer.buffer));
+                    return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
                 }
-                char currChar = hllSource[lexPointer];
+                char currChar = peek();
 
-                if(isLetter(currChar)){
-                    lexBuffer.append(currChar);
-                    lexPointer++;
+                if(currChar == '_'){
+                    advanceAndAppend();
+                }
+                else if(isLetter(currChar) | isDigit(currChar)){
+                    advanceAndAppend();
                     currState = State::Identing2;
                 }
                 else{
-                    //@Volatile: finish Identing1
-                    //By this point we know the first char is either a letter or a
-                    //'_'. A '_' alone is not a valid identifier so we must return
-                    if(lexBuffer.length == 1 && lexBuffer.buffer[0] == '_'){
-                        return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
-                    }
-                    return Token(TokenKind::Identifier, MyString(lexBuffer.length, lexBuffer.buffer));
-
+                    return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
                 }
             }break;
             case Identing2:
@@ -194,11 +184,10 @@ Token Lexer::getNextToken()
                 if(lexPointer == hllSource.length){
                     return Token(TokenKind::Identifier, MyString(lexBuffer.length, lexBuffer.buffer));
                 }
-                char currChar = hllSource[lexPointer];
+                char currChar = peek();
 
                 if(isLetter(currChar) || isDigit(currChar) || currChar == '_'){
-                    lexBuffer.append(currChar);
-                    lexPointer++;
+                    advanceAndAppend();
                 }
                 else{
                     return Token(TokenKind::Identifier, MyString(lexBuffer.length, lexBuffer.buffer));
@@ -221,8 +210,7 @@ Token Lexer::getNextToken()
                 char currChar = hllSource[lexPointer];
                 //special case if end of file
                 if(isDigit(currChar)){
-                    lexBuffer.append(currChar);
-                    lexPointer++;
+                    advanceAndAppend();
                 }
                 //@TODO: support for float literals
                 else{
@@ -242,3 +230,293 @@ Token Lexer::getNextToken()
 //@NOTE: states are not final or not, they might need to check some other thing
 //in mem that tells them is they are a valid final or if they should return
 //an error token
+
+//@Improvement?: make it so we peek advance 'n' characters
+//works for negative as well but only asserts we dont peek out of bounds
+//in debug build
+inline char Lexer::peek(s64 ammount)
+{
+    assert((lexPointer + ammount <= hllSource.length ||
+            lexPointer + ammount < 0)
+           &&
+           "lexPointer is out of bounds!");
+
+    return hllSource[lexPointer + ammount];
+}
+
+//@Improvement?: make it so we can advance 'n' characters
+//appends to lexBuffer whatever is in hllSource[lexPointer] and advances
+//the pointer by 1
+inline void Lexer::advanceAndAppend()
+{
+    lexBuffer.append(hllSource[lexPointer]);
+    lexPointer += 1;
+}
+
+//Mostly used when we peek a character we want to skip
+inline void Lexer::advanceAndSkip()
+{
+    lexPointer += 1;
+}
+
+//BAD?: If every state returns a token we will have to copy that Token all over
+//the stack call untill we reaad funcGetNextToken
+
+//For this version we will be very disciplined: 1 function = to 1 state always
+//every state is a function, a state that is not final returns Error or other
+//state, a state that is final doesnt, a state cant return both
+
+Token Lexer::funcGetNextToken()
+{
+    assert((lexPointer <= hllSource.length) &&
+          "lexPointer is out of bounds!");
+
+    lexBuffer.empty();
+
+    return funcFirst();
+}
+
+Token Lexer::funcFirst()
+{
+    //special case if end of file
+    if(lexPointer == hllSource.length)
+        return Token{TokenKind::Eof};
+
+    char currChar = peek();
+    if(isDigit(currChar))
+    {
+        advanceAndAppend();
+        return funcNuming();
+    }
+    else if(currChar == '_'){
+        advanceAndAppend();
+        return funcIdenting1();
+    }
+    else if(isLetter(currChar))
+    {
+        advanceAndAppend();
+        return funcIdenting2();
+    }
+    //cases where char == TokenKind
+    else if(currChar == '+' || currChar == '-'){
+        advanceAndSkip();
+        return Token((TokenKind)currChar);
+    }
+    //All the ignored chars
+    else if(isWhiteSpace(currChar)){
+        advanceAndSkip();
+        return funcFirst();
+    }
+    else{
+        advanceAndAppend();
+        return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
+    }
+}
+
+Token Lexer::funcNuming()
+{
+    //@TODO: atrapar si la cadena representa un numero demasiado
+    //grande para s64
+
+    //special case if end of file
+    if(lexPointer == hllSource.length){
+        //@TODO: dont convert to stdString here! find a way to parse
+        //to integer only using your MyString
+        //@Bodge:
+        auto myString = MyString(lexBuffer.length, lexBuffer.buffer);
+        auto stdString = myString.toStdString();
+        return Token(TokenKind::Integer, std::stoll(stdString.c_str(), nullptr, 10));
+    }
+    char currChar = hllSource[lexPointer];
+    //special case if end of file
+    if(isDigit(currChar)){
+        advanceAndAppend();
+        return funcNuming();
+    }
+    //@TODO: support for float literals
+    else{
+        //@TODO: dont convert to stdString here! find a way to parse
+        //to integer only using your MyString
+        //@Bodge:
+        auto myString = MyString(lexBuffer.length, lexBuffer.buffer);
+        auto stdString = myString.toStdString();
+        return Token(TokenKind::Integer, std::stoll(stdString.c_str(), nullptr, 10));
+    }
+}
+
+Token Lexer::funcIdenting1()
+{
+    //special case if end of file
+    if(lexPointer == hllSource.length){
+        //@Volatile: finish Identing1
+        //By this point we know the first char is either a letter or a
+        //'_'. A '_' alone is not a valid identifier so we must return
+        return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
+    }
+    char currChar = peek();
+
+    if(currChar == '_'){
+        advanceAndAppend();
+        return funcIdenting1();
+    }
+    else if(isLetter(currChar) | isDigit(currChar)){
+        advanceAndAppend();
+        return funcIdenting2();
+    }
+    else{
+        return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
+    }
+}
+
+Token Lexer::funcIdenting2()
+{//special case if end of file
+    if(lexPointer == hllSource.length){
+        return Token(TokenKind::Identifier, MyString(lexBuffer.length, lexBuffer.buffer));
+    }
+    char currChar = peek();
+
+    if(isLetter(currChar) || isDigit(currChar) || currChar == '_'){
+        advanceAndAppend();
+        return funcIdenting2();
+    }
+    else{
+        return Token(TokenKind::Identifier, MyString(lexBuffer.length, lexBuffer.buffer));
+    }
+}
+
+Token Lexer::gotoGetNextToken()
+{
+    assert((lexPointer <= hllSource.length) &&
+           "lexPointer is out of bounds!");
+
+    lexBuffer.empty();
+    goto First;
+
+    //'State machine' for the lexing because its the easiest to understand
+    //in my opinion.
+    //1 label per state.
+    //@TODO: make a drawing of the state machine and put it here in ASCII or
+    //something
+    //@NOTE:
+    //asserts between states because we can only leave a state by explicitely
+    //going to another one or returning a function
+
+    First:
+    {
+        //special case if end of file
+        if(lexPointer == hllSource.length)
+            return Token{TokenKind::Eof};
+
+        char currChar = peek();
+        if(isDigit(currChar))
+        {
+            advanceAndAppend();
+            goto Numing;
+        }
+        else if(isLetter(currChar))
+        {
+            advanceAndAppend();
+            goto Identing2;
+        }
+        else if(currChar == '_')
+        {
+            advanceAndAppend();
+            goto Identing1;
+        }
+        //cases where char == TokenKind
+        else if(currChar == '+' || currChar == '-'){
+            advanceAndSkip();
+            return Token((TokenKind)currChar);
+        }
+        //All the ignored chars
+        else if(isWhiteSpace(currChar)){
+            advanceAndSkip();
+            goto First;
+        }
+        else{
+            advanceAndAppend();
+            return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
+        }
+
+    }
+    assert(false && "We can only leave a LexState by explecitely going "
+                    "to another state or by returning a token");
+
+    Identing1:
+    {
+        //special case if end of file
+        if(lexPointer == hllSource.length){
+            //@Volatile: finish Identing1
+            //By this point we know the first char is either a letter or a
+            //'_'. A '_' alone is not a valid identifier so we must return
+            return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
+        }
+        char currChar = peek();
+
+        if(currChar == '_'){
+            advanceAndAppend();
+            goto Identing2;
+        }
+        else if(isLetter(currChar) | isDigit(currChar)){
+            advanceAndAppend();
+            goto Identing2;
+        }
+        else{
+            return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
+        }
+    }
+
+    assert(false && "We can only leave a LexState by explecitely going "
+                    "to another state or by returning a token");
+
+    Identing2:
+    {
+        //special case if end of file
+        if(lexPointer == hllSource.length){
+            return Token(TokenKind::Identifier, MyString(lexBuffer.length, lexBuffer.buffer));
+        }
+        char currChar = peek();
+
+        if(isLetter(currChar) || isDigit(currChar) || currChar == '_'){
+            advanceAndAppend();
+            goto Identing2;
+        }
+        else{
+            return Token(TokenKind::Identifier, MyString(lexBuffer.length, lexBuffer.buffer));
+        }
+    }
+
+    assert(false && "We can only leave a LexState by explecitely going "
+                    "to another state or by returning a token");
+
+    Numing:
+    {
+        //@TODO: atrapar si la cadena representa un numero demasiado
+        //grande para s64
+
+        //special case if end of file
+        if(lexPointer == hllSource.length){
+            //@TODO: dont convert to stdString here! find a way to parse
+            //to integer only using your MyString
+            //@Bodge:
+            auto myString = MyString(lexBuffer.length, lexBuffer.buffer);
+            auto stdString = myString.toStdString();
+            return Token(TokenKind::Integer, std::stoll(stdString.c_str(), nullptr, 10));
+        }
+        char currChar = hllSource[lexPointer];
+        //special case if end of file
+        if(isDigit(currChar)){
+            advanceAndAppend();
+            goto Numing;
+        }
+        //@TODO: support for float literals
+        else{
+            //@TODO: dont convert to stdString here! find a way to parse
+            //to integer only using your MyString
+            //@Bodge:
+            auto myString = MyString(lexBuffer.length, lexBuffer.buffer);
+            auto stdString = myString.toStdString();
+            return Token(TokenKind::Integer, std::stoll(stdString.c_str(), nullptr, 10));
+        }
+    }
+}

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "lexer.h"
+#include "Lexer/lexer.h"
 
 //@Temp debug
 #include "mystring.h"
@@ -67,8 +67,10 @@ int main()
                 cout << "Eof: EOF"  << endl;
                 goto break_while;
             }break;
+            default:
+                assert(false);
         }
-        token = Lexer::getNextToken();
+        token = Lexer::gotoGetNextToken();
     }
     break_while:
 

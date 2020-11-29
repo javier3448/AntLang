@@ -5,10 +5,6 @@
 #include "Lexer/token.h"
 #include "mystring.h"
 
-//TODO: put all this into different files and make a directory for all lexer
-//related stuff
-//BUG: Token definition inside header!!!
-
 namespace Lexer
 {
     //all the 'private' stuff
@@ -17,6 +13,7 @@ namespace Lexer
     //like for this header to have all the declarations because its easier to
     //read that imo. oh well :/
     extern MyString hllSource;
+    //points to the first unLexed character in hllSource
     extern s64 lexPointer;
 
     //returns const char* to string literal containing the error message, returns
@@ -28,6 +25,21 @@ namespace Lexer
     //to go back in the call tree to make a better error
     std::optional<const char*> init(const char* path);
     Token getNextToken();
+
+    Token funcGetNextToken();
+    //1 function per state
+    Token funcFirst();
+    Token funcIdenting1();
+    Token funcIdenting2();
+    Token funcNuming();
+
+
+
+    Token gotoGetNextToken();
+
+    char peek(s64 ammount = 0);
+    void advanceAndAppend();
+    void advanceAndSkip();
 };
 
 #endif // LEXER_H
