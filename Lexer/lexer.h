@@ -24,18 +24,8 @@ namespace Lexer
     //a good error message as soon as we know there is an error, we might have
     //to go back in the call tree to make a better error
     std::optional<const char*> init(const char* path);
+
     Token getNextToken();
-
-    Token funcGetNextToken();
-    //1 function per state
-    Token funcFirst();
-    Token funcIdenting1();
-    Token funcIdenting2();
-    Token funcNuming();
-
-
-
-    Token gotoGetNextToken();
 
     char peek(s64 ammount = 0);
     void advanceAndAppend();

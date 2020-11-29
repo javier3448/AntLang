@@ -70,7 +70,7 @@ int main()
             default:
                 assert(false);
         }
-        token = Lexer::gotoGetNextToken();
+        token = Lexer::getNextToken();
     }
     break_while:
 
