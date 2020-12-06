@@ -1,0 +1,4 @@
+PLEASE: come up with a better strategy to do testing.
+Have like a bunch of tests that run automatically, I think they are called 
+regression tests or something.
+I would prefer it if they didnt depend on Qt Creator at all, pls.

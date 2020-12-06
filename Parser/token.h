@@ -14,9 +14,22 @@ enum TokenKind : char{
     Real = 2,
     Error = 4,
     Eof = 5,
+
+    //Operators:
     Plus = '+',
     Minus = '-',
+    Division = '/',
+    Multiplication = '*',
+
+
+    LeftParen = '(',
+    RightParen = ')',
 };
+
+//@C++: should be inline but I dont know how to inline accross different
+//compilation units or whatever
+bool isOperatorKind(TokenKind kind);
+
 
 //@Improvement?: this is basically a tagged union, people say that that is a
 //std::variant in c++, should we use that here???
@@ -55,6 +68,11 @@ struct Token{
        //a float token are not converted until later so they will contain a
        //string
    };
+
+   //doesnt do anything, is useful becuase the TokenCache needs to
+   //initialize its tokenBuffer because this is c++ (I think)
+   //so we need a default constructor
+   Token();
 
    //A bunch of constructors because c++ doesnt let us initialize things like in
    //C99, oh well :/

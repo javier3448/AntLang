@@ -2,7 +2,8 @@
 #define LEXER_H
 
 #include "pch.h"
-#include "Lexer/token.h"
+#include "Parser/token.h"
+#include "Parser/tokencache.h"
 #include "mystring.h"
 
 namespace Lexer
@@ -16,6 +17,11 @@ namespace Lexer
     //points to the first unLexed character in hllSource
     extern s64 lexPointer;
 
+    //A constant array is perfectly fine for know, I doubt we will ever cache more
+    //than 16 tokens, but if we do we just change this to std::vector or our own
+    //dynamic array
+    extern TokenCache tokenCache;
+
     //returns const char* to string literal containing the error message, returns
     //nullptr if no error occured
     //@TODO: make a better way of error handling, honestly we need to put some
@@ -25,9 +31,21 @@ namespace Lexer
     //to go back in the call tree to make a better error
     std::optional<const char*> init(const char* path);
 
+
+    //Unlike peekChar this actually caches the tokens so we can get them right away
+    //later
+    //Returns a pointer to the buffer inside the tokenCache
+    //unlike peekChar this ONLY works on possitive integers and 0
+    Token* peekToken(s64 amount = 0);
+
+    //'Transfers ownership' i.e. it pops it out of the cache if it is in cache
     Token getNextToken();
 
-    char peek(s64 ammount = 0);
+    //****Private stuff****
+
+    //lexes a token from lexPointer onward
+    Token lexToken();
+    char peekChar(s64 amount = 0);
     void advanceAndAppend();
     void advanceAndSkip();
 };

@@ -1,9 +1,12 @@
 #include "pch.h"
 
-#include "Lexer/lexer.h"
-
 //@Temp debug
+#include <unistd.h>
+
 #include "mystring.h"
+#include "Parser/lexer.h"
+#include "Parser/parser.h"
+#include "Parser/grapher.h"
 
 //@Decision: we will *try* to initialize to 0 by default and have that mean
 //something useful, because I heard that initializing to 0 is quite free
@@ -15,7 +18,6 @@
 //kinds of types, I dont like having to write the string literal for printf
 //and we will be printing primiraly for debugging purposes
 //constructor/destructor
-
 //@Decision: we will not use std::string for anything other than debugging
 //because I want to eventually be able to be smarter about the way I allocate
 //strings
@@ -24,10 +26,15 @@
 //because I want to eventually be able to be smarter about the way I allocate
 //strings
 
-int main()
+//@TODO: poner esto en un mejor lugar. Me da cosa borrarlo porque talvez nos
+//sirva pero por ahora definitivamente no lo vamos a usar
+int lexerTester()
 {
+
+    assert(false);
+
     restart:
-    auto result =  Lexer::init("/home/javier/Downloads/test/test.txt");
+    auto result = Lexer::init("../AntLang/TestFiles/test.txt");
     if(result.has_value()){
         cout << result.value() << endl;
         exit(1);
@@ -35,8 +42,19 @@ int main()
 
     cout << "=======LEXING=======" << endl;
 
+    Lexer::peekToken(15);
+    //@REMEMBER: right now we are leaking the myString of every single token
+    //this whole contraption is just to qd test the lexer
     auto token = Lexer::getNextToken();
+
+    //@debug
+    s64 counter = 0;
     while(true){
+        counter++;
+        if(counter == 32){
+            Lexer::peekToken(15);
+            counter = 0;
+        }
         switch (token.kind) {
             case Identifier:
             {
@@ -67,6 +85,22 @@ int main()
                 cout << "Eof: EOF"  << endl;
                 goto break_while;
             }break;
+            case LeftParen:
+            {
+                cout << "("  << endl;
+            }break;
+            case RightParen:
+            {
+                cout << ")"  << endl;
+            }break;
+            case Division:
+            {
+                cout << "/"  << endl;
+            }break;
+            case Multiplication:
+            {
+                cout << "*"  << endl;
+            }break;
             default:
                 assert(false);
         }
@@ -77,6 +111,21 @@ int main()
     //@bodge as fuck just for qd testing:
     std::cin.get();
     goto restart;
+
+    return 0;
+}
+
+int main()
+{
+    auto result = Lexer::init("../AntLang/TestFiles/test.txt");
+    if(result.has_value()){
+        cout << result.value() << endl;
+        exit(1);
+    }
+
+    auto expr = parser::parseExpression();
+
+    cout << "digraph G {\n" <<  Grapher::graphExpression(expr).code  << "\n}" << "\n";
 
     return 0;
 }

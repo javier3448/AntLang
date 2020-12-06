@@ -4,6 +4,15 @@
 
 //@TODO: hacer un lexBuffer.cloneIntoMyString
 
+//@TODO soon: add line and column info to each token. Later we will even have
+//to add file info as well
+
+//@Idea?
+//@Improvement?: the whole thing might be easier to understand if peek
+//would return a special value when we run out of file.
+//having an if that checks for that first and Then peekin for next char is
+//kinda confusing
+
 //@Improvement?: wrap all the global state into 1 struct
 
 //@Improvement?: split this file into multiple files, particularly the class
@@ -16,7 +25,7 @@
 //just a string that grows in a way we can optimize for our lexing.
 //@Tunning: In the initial size and the way it grows when its needed
 struct LexBuffer{
-    static constexpr s64 INITIAL_SIZE = 255;
+    static constexpr s64 INITIAL_SIZE = 256;
 
     s64 size;
     s64 length;
@@ -117,7 +126,7 @@ auto lexBuffer = LexBuffer();
 //@Improvement?: make it so we peek advance 'n' characters
 //works for negative as well but only asserts we dont peek out of bounds
 //in debug build
-inline char Lexer::peek(s64 ammount)
+inline char Lexer::peekChar(s64 ammount)
 {
     assert((lexPointer + ammount <= hllSource.length ||
             lexPointer + ammount < 0)
@@ -143,10 +152,19 @@ inline void Lexer::advanceAndSkip()
 }
 
 //@TO LEARN: how does UTF8 works for real, and does it affect us here??
-Token Lexer::getNextToken()
+Token Lexer::lexToken()
 {
+    //@BUG: we fail assert if the last thing in the source file is an ignored char
+    //like a comment or a whitespace
     assert((lexPointer <= hllSource.length) &&
            "lexPointer is out of bounds!");
+
+    //@debug
+//    static s64 count = 1;
+//    cout << "*********************************************\n";
+//    cout << "this is the: " << count << " time we run lexToken() \n";
+//    cout << "*********************************************\n";
+//    count++;
 
     lexBuffer.empty();
     goto First;
@@ -164,9 +182,15 @@ Token Lexer::getNextToken()
     {
         //special case if end of file
         if(lexPointer == hllSource.length)
+        {
+            //we still need to advance to leave the lexPointer in an 'out of
+            //bounds' state so next time we call lexToken the assertion can
+            //throw an error
+            advanceAndSkip();
             return Token{TokenKind::Eof};
+        }
 
-        char currChar = peek();
+        char currChar = peekChar();
         if(isDigit(currChar))
         {
             advanceAndAppend();
@@ -183,9 +207,13 @@ Token Lexer::getNextToken()
             goto Identing1;
         }
         //cases where char == TokenKind
-        else if(currChar == '+' || currChar == '-'){
+        else if(currChar == '+' || currChar == '-' || currChar == '(' || currChar == ')' || currChar == '*'){
             advanceAndSkip();
             return Token((TokenKind)currChar);
+        }
+        else if(currChar == '/'){
+            advanceAndSkip();
+            goto Slash;
         }
         //All the ignored chars
         else if(isWhiteSpace(currChar)){
@@ -196,10 +224,48 @@ Token Lexer::getNextToken()
             advanceAndAppend();
             return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
         }
+    }assert(false && "We can only leave a LexState by 'goto State;' or returning");
 
-    }
-    assert(false && "We can only leave a LexState by explecitely going "
-                    "to another state or by returning a token");
+    //needs its own state because we might have a '/' that is being used to
+    //make a line comment
+    Slash:
+    {
+        //special case if end of file
+        if(lexPointer == hllSource.length){
+            return Token((TokenKind)'/');
+        }
+        char currChar = peekChar();
+        if(currChar == '/'){
+            advanceAndSkip();
+            goto LineComment;
+        }
+        else{
+            return Token((TokenKind)'/');
+        }
+    }assert(false && "We can only leave a LexState by 'goto State;' or returning");
+
+
+    //Its like a special case for ignore. 'an ignore char that only stops
+    //ignoring untill it finds end of line or EOF
+    LineComment:
+    {
+        //special case if end of file
+        if(lexPointer == hllSource.length){
+            //we stop ignoring and let 'First state' figure out what is the
+            //real nextToken
+            goto First;
+        }
+        char currChar = peekChar();
+
+        if(currChar == '\n' || currChar == '\r'){
+            advanceAndSkip();
+            goto First;
+        }
+        else{
+            advanceAndSkip();
+            goto LineComment;
+        }
+    }assert(false && "We can only leave a LexState by 'goto State;' or returning");
 
     Identing1:
     {
@@ -210,7 +276,7 @@ Token Lexer::getNextToken()
             //'_'. A '_' alone is not a valid identifier so we must return
             return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
         }
-        char currChar = peek();
+        char currChar = peekChar();
 
         if(currChar == '_'){
             advanceAndAppend();
@@ -223,10 +289,7 @@ Token Lexer::getNextToken()
         else{
             return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
         }
-    }
-
-    assert(false && "We can only leave a LexState by explecitely going "
-                    "to another state or by returning a token");
+    }assert(false && "We can only leave a LexState by 'goto State;' or returning");
 
     Identing2:
     {
@@ -234,7 +297,7 @@ Token Lexer::getNextToken()
         if(lexPointer == hllSource.length){
             return Token(TokenKind::Identifier, MyString(lexBuffer.length, lexBuffer.buffer));
         }
-        char currChar = peek();
+        char currChar = peekChar();
 
         if(isLetter(currChar) || isDigit(currChar) || currChar == '_'){
             advanceAndAppend();
@@ -243,10 +306,7 @@ Token Lexer::getNextToken()
         else{
             return Token(TokenKind::Identifier, MyString(lexBuffer.length, lexBuffer.buffer));
         }
-    }
-
-    assert(false && "We can only leave a LexState by explecitely going "
-                    "to another state or by returning a token");
+    }assert(false && "We can only leave a LexState by 'goto State;' or returning");
 
     Numing:
     {
@@ -277,5 +337,32 @@ Token Lexer::getNextToken()
             auto stdString = myString.toStdString();
             return Token(TokenKind::Integer, std::stoll(stdString.c_str(), nullptr, 10));
         }
+    }assert(false && "We can only leave a LexState by 'goto State;' or returning");
+}
+
+TokenCache Lexer::tokenCache{};
+
+Token Lexer::getNextToken()
+{
+    if(tokenCache.occupiedSpaces != 0){
+        return tokenCache.dequeue();
     }
+    else{
+        //if tokenCache is empty we dont need to interact with the cache at all
+        return lexToken();
+    }
+}
+
+//@PERF?:
+//[?] should this return by value instead. Whats generally better for perf
+//idfk :((((.
+Token* Lexer::peekToken(s64 amount)
+{
+    //we cache as many tokens as are required to peek that amount
+    for (s32 i = tokenCache.occupiedSpaces; i <= amount; i++)
+    {
+        tokenCache.enqueue(lexToken());
+    }
+
+    return &tokenCache.tokenBuffer[tokenCache.targetOffset + amount];
 }
