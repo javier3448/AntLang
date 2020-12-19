@@ -1,6 +1,9 @@
+//10 * 20 + 30
+//20 / (5 + 2 * 3)
+//I dont see a bug but the tree is a bit different than the one we 
+//generated for compi2. I am not 100% sure we are bug free :s
+
 5 + (10 * (20 / (5 + 2 * 3)) - 8) * 32 * 32
-//TODO: find a better way to make a correct tree
-//other than doing it by hand
 //TODO test with a ton more stuff after parentesis followed by operator
 //7 - (5 + 10 * (20 / 5 - 2 + 4 * (5 + 2 * 3)) - 8 * 3 * 2) + 50 * (6 * 2)//190
 

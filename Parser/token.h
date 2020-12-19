@@ -15,7 +15,7 @@ enum TokenKind : char{
     Error = 4,
     Eof = 5,
 
-    //Operators:
+    //Binary Operators:
     Plus = '+',
     Minus = '-',
     Division = '/',
@@ -28,8 +28,10 @@ enum TokenKind : char{
 
 //@C++: should be inline but I dont know how to inline accross different
 //compilation units or whatever
+//[!]: warning: this is used in assertions as well
 bool isOperatorKind(TokenKind kind);
 
+bool isBiOperatorKind(TokenKind kind);
 
 //@Improvement?: this is basically a tagged union, people say that that is a
 //std::variant in c++, should we use that here???

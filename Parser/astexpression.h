@@ -5,44 +5,37 @@
 
 #include "token.h"
 
+struct AstExpression;
+struct BinaryExpressionForm;
+
 enum AstExpressionKind : char{
     IntegerLiteral = 0,
     BinaryExpression = 1,
 };
 
-//@Improvement: :((( I would prefer if we could define the structures outside the union
-//but cpp complains that the type definition is not complete and AstExpression type and
-//its form types have a 'circular dependency'
+struct BinaryExpressionForm
+{
+    AstExpression* left;
+    Token _operator;
+    AstExpression* right;
+};
+
 struct AstExpression
 {
     AstExpressionKind kind;
     union{
         Token intLiteral;
-        struct
-        {
-            AstExpression* left;
-            Token _operator;
-            AstExpression* right;
-        }binaryForm;
+        BinaryExpressionForm binaryForm;
     };
+    //@Improvement: Find a better solution to communicate that the expression is
+    //parenthesized
+    //Bodgy flag that we will only use when rearrenging the tree because precedences
+    bool hasParenthesis;
+
+    s16 getPrecedence();
 
     void makeIntLiteralExpression(Token intLiteral);
     void makeBinaryExpression(AstExpression* left, Token biOperator, AstExpression* right);
 };
-
-
-
-//struct AstBinaryExpressionForm
-//{
-//    AstExpression* left;
-//    Token _operator;
-//    AstExpression* right;
-//};
-
-//struct AstExpressionIntegerLiteralForm
-//{
-//    Token intLiteral;
-//};
-
 
 #endif // ASTEXPRESSION_H

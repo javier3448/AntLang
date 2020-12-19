@@ -8,6 +8,7 @@ SOURCES += \
         Parser/grapher.cpp \
         Parser/lexer.cpp \
         Parser/parser.cpp \
+        Parser/shuntingyard.cpp \
         Parser/token.cpp \
         Parser/tokencache.cpp \
         main.cpp \
@@ -18,12 +19,15 @@ HEADERS += \
     Parser/grapher.h \
     Parser/lexer.h \
     Parser/parser.h \
+    Parser/shuntingyard.h \
     Parser/token.h \
     Parser/tokencache.h \
     mystring.h \
     pch.h
 
 DISTFILES += \
+    TestFiles/Graphviz/test.dot \
+    TestFiles/Graphviz/test.png \
     TestFiles/test.txt \
     TestFiles/todo \
     todo.txt

@@ -48,6 +48,10 @@ namespace Lexer
     char peekChar(s64 amount = 0);
     void advanceAndAppend();
     void advanceAndSkip();
+
+
+    //TODO: We need a way to delete the input string when we are done lexing.
+    //It would be unfair to leak all that mem.
 };
 
 #endif // LEXER_H

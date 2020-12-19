@@ -123,9 +123,31 @@ int main()
         exit(1);
     }
 
-    auto expr = parser::parseExpression();
+    auto expr = Parser::parseExpression();
 
-    cout << "digraph G {\n" <<  Grapher::graphExpression(expr).code  << "\n}" << "\n";
+    auto graphvizCode = "digraph G {\n" +  Grapher::graphExpression(expr).code  + "\n}\n";
+
+
+    //@DEBUG: just to generate save and compile a .dot file
+    std::FILE* f = std::fopen("../AntLang/TestFiles/Graphviz/test.dot", "wb");
+
+    if(f == nullptr){
+        cout << "Couldnt generate the test graphviz image: n";
+        cout << strerror(errno) << endl;
+        exit(1);
+    }
+    //@TODO: report error is something goes wrong
+    fprintf(f, "%s", graphvizCode.c_str());
+    fclose(f);
+
+    auto compileDot = "dot -Tpng "
+                      "../AntLang/TestFiles/Graphviz/test.dot "
+                      "-o "
+                      "../AntLang/TestFiles/Graphviz/test.png";
+    auto displayImage = "nohup display ../AntLang/TestFiles/Graphviz/test.png";
+
+    system(compileDot);
+    system(displayImage);
 
     return 0;
 }

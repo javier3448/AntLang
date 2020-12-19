@@ -5,9 +5,16 @@
 
 #include "astexpression.h"
 
-namespace parser
+namespace Parser
 {
+
+    //Asserts that we pass a token kind that is an operator
+    int Associativity(TokenKind kind);
+
     AstExpression* parseExpression();
+    AstExpression* parseMostPrecedentExpression();
+
+    AstExpression* applyPrecedenceRules(AstExpression* expression);
 };
 
 #endif // PARSER_H

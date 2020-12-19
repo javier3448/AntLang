@@ -1,14 +1,20 @@
 #include "token.h"
 
-//TokenKind stuff.
-//@Improvement?: should we put all the tokenKind stuff into its own namespace?
-//maybe its own file even??
 bool isOperatorKind(TokenKind kind)
 {
     return kind == TokenKind::Plus ||
-    kind == TokenKind::Minus ||
-    kind == TokenKind::Division ||
-    kind == TokenKind::Multiplication;
+           kind == TokenKind::Minus ||
+           kind == TokenKind::Division ||
+           kind == TokenKind::Multiplication;
+}
+
+bool isBiOperatorKind(TokenKind kind)
+{
+
+    return kind == TokenKind::Plus ||
+           kind == TokenKind::Minus ||
+           kind == TokenKind::Division ||
+           kind == TokenKind::Multiplication;
 }
 
 Token::Token()
@@ -59,4 +65,5 @@ void Token::destroy()
 {
    string.destroy();
 }
+
 

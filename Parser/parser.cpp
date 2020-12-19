@@ -8,7 +8,7 @@
 //@idea?
 //consume token.... instead of getNextToken
 
-AstExpression *parser::parseExpression()
+AstExpression *Parser::parseExpression()
 {
     //peek token...
     //switch them all and be recursive and all that???
@@ -16,37 +16,33 @@ AstExpression *parser::parseExpression()
 
     //Token* peekedToken = Lexer::peekToken();
 
+    auto leftExpr = parseMostPrecedentExpression();
+
+    if(isOperatorKind(Lexer::peekToken()->kind)){
+        auto biOperator = Lexer::getNextToken();
+
+        auto rightExpr = parseExpression();
+
+        auto binaryExpr = (AstExpression*)malloc(sizeof(AstExpression));
+        binaryExpr->makeBinaryExpression(leftExpr, biOperator, rightExpr);
+
+        return  applyPrecedenceRules(binaryExpr);
+    }
+    else{
+        return leftExpr;
+    }
+}
+
+
+AstExpression *Parser::parseMostPrecedentExpression()
+{
     switch (Lexer::peekToken()->kind) {
         case Integer:
         {
-            if(isOperatorKind(Lexer::peekToken(1)->kind)){
-                //It means we are a binary expression?
-                //So we gotta make an Expression node for the first toke we
-                //peeked (which is a number) and then parse whatever expression
-                //is next to the operator
+            auto result = (AstExpression*)malloc(sizeof(AstExpression));
+            result->makeIntLiteralExpression(Lexer::getNextToken());
 
-                //@C++?: This would be a good place to use a constructor but I
-                //dont always want to *have* call a constructor once I allocate
-                //the memory. is there any way to call the constructor on a
-                //a pointer I provide?
-                auto leftExpr = (AstExpression*)malloc(sizeof(AstExpression));
-                leftExpr->makeIntLiteralExpression(Lexer::getNextToken());
-
-                auto biOperator = Lexer::getNextToken();
-
-                auto rightExpr = parseExpression();
-
-                auto binaryExpr = (AstExpression*)malloc(sizeof(AstExpression));
-                binaryExpr->makeBinaryExpression(leftExpr, biOperator, rightExpr);
-
-                return binaryExpr;
-            }
-            else{
-                auto result = (AstExpression*)malloc(sizeof(AstExpression));
-                result->makeIntLiteralExpression(Lexer::getNextToken());
-
-                return result;
-            }
+            return result;
         }break;
         case LeftParen:
         {
@@ -56,9 +52,6 @@ AstExpression *parser::parseExpression()
 
             AstExpression* result = parseExpression();
 
-            //@Incomplete documentation and renames
-            //same as if integer we gotta lookahead once to see if we should
-            //return a binExpr instead
             auto peekedToken = Lexer::peekToken();
             if(peekedToken->kind != RightParen){
                 //@SERIOUS TODO:
@@ -70,32 +63,8 @@ AstExpression *parser::parseExpression()
             }
             Lexer::getNextToken();
 
-            peekedToken = Lexer::peekToken();
-            if(isOperatorKind(peekedToken->kind)){
-                //It means we are a binary expression?
-                //So we gotta make an Expression node for the first toke we
-                //peeked (which is a number) and then parse whatever expression
-                //is next to the operator
-
-                //@C++?: This would be a good place to use a constructor but I
-                //dont always want to *have* call a constructor once I allocate
-                //the memory. is there any way to call the constructor on a
-                //a pointer I provide?
-                auto leftExpr = result;
-
-                auto biOperator = Lexer::getNextToken();
-
-                auto rightExpr = parseExpression();
-
-                auto binaryExpr = (AstExpression*)malloc(sizeof(AstExpression));
-                binaryExpr->makeBinaryExpression(leftExpr, biOperator, rightExpr);
-
-                return binaryExpr;
-            }
-            else{
-                return result;
-            }
-            //@REMEMBER: to 'consume' the right paren we just peeked
+            result->hasParenthesis = true;
+            return result;
         }break;
         default:
         {
@@ -109,3 +78,64 @@ AstExpression *parser::parseExpression()
     }
 }
 
+inline s16 getOperatorPrecedence(TokenKind kind)
+{
+    switch (kind) {
+    case Plus:
+    case Minus:
+        return 110;
+    case Division:
+    case Multiplication:
+        return 120;
+    default:
+        assert(false && "Binary operator not implemented yet!");
+    }
+}
+
+inline s16 getPrecedence(AstExpression* astExpression)
+{
+    if(astExpression->hasParenthesis)
+        return INT8_MAX;
+
+    switch (astExpression->kind) {
+    case IntegerLiteral:
+        return INT8_MAX;
+    case BinaryExpression:
+        return getOperatorPrecedence(astExpression->binaryForm._operator.kind);
+    default:
+        assert(false && "astExpressionKind not implemented yet!");
+    }
+}
+
+//TODO: write some of the assumptions we made about the tree to make this algo
+//ONLY WORKS FOR BinaryExpressions
+AstExpression *Parser::applyPrecedenceRules(AstExpression* binaryExpression)
+{
+    assert(binaryExpression->kind == BinaryExpression);
+
+    //@[!] we a asume that leftOperand of a binaryExpression will always be
+    //infinitely precedent
+
+    auto thisNodePrecedence = getOperatorPrecedence(binaryExpression->binaryForm._operator.kind);
+    auto rightChildNodePrecedence = getPrecedence(binaryExpression->binaryForm.right);
+
+    if(thisNodePrecedence > rightChildNodePrecedence){
+        //'left rotation'
+        auto oldRightChild = binaryExpression->binaryForm.right;
+
+        //For know the only way a we can get inside this 'if' is if the right
+        //child is another binaryExpression
+        assert(oldRightChild->kind == BinaryExpression);
+
+        binaryExpression->binaryForm.right = oldRightChild->binaryForm.left;
+
+        oldRightChild->binaryForm.left = binaryExpression;
+
+        return oldRightChild;
+    }
+    else{
+        return binaryExpression;
+    }
+
+
+}
