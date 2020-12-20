@@ -30,7 +30,6 @@
 //sirva pero por ahora definitivamente no lo vamos a usar
 int lexerTester()
 {
-
     assert(false);
 
     restart:

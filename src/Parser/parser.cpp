@@ -1,6 +1,6 @@
-#include "parser.h"
+#include "./parser.h"
 
-#include "Parser/lexer.h"
+#include "./lexer.h"
 
 //@TODO: improve the way we peek and consume tokens. at the very least use better
 //names. maybe a different object to peek tokens, kinda like rust does with

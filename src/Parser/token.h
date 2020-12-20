@@ -1,8 +1,8 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-#include "pch.h"
-#include "mystring.h"
+#include "../pch.h"
+#include "../mystring.h"
 
 
 //@[?] C++: why dont I need to specify the 'namespace' of the enum when I dont add

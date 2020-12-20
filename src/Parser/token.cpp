@@ -1,4 +1,4 @@
-#include "token.h"
+#include "./token.h"
 
 bool isOperatorKind(TokenKind kind)
 {

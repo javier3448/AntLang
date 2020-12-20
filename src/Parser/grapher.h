@@ -1,9 +1,9 @@
 #ifndef GRAPHER_H
 #define GRAPHER_H
 
-#include "pch.h"
+#include "../pch.h"
 
-#include "astexpression.h"
+#include "./astexpression.h"
 
 //@EZ TODO: put .h and .cpp outsde the Parser folder
 

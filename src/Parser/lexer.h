@@ -1,10 +1,10 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include "pch.h"
-#include "Parser/token.h"
-#include "Parser/tokencache.h"
-#include "mystring.h"
+#include "../pch.h"
+#include "../Parser/token.h"
+#include "../Parser/tokencache.h"
+#include "../mystring.h"
 
 namespace Lexer
 {

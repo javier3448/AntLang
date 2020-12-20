@@ -1,4 +1,4 @@
-#include "grapher.h"
+#include "./grapher.h"
 
 
 GraphvizNode Grapher::graphExpression(AstExpression *expr)

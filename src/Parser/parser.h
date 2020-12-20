@@ -1,9 +1,9 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "pch.h"
+#include "../pch.h"
 
-#include "astexpression.h"
+#include "./astexpression.h"
 
 namespace Parser
 {

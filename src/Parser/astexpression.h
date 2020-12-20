@@ -1,9 +1,9 @@
 #ifndef ASTEXPRESSION_H
 #define ASTEXPRESSION_H
 
-#include "pch.h"
+#include "../pch.h"
 
-#include "token.h"
+#include "./token.h"
 
 struct AstExpression;
 struct BinaryExpressionForm;

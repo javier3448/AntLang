@@ -1,6 +1,6 @@
-#include "lexer.h"
+#include "./lexer.h"
 
-#include "mystring.h"
+#include "../mystring.h"
 
 //@TODO: hacer un lexBuffer.cloneIntoMyString
 

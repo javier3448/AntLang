@@ -13,9 +13,9 @@
 //The Jonathan Blow tree rotation seem so much simpler now, and requires no auxiliary
 //data structure. So we will use that for now
 
-#include "pch.h"
+#include "../pch.h"
 
-#include "astexpression.h"
+#include "./astexpression.h"
 
 //A bunch of structs and what not that we need to implement the shunting yard
 //algorith.
@@ -71,15 +71,15 @@ struct ShuntingStacks
     //the tokens quite a bit. because we need to place them in a dynamic data
     //structure but the lexer wants to return them by value
     void pushOperator(Token token);
-    ShuntingOperator popOperator();
-    ShuntingOperator* peekOperator();
+    // ShuntingOperator popOperator();
+    // ShuntingOperator* peekOperator();
 
-    AstExpression* popExpressionStack();
+    // AstExpression* popExpressionStack();
     //This returns a pointer and not a pointer to pointer because AstExpression
     //will forever live in heap land any way, so it would be a pointles indirection
     //unlike peekOperator where the actual data of the Operator is right there in
     //ShuntingOperator* buffer
-    AstExpression* peekExpressionStack();
+    // AstExpression* peekExpressionStack();
 
     void init();
     void destroy();

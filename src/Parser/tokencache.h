@@ -1,9 +1,8 @@
 #ifndef TOKENCACHE_H
 #define TOKENCACHE_H
 
-#include "pch.h"
-
-#include "token.h"
+#include "../pch.h"
+#include "./token.h"
 
 //Queue like thing with static size to cache tokens when the parser starts
 //peeking and getting
