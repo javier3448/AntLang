@@ -12,11 +12,25 @@
 ./token.h
 /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.h
 
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/shuntingyard.cpp
-./shuntingyard.h
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/shuntingyard.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/lexer.h
+../pch.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
+../Parser/token.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.h
+../Parser/tokencache.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/tokencache.h
+../mystring.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
 
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/shuntingyard.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/parser.cpp
+./parser.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/parser.h
+llvm/ADT/APFloat.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/llvm/ADT/APFloat.h
+./lexer.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/lexer.h
+
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/parser.h
 ../pch.h
 /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
 ./astexpression.h
@@ -27,6 +41,12 @@
 /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
 ../mystring.h
 /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
+
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/tokencache.h
+../pch.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
+./token.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.h
 
 /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
 pch.h

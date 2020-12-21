@@ -1,5 +1,7 @@
 #include "./parser.h"
 
+#include "llvm/ADT/APFloat.h"
+
 #include "./lexer.h"
 
 //@TODO: improve the way we peek and consume tokens. at the very least use better
