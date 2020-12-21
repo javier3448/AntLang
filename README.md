@@ -10,3 +10,8 @@ change the configurations
 We *might* need to do this before running ccmake:
 Change the CMakeLists.txt if necessary. 
 Delete everything inside build
+
+TO BUILD FOR REAL:
+cd into build/Debug
+run: cmake -DCMAKE_BUILD_TYPE=Debug ../..
+then run: make

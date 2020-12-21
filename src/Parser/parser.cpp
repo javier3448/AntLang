@@ -1,6 +1,8 @@
 #include "./parser.h"
 
-#include "llvm/ADT/APFloat.h"
+//This is throwing linking error, I dont know why and I am very scared.
+//There must be something we are not including in cmake (maybe the macros??)
+//#include "llvm/ADT/APFloat.h"
 
 #include "./lexer.h"
 

@@ -41,5 +41,9 @@ GraphvizNode Grapher::graphExpression(AstExpression *expr)
         }break;
     }
 
+    assert(false && "Grapher not implemented for that expression kind yet!");
+    //@Bodge: just to make clang shut up about not return. I am asserting
+    //false, so we are never gonna get to this code (in debug mode)
+    return GraphvizNode{name, code};
 }
 

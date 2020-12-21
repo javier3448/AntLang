@@ -8,6 +8,8 @@
 #include "Parser/parser.h"
 #include "Parser/grapher.h"
 
+#include "llvm/IR/Verifier.h"
+
 //@Decision: we will *try* to initialize to 0 by default and have that mean
 //something useful, because I heard that initializing to 0 is quite free
 
