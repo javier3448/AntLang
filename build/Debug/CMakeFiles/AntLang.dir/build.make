@@ -76,9 +76,22 @@ include CMakeFiles/AntLang.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/AntLang.dir/flags.make
 
+CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.o: CMakeFiles/AntLang.dir/flags.make
+CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.o: ../../src/AntLlvmGen/antLlvmGen.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.o -c /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntLlvmGen/antLlvmGen.cpp
+
+CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntLlvmGen/antLlvmGen.cpp > CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.i
+
+CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntLlvmGen/antLlvmGen.cpp -o CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.s
+
 CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: CMakeFiles/AntLang.dir/flags.make
 CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/Parser/astexpression.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o -c /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/astexpression.cpp
 
 CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.i: cmake_force
@@ -91,7 +104,7 @@ CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.s: cmake_force
 
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: CMakeFiles/AntLang.dir/flags.make
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/Parser/grapher.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o -c /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/grapher.cpp
 
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.i: cmake_force
@@ -104,7 +117,7 @@ CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.s: cmake_force
 
 CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: CMakeFiles/AntLang.dir/flags.make
 CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/Parser/lexer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o -c /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/lexer.cpp
 
 CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.i: cmake_force
@@ -117,7 +130,7 @@ CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.s: cmake_force
 
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: CMakeFiles/AntLang.dir/flags.make
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/parser.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o -c /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/parser.cpp
 
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.i: cmake_force
@@ -130,7 +143,7 @@ CMakeFiles/AntLang.dir/src/Parser/parser.cpp.s: cmake_force
 
 CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o: CMakeFiles/AntLang.dir/flags.make
 CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o: ../../src/Parser/shuntingyard.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o -c /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/shuntingyard.cpp
 
 CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.i: cmake_force
@@ -143,7 +156,7 @@ CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.s: cmake_force
 
 CMakeFiles/AntLang.dir/src/Parser/token.cpp.o: CMakeFiles/AntLang.dir/flags.make
 CMakeFiles/AntLang.dir/src/Parser/token.cpp.o: ../../src/Parser/token.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/token.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/token.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AntLang.dir/src/Parser/token.cpp.o -c /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.cpp
 
 CMakeFiles/AntLang.dir/src/Parser/token.cpp.i: cmake_force
@@ -156,7 +169,7 @@ CMakeFiles/AntLang.dir/src/Parser/token.cpp.s: cmake_force
 
 CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: CMakeFiles/AntLang.dir/flags.make
 CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/Parser/tokencache.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o -c /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/tokencache.cpp
 
 CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.i: cmake_force
@@ -169,7 +182,7 @@ CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.s: cmake_force
 
 CMakeFiles/AntLang.dir/src/main.cpp.o: CMakeFiles/AntLang.dir/flags.make
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/AntLang.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/AntLang.dir/src/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AntLang.dir/src/main.cpp.o -c /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/main.cpp
 
 CMakeFiles/AntLang.dir/src/main.cpp.i: cmake_force
@@ -182,7 +195,7 @@ CMakeFiles/AntLang.dir/src/main.cpp.s: cmake_force
 
 CMakeFiles/AntLang.dir/src/mystring.cpp.o: CMakeFiles/AntLang.dir/flags.make
 CMakeFiles/AntLang.dir/src/mystring.cpp.o: ../../src/mystring.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/AntLang.dir/src/mystring.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/AntLang.dir/src/mystring.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AntLang.dir/src/mystring.cpp.o -c /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.cpp
 
 CMakeFiles/AntLang.dir/src/mystring.cpp.i: cmake_force
@@ -195,6 +208,7 @@ CMakeFiles/AntLang.dir/src/mystring.cpp.s: cmake_force
 
 # Object files for target AntLang
 AntLang_OBJECTS = \
+"CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.o" \
 "CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o" \
 "CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o" \
 "CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o" \
@@ -208,6 +222,7 @@ AntLang_OBJECTS = \
 # External object files for target AntLang
 AntLang_EXTERNAL_OBJECTS =
 
+AntLang: CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.o
 AntLang: CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o
 AntLang: CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o
 AntLang: CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o
@@ -219,7 +234,7 @@ AntLang: CMakeFiles/AntLang.dir/src/main.cpp.o
 AntLang: CMakeFiles/AntLang.dir/src/mystring.cpp.o
 AntLang: CMakeFiles/AntLang.dir/build.make
 AntLang: CMakeFiles/AntLang.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable AntLang"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable AntLang"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/AntLang.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

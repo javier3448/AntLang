@@ -64,9 +64,14 @@ struct Token{
    //(int32)(string_to_int64("10")) is the same as string_to_int32("10")
    //so we dont need to pass the string around in this case
 
+   // @Improvement?: I think LLVM wants me to keep my float lits as strings 
+   // We say that because ConstantFP::get doesnt accept (LlvmContext, double) 
+   // and APFloat can be constructed using a string. SO it might be wiser to 
+   // store the 'number string' in the token instead of a float
+   //
    union{
        MyString string;
-       u64 integer;
+       s64 integer;
        //a float token are not converted until later so they will contain a
        //string
    };

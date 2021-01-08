@@ -5,3 +5,6 @@ this would be a good excercise to learn a more about c macros
 @TODO:
 Use templates or whatnot to make a malloc that is easier to use, so I dont have to
 write the type like 3 times everytime I use malloc
+
+@Improvement?????:
+Abbreviate Expression to expr through out all the 'codebase'

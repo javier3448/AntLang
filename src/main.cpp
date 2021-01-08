@@ -1,13 +1,19 @@
 #include "pch.h"
 
-//@Temp debug
-#include <unistd.h>
+#include "./AntLlvmGen/antLlvmGen.h"
+#include "./Parser/parser.h"
+#include "./Parser/lexer.h"
 
-#include "mystring.h"
-#include "Parser/lexer.h"
-#include "Parser/parser.h"
-#include "Parser/grapher.h"
+//@debug: just for `errs()` to dump the function
+//@bodge: I dont know how has the definition for errs so I am just copying the
+//entire thing :(
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
+#include "llvm/IR/IRBuilder.h"
 
+#include "llvm/IR/Constants.h"
+#include "llvm/IR/BasicBlock.h"
+#include "llvm/IR/Type.h"
 #include "llvm/IR/Verifier.h"
 
 //@Decision: we will *try* to initialize to 0 by default and have that mean
@@ -28,97 +34,11 @@
 //because I want to eventually be able to be smarter about the way I allocate
 //strings
 
-//@TODO: poner esto en un mejor lugar. Me da cosa borrarlo porque talvez nos
-//sirva pero por ahora definitivamente no lo vamos a usar
-int lexerTester()
-{
-    assert(false);
-
-    restart:
-    auto result = Lexer::init("../AntLang/TestFiles/test.txt");
-    if(result.has_value()){
-        cout << result.value() << endl;
-        exit(1);
-    }
-
-    cout << "=======LEXING=======" << endl;
-
-    Lexer::peekToken(15);
-    //@REMEMBER: right now we are leaking the myString of every single token
-    //this whole contraption is just to qd test the lexer
-    auto token = Lexer::getNextToken();
-
-    //@debug
-    s64 counter = 0;
-    while(true){
-        counter++;
-        if(counter == 32){
-            Lexer::peekToken(15);
-            counter = 0;
-        }
-        switch (token.kind) {
-            case Identifier:
-            {
-                cout << "Identifier: " << token.string << endl;
-            }break;
-            case Integer:
-            {
-                cout << "integer: " << token.integer << endl;
-            }break;
-            case Real:
-            {
-                cout << "Real: " << token.string << endl;
-            }break;
-            case Error:
-            {
-                cout << "Error: " << token.string << endl;
-            }break;
-            case Plus:
-            {
-                cout << "Plus: +" << endl;
-            }break;
-            case Minus:
-            {
-                cout << "Minus: -" << endl;
-            }break;
-            case Eof:
-            {
-                cout << "Eof: EOF"  << endl;
-                goto break_while;
-            }break;
-            case LeftParen:
-            {
-                cout << "("  << endl;
-            }break;
-            case RightParen:
-            {
-                cout << ")"  << endl;
-            }break;
-            case Division:
-            {
-                cout << "/"  << endl;
-            }break;
-            case Multiplication:
-            {
-                cout << "*"  << endl;
-            }break;
-            default:
-                assert(false);
-        }
-        token = Lexer::getNextToken();
-    }
-    break_while:
-
-    //@bodge as fuck just for qd testing:
-    std::cin.get();
-    goto restart;
-
-    return 0;
-}
-
 int main()
 {
-    auto result = Lexer::init("../AntLang/TestFiles/test.txt");
+    cout << "Hello there" << endl;
+
+    auto result = Lexer::init("../../src/TestFiles/test.txt");
     if(result.has_value()){
         cout << result.value() << endl;
         exit(1);
@@ -126,29 +46,12 @@ int main()
 
     auto expr = Parser::parseExpression();
 
-    auto graphvizCode = "digraph G {\n" +  Grapher::graphExpression(expr).code  + "\n}\n";
+    AntLlvmGen::init();
+    auto mainFunc = AntLlvmGen::compileTopLevelExpression(expr);
 
-
-    //@DEBUG: just to generate save and compile a .dot file
-    std::FILE* f = std::fopen("../AntLang/TestFiles/Graphviz/test.dot", "wb");
-
-    if(f == nullptr){
-        cout << "Couldnt generate the test graphviz image: n";
-        cout << strerror(errno) << endl;
-        exit(1);
+    if(mainFunc == nullptr){
+    	cout << "null returned" << endl;
     }
-    //@TODO: report error is something goes wrong
-    fprintf(f, "%s", graphvizCode.c_str());
-    fclose(f);
-
-    auto compileDot = "dot -Tpng "
-                      "../AntLang/TestFiles/Graphviz/test.dot "
-                      "-o "
-                      "../AntLang/TestFiles/Graphviz/test.png";
-    auto displayImage = "nohup display ../AntLang/TestFiles/Graphviz/test.png";
-
-    system(compileDot);
-    system(displayImage);
 
     return 0;
 }

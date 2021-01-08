@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "AntLang"
   "AntLang.pdb"
+  "CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o"
