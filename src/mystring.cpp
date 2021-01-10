@@ -5,18 +5,37 @@
 //@Improvement: if this intended for constructing a MyString from a string
 //literal there should be a way to pass the size so we dont have to iterate thru
 //the c_string 2 times
-MyString::MyString(const char* c_string)
+MyString MyString::make(const char* c_string)
 {
-    this->length = std::strlen(c_string);
-    this->buffer = new char[this->length];
-    std::memcpy(buffer, c_string, this->length);
+    MyString retString;
+    retString.length = std::strlen(c_string);
+    retString.buffer = new char[retString.length];
+    std::memcpy(retString.buffer, c_string, retString.length);
+
+    return retString;
 }
 
-MyString::MyString(int length, char* buffer)
+MyString MyString::make(const char* c_string1, const char* c_string2)
 {
-    this->length = length;
-    this->buffer = (char*)malloc(this->length);
-    std::memcpy(this->buffer, buffer, this->length);
+    MyString retString;
+    s64 length1 = std::strlen(c_string1);
+    s64 length2 = std::strlen(c_string2);
+    retString.length = length1 + length2;
+    retString.buffer = new char[retString.length];
+    std::memcpy(retString.buffer, c_string1, length1);
+    std::memcpy(retString.buffer + length1, c_string2, length2);
+
+    return retString;
+}
+
+MyString MyString::make(int length, char* buffer)
+{
+    MyString retString;
+    retString.length = length;
+    retString.buffer = (char*)malloc(retString.length);
+    std::memcpy(retString.buffer, buffer, retString.length);
+
+    return retString;
 }
 
 char& MyString::operator[](s64 index)
@@ -30,7 +49,7 @@ std::string MyString::toStdString(){
 
 MyString MyString::clone()
 {
-    return MyString(this->length, this->buffer);
+    return MyString::make(this->length, this->buffer);
 }
 
 void MyString::destroy()

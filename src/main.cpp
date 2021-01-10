@@ -1,8 +1,10 @@
 #include "pch.h"
 
-#include "./AntLlvmGen/antLlvmGen.h"
 #include "./Parser/parser.h"
 #include "./Parser/lexer.h"
+
+#include "./AntLlvmGen/antLlvmGen.h"
+#include "./AntQbeGen/antQbeGen.h"
 
 //@debug: just for `errs()` to dump the function
 //@bodge: I dont know how has the definition for errs so I am just copying the
@@ -46,12 +48,21 @@ int main()
 
     auto expr = Parser::parseExpression();
 
-    AntLlvmGen::init();
-    auto mainFunc = AntLlvmGen::compileTopLevelExpression(expr);
+    // AntLlvmGen::init();
+    // auto mainFunc = AntLlvmGen::compileTopLevelExpression(expr);
 
-    if(mainFunc == nullptr){
-    	cout << "null returned" << endl;
-    }
+    // if(mainFunc == nullptr){
+    // 	cout << "null returned" << endl;
+    // }
+
+    AntQbeGen::init();
+    AntQbeGen::compileTopLevelExpression(expr);
+
+    //@debug
+    auto instructions = AntQbeGen::mainFunction.instructions;
+    cout << instructions.size() << endl;
+
+    //TODO: print the qbe instructions
 
     return 0;
 }

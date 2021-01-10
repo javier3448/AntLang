@@ -8,3 +8,15 @@ write the type like 3 times everytime I use malloc
 
 @Improvement?????:
 Abbreviate Expression to expr through out all the 'codebase'
+
+@TODO:
+Make a templated version of dynamic array that has no constructor or destructor.
+It doesnt have to be great or let the user define allocators or resizing 
+parameters. I just want to be able to progress and see what works and what doesnt
+before having to think about a proper 'allocation strategy'
+
+@TODO: 
+Get rid of all constructors, just use functions from now on:
+MyObj construct(construct params...);
+or
+void construct(MyObj* obj, construct params...);

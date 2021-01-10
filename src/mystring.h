@@ -3,38 +3,20 @@
 
 #include "pch.h"
 
-// About wanting to use constructors/destructors in this struct
-// it makes a lot of sence for MyString to have a destructor so we are fucked now
-// MyString a("hello");
-// MyString b = a; //when a and b go out of scope we will double free a char*
-// ---(an option would be to just call something str.myFree manually )---
+// @Improvement?: for better compatibility with all the c stuff (sprintf 
+// in particular) it might be wise to modify this struct so the buffer has 
+// the null terminated character, its just one fucking byte at the end of the
+// day, I dont want to implement my own sprintf just because of 1 byte 
 
-// I would like something like this:
-// ...
-// MyString b = a.clone;
-// //MyString b = a; and this is a not allowed
-// neither is this allowed:
-// b = a;
-// but this is:
-// auto& b = a;
-// I am scared because there seem to be multiple '=' operators
-// and because cppreference says:
-// "Because C++ copies and copy-assigns objects of user-defined
-// types in various situations (passing/**returning** by value, manipulating
-// a container, etc), these special member functions will be called, if
-// accessible, and if they are not user-defined, they are implicitly-defined
-// by the compiler."
+// A extremely simple string implemantion. Doesnt resize, cant append other 
+// string to it, doesnt deallocate itself
+// basically a non null terminated c string (char*)
 
-//size = 0 means empty string regardless of the value of buffer.
-//We dont warranty that if size=0 then buffer=nullptr
-//@Volitile: MyString class def
-//@Possible leaks:
-//@WARNING:
-//@[!!!!] For now this string DOESNT automatically deallocate its heap pointer
+//[!!!!] For now this string DOESNT automatically deallocate its heap pointer
 //(buffer) because I am affraid that the copy constructor and assignment will
 //get called a bunch without us noticing and at that point we might as well just
 //use std::string
-//So, for now, we must deallocate the string manually with .clear
+//So, for now, we must deallocate the string manually with .destroy
 struct MyString
 {
     //@Improvement?: Aqui este podria ser privado y todo eso.
@@ -63,10 +45,13 @@ struct MyString
     //TODO: 'user define' the
 
     //intended to be used with a string literal. Does malloc
-    MyString(const char* c_string);
+    static MyString make(const char* c_string);
+
+    //just concats both c strings into one
+    static MyString make(const char* c_string1, const char* c_string2);
 
     //mallocs
-    MyString(int size, char* buffer);
+    static MyString make(int size, char* buffer);
 
     MyString clone();
 

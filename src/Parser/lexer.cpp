@@ -222,7 +222,7 @@ Token Lexer::lexToken()
         }
         else{
             advanceAndAppend();
-            return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
+            return Token(TokenKind::Error, MyString::make(lexBuffer.length, lexBuffer.buffer));
         }
     }assert(false && "We can only leave a LexState by 'goto State;' or returning");
 
@@ -274,7 +274,7 @@ Token Lexer::lexToken()
             //@Volatile: finish Identing1
             //By this point we know the first char is either a letter or a
             //'_'. A '_' alone is not a valid identifier so we must return
-            return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
+            return Token(TokenKind::Error, MyString::make(lexBuffer.length, lexBuffer.buffer));
         }
         char currChar = peekChar();
 
@@ -287,7 +287,7 @@ Token Lexer::lexToken()
             goto Identing2;
         }
         else{
-            return Token(TokenKind::Error, MyString(lexBuffer.length, lexBuffer.buffer));
+            return Token(TokenKind::Error, MyString::make(lexBuffer.length, lexBuffer.buffer));
         }
     }assert(false && "We can only leave a LexState by 'goto State;' or returning");
 
@@ -295,7 +295,7 @@ Token Lexer::lexToken()
     {
         //special case if end of file
         if(lexPointer == hllSource.length){
-            return Token(TokenKind::Identifier, MyString(lexBuffer.length, lexBuffer.buffer));
+            return Token(TokenKind::Identifier, MyString::make(lexBuffer.length, lexBuffer.buffer));
         }
         char currChar = peekChar();
 
@@ -304,7 +304,7 @@ Token Lexer::lexToken()
             goto Identing2;
         }
         else{
-            return Token(TokenKind::Identifier, MyString(lexBuffer.length, lexBuffer.buffer));
+            return Token(TokenKind::Identifier, MyString::make(lexBuffer.length, lexBuffer.buffer));
         }
     }assert(false && "We can only leave a LexState by 'goto State;' or returning");
 
@@ -318,7 +318,7 @@ Token Lexer::lexToken()
             //@TODO: dont convert to stdString here! find a way to parse
             //to integer only using your MyString
             //@Bodge:
-            auto myString = MyString(lexBuffer.length, lexBuffer.buffer);
+            auto myString = MyString::make(lexBuffer.length, lexBuffer.buffer);
             auto stdString = myString.toStdString();
             return Token(TokenKind::Integer, std::stoll(stdString.c_str(), nullptr, 10));
         }
@@ -333,7 +333,7 @@ Token Lexer::lexToken()
             //@TODO: dont convert to stdString here! find a way to parse
             //to integer only using your MyString
             //@Bodge:
-            auto myString = MyString(lexBuffer.length, lexBuffer.buffer);
+            auto myString = MyString::make(lexBuffer.length, lexBuffer.buffer);
             auto stdString = myString.toStdString();
             return Token(TokenKind::Integer, std::stoll(stdString.c_str(), nullptr, 10));
         }
