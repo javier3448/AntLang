@@ -59,8 +59,7 @@ int main()
     AntQbeGen::compileTopLevelExpression(expr);
 
     //@debug
-    auto instructions = AntQbeGen::mainFunction.instructions;
-    cout << instructions.size() << endl;
+    cout << qbeBuffer.buffer << endl;
 
     //TODO: print the qbe instructions
 

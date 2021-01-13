@@ -15,18 +15,19 @@ struct QbeOperand;
 // stuct QbeConstant
 
 
-enum QbeTempType
+enum QbeTempType : char
 {
-	qbeWord,   // w int32
-	qbeLong,   // l int64
-	qbeSingle, // s float32
-	qbeDouble  // d float64
+	qbeWord = 'w',   //  int32
+	qbeLong = 'l',   //  int64
+	qbeSingle = 's', //  float32
+	qbeDouble = 'd'  //  float64
 };
 
 struct QbeTemp 
 {
 	QbeTempType type;
 	MyString name;
+
 };
 
 enum QbeOperandKind 
@@ -40,8 +41,18 @@ struct QbeOperand
 	QbeOperandKind kind;
 	union {
 		QbeTemp temp;
-		double constant;
+		double double_constant;
+		float single_constant;
+		s64 slong_constant;
+		u64 ulong_constant;
+		s32 sword_constant;
+		u32 uword_constant;
 	};
+
+    // @Volatile the maximum size of temp is 5 + 17 + 1(null termination)
+	// buff must have enough space for up to 23 chars
+	// sets buff to the string representation of this QbeTemp (null terminates)
+	void toString(char* buff);
 };
 
 #endif

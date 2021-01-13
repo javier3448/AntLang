@@ -10,32 +10,26 @@ CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.o: ../../src/pch.h
 
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/antQbeGen.cpp
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/antQbeGen.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/qbeDefinition.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/qbeInstruction.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/qbeInstructionBuilder.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/qbeBuffer.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/qbeBuilder.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/qbeValue.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/Parser/astexpression.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/Parser/token.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/pch.h
 
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeDefinition.cpp.o: ../../src/AntQbeGen/qbeDefinition.cpp
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/AntQbeGen/qbeBuffer.cpp
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/AntQbeGen/qbeBuffer.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/AntQbeGen/qbeValue.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/mystring.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/pch.h
 
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/AntQbeGen/qbeInstruction.cpp
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/AntQbeGen/qbeInstruction.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/AntQbeGen/qbeValue.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/mystring.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/pch.h
-
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstructionBuilder.cpp.o: ../../src/AntQbeGen/qbeDefinition.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstructionBuilder.cpp.o: ../../src/AntQbeGen/qbeInstruction.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstructionBuilder.cpp.o: ../../src/AntQbeGen/qbeInstructionBuilder.cpp
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstructionBuilder.cpp.o: ../../src/AntQbeGen/qbeInstructionBuilder.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstructionBuilder.cpp.o: ../../src/AntQbeGen/qbeValue.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstructionBuilder.cpp.o: ../../src/Parser/astexpression.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstructionBuilder.cpp.o: ../../src/Parser/token.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstructionBuilder.cpp.o: ../../src/mystring.h
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstructionBuilder.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.o: ../../src/AntQbeGen/qbeBuffer.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.o: ../../src/AntQbeGen/qbeBuilder.cpp
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.o: ../../src/AntQbeGen/qbeBuilder.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.o: ../../src/AntQbeGen/qbeValue.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.o: ../../src/mystring.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.o: ../../src/pch.h
 
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/AntQbeGen/qbeValue.cpp
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/AntQbeGen/qbeValue.h
@@ -91,8 +85,7 @@ CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/pch.h
 
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/AntLlvmGen/antLlvmGen.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/AntQbeGen/antQbeGen.h
-CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/AntQbeGen/qbeDefinition.h
-CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/AntQbeGen/qbeInstruction.h
+CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/AntQbeGen/qbeBuffer.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/AntQbeGen/qbeValue.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/astexpression.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/lexer.h

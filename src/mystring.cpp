@@ -9,8 +9,9 @@ MyString MyString::make(const char* c_string)
 {
     MyString retString;
     retString.length = std::strlen(c_string);
-    retString.buffer = new char[retString.length];
+    retString.buffer = new char[retString.length + 1];
     std::memcpy(retString.buffer, c_string, retString.length);
+    retString.buffer[retString.length] = 0;
 
     return retString;
 }
@@ -21,9 +22,10 @@ MyString MyString::make(const char* c_string1, const char* c_string2)
     s64 length1 = std::strlen(c_string1);
     s64 length2 = std::strlen(c_string2);
     retString.length = length1 + length2;
-    retString.buffer = new char[retString.length];
+    retString.buffer = new char[retString.length + 1];
     std::memcpy(retString.buffer, c_string1, length1);
     std::memcpy(retString.buffer + length1, c_string2, length2);
+    retString.buffer[retString.length] = 0;
 
     return retString;
 }
@@ -32,8 +34,9 @@ MyString MyString::make(int length, char* buffer)
 {
     MyString retString;
     retString.length = length;
-    retString.buffer = (char*)malloc(retString.length);
+    retString.buffer = (char*)malloc(retString.length + 1);
     std::memcpy(retString.buffer, buffer, retString.length);
+    retString.buffer[retString.length] = 0;
 
     return retString;
 }
@@ -59,6 +62,7 @@ void MyString::destroy()
         free(buffer);
 }
 
-std::ostream& operator<<(std::ostream& stream, MyString& myString){
+std::ostream& operator<<(std::ostream& stream, MyString& myString)
+{
     return stream.write(myString.buffer, myString.length);
 }

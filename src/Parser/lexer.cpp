@@ -58,6 +58,10 @@ struct LexBuffer{
 MyString Lexer::hllSource{0, nullptr};
 s64 Lexer::lexPointer = 0;
 
+// @[!!!]
+// @UB: if the contents in the file: 'path' contain null chars
+//      An easy way to avoid that would be to have a different string struct
+//      for lexing, one that can take null chars and is not null terminated
 std::optional<const char*> Lexer::init(const char* path)
 {
     std::FILE* f = std::fopen(path, "rb");

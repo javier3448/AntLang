@@ -1,51 +1,66 @@
 #include "./antQbeGen.h" 
 
-#include "./qbeInstruction.h" 
-#include "./qbeInstructionBuilder.h" 
+#include "./qbeBuilder.h" 
+#include "./qbeBuffer.h" 
 
-QbeFunction AntQbeGen::mainFunction;
+QbeBuffer qbeBuffer = { .length = 0, .size = 0, .buffer = nullptr };
 
+//@Improvement? honestly qbeBuffer could be a globa absolutely everyone
+//uses, instead of passing a pointer to the qbeBuilder functions
+
+// FOR NOW IT CAN ONLY BE CALLED ONCE, OTHERWISE WE MIGHT LEAK MEMORY
 void AntQbeGen::init()
 {
-    //TODO: clear the qbeDefsBuffer 
+    qbeBuffer = QbeBuffer::make();
 }
 
 void AntQbeGen::compileTopLevelExpression(AstExpression* expr)
 {
-    mainFunction.instructions.clear();
-    mainFunction.returnType = QbeTempType::qbeWord;
-    mainFunction.params.clear();
+    qbeBuffer.append("function w $main() {\n"
+                     "@start\n");
 
     compileExpression(expr);
 
-    // @BIG TODO: put the instruction building in functions
-    QbeInstruction retIns = {
-        .kind = QbeInstructionKind::RetKind,
-        .retIns = {
-            .hasRetValue = true,
-            .retValue = {
-                .kind = ConstantKind,
-                .constant = 0
-            }
-        }
-    };
-    mainFunction.instructions.push_back(retIns);
+    QbeOperand zero = { .kind = QbeOperandKind::ConstantKind, .ulong_constant = 0 };
+    QbeBuilder::nonVoidRet(&qbeBuffer, &zero);
+
+    qbeBuffer.append("}");
 }
 
-QbeOperand getNextTemp(const char* name)
+// asserts that the first char of c_string is '%'
+// @TODO: after you add a constant with the maximum tempName length.
+//        let c_string be 6 or less chars
+// @Important:
+// c_string can only have at most 5 chars
+// we implement that so the name of any given temp in the code we generate has a 
+// known maximum number of chars, This will help other parts of the AntQbeGen 
+// code avoid mallocs for 'ephemeral' strings. We can allocate a fixed size buffer 
+// in the stack instead
+// Its worth mentioning that most of the time we require the ephemeral
+// strings to use sprintf. If we could program an sprintf that directly writes to  
+// the QbeBuffer while being mindful of resizing, we wouldnt need to know the 
+// maximum length of any given temp name
+// @Improvement: define the maximum lenght of a temp name in a constant
+QbeOperand getNextTemp(const char* c_string)
 {
-    static s32 counter = 1;
+    static u64 counter = 1;
 
-    char counterStr[9];
+    assert(strlen(c_string) < 6);
+    assert(c_string[0] == '%');
 
-    sprintf(counterStr, "%x", counter);
+    char counterStr[18];
+    auto err = snprintf(counterStr, sizeof counterStr, "_%lx", counter);
+    assert(err > 0);
+    assert(err <= (s64) sizeof counterStr);
+    //@Volatile the maximum size of temp is 5 + 17 + 1(null termination)
+    //%aaaaa
 
     counter++;
     return QbeOperand { 
         .kind = QbeOperandKind::TempKind, 
         .temp = {
             .type = QbeTempType::qbeDouble,
-            .name = MyString::make(name, counterStr),
+            .name = MyString::make(c_string, counterStr),
         } 
     };
 }
@@ -58,7 +73,7 @@ QbeOperand AntQbeGen::compileExpression(AstExpression* astExpr)
         {
             return QbeOperand{
                 .kind = QbeOperandKind::ConstantKind,
-                .constant = (double) astExpr->intLiteral.integer
+                .double_constant = (double) astExpr->intLiteral.integer
             };
         }break;
 
@@ -80,29 +95,29 @@ QbeOperand AntQbeGen::compileBinaryExpression(BinaryExpressionForm* biExpr)
     switch(biExpr->_operator.kind){
         case TokenKind::Plus:
         {
-            auto tempResult = getNextTemp("add");
-            mainFunction.instructions.push_back(AntQbeInstructionBuilder::add(QbeTempType::qbeDouble, tempResult.temp, leftVal, rightVal));
+            auto tempResult = getNextTemp("%add");
+            QbeBuilder::add(&qbeBuffer, &(tempResult.temp), QbeTempType::qbeDouble, &leftVal, &rightVal);
             return tempResult;
         }break;
 
         case TokenKind::Minus:
         {
-            auto tempResult = getNextTemp("sub");
-            mainFunction.instructions.push_back(AntQbeInstructionBuilder::sub(QbeTempType::qbeDouble, tempResult.temp, leftVal, rightVal));
+            auto tempResult = getNextTemp("%sub");
+            QbeBuilder::sub(&qbeBuffer, &(tempResult.temp), QbeTempType::qbeDouble, &leftVal, &rightVal);
             return tempResult;
         }break;
 
         case TokenKind::Division:
         {
-            auto tempResult = getNextTemp("div");
-            mainFunction.instructions.push_back(AntQbeInstructionBuilder::div(QbeTempType::qbeDouble, tempResult.temp, leftVal, rightVal));
+            auto tempResult = getNextTemp("%div");
+            QbeBuilder::div(&qbeBuffer, &(tempResult.temp), QbeTempType::qbeDouble, &leftVal, &rightVal);
             return tempResult;
         }break;
 
         case TokenKind::Multiplication:
         {
-            auto tempResult = getNextTemp("mul");
-            mainFunction.instructions.push_back(AntQbeInstructionBuilder::mul(QbeTempType::qbeDouble, tempResult.temp, leftVal, rightVal));
+            auto tempResult = getNextTemp("%mul");
+            QbeBuilder::mul(&qbeBuffer, &(tempResult.temp), QbeTempType::qbeDouble, &leftVal, &rightVal);
             return tempResult;
         }break;
         default:
