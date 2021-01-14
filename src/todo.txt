@@ -1,6 +1,6 @@
 @TODO SOON:
-Write the maximum length of a string representation of QbeTemp in a constant 
-PLEASE and move getNextTemp to QbeValue
+Write the maximum length of a string representation of QbeOperand in a constant 
+BE MINDFUL OF THE MAX LENGTH OF QBE CONSTANTS TOO
 
 @TODO:
 write a macro that asserts something and prints a message when the assertion fails.
@@ -29,6 +29,9 @@ void construct(MyObj* obj, construct params...);
 Decide which asserts are worth keeping in release build (most of them seem
 quite cheap so I wouldn't mind the perf hit) We might have to write our own
 assert macro if we want to do that
+
+@TODO quality of life improvement: the readability of the double literals in 
+the our current qbe ir generation is way too bad, find way to improve it
 
 🤔
 A lot of the problems we are having with strings is that we want 1 struct to 

@@ -5,6 +5,8 @@
 
 #include "./AntLlvmGen/antLlvmGen.h"
 #include "./AntQbeGen/antQbeGen.h"
+//@debug
+#include "./AntQbeGen/qbeInstruction.h"
 
 //@debug: just for `errs()` to dump the function
 //@bodge: I dont know how has the definition for errs so I am just copying the

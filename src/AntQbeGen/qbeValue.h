@@ -49,10 +49,31 @@ struct QbeOperand
 		u32 uword_constant;
 	};
 
-    // @Volatile the maximum size of temp is 5 + 17 + 1(null termination)
-	// buff must have enough space for up to 23 chars
-	// sets buff to the string representation of this QbeTemp (null terminates)
 	void toString(char* buff);
 };
+
+//@Volatile the maximum size of temp is 6 + 17 + 1(null termination)
+//%sssss_ffffffffffffffff
+constexpr s16 MAX_QBEOPERAND_STR_LENGTH = 6 + 17 + 1;
+//@TODO: add a constant for the max length of the c_string in the 
+//getNextTemp function
+
+
+// asserts that the first char of c_string is '%'
+// @TODO: after you add a constant with the maximum tempName length.
+//        let c_string be 6 or less chars
+// @Important:
+// c_string can only have at most 5 chars
+// we implement that so the name of any given temp in the code we generate has a 
+// known maximum number of chars, This will help other parts of the AntQbeGen 
+// code avoid mallocs for 'ephemeral' strings. We can allocate a fixed size buffer 
+// in the stack instead
+// Its worth mentioning that most of the time we require the ephemeral
+// strings to use sprintf. If we could program an sprintf that directly writes to  
+// the QbeBuffer while being mindful of resizing, we wouldnt need to know the 
+// maximum length of any given temp name
+// @Improvement: define the maximum lenght of a temp name in a constant
+QbeOperand getNextTemp(const char* c_string);
+
 
 #endif

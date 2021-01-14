@@ -115,18 +115,18 @@ CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeBuffer.cpp -o CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.s
 
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.o: CMakeFiles/AntLang.dir/flags.make
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.o: ../../src/AntQbeGen/qbeBuilder.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.o -c /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeBuilder.cpp
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: CMakeFiles/AntLang.dir/flags.make
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/AntQbeGen/qbeInstruction.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/build/Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o -c /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeInstruction.cpp
 
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeBuilder.cpp > CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.i
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeInstruction.cpp > CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.i
 
-CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeBuilder.cpp -o CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.s
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeInstruction.cpp -o CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.s
 
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: CMakeFiles/AntLang.dir/flags.make
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/AntQbeGen/qbeValue.cpp
@@ -263,7 +263,7 @@ AntLang_OBJECTS = \
 "CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.o" \
 "CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o" \
 "CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o" \
-"CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.o" \
+"CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o" \
 "CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o" \
 "CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o" \
 "CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o" \
@@ -281,7 +281,7 @@ AntLang_EXTERNAL_OBJECTS =
 AntLang: CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.o
 AntLang: CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o
 AntLang: CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o
-AntLang: CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuilder.cpp.o
+AntLang: CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o
 AntLang: CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o
 AntLang: CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o
 AntLang: CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o

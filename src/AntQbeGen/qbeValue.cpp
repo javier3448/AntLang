@@ -1,16 +1,15 @@
 #include "qbeValue.h"
 
+// @Improvement: when qbeOperand is a temp we shouldnt need to write the string into
+// buffer, we should be able to just return the this->temp.name.buffer
 void QbeOperand::toString(char * buff)
 {
-    // @Volatile the maximum size of temp is 5 + 17 + 1(null termination)
-	// @BUG (maybe): We assume that the maximum size of a constant is less than 
-	// or equal to 23
 	switch(this->kind){
 		case QbeOperandKind::TempKind:
 		{
-    		auto err = snprintf(buff, 23, "%s", this->temp.name.buffer);
+    		auto err = snprintf(buff, MAX_QBEOPERAND_STR_LENGTH, "%s", this->temp.name.buffer);
     		assert(err > 0);
-    		assert(err <= 23);
+    		assert(err <= MAX_QBEOPERAND_STR_LENGTH);
     		return;
 		}break;
 
@@ -19,13 +18,38 @@ void QbeOperand::toString(char * buff)
 		// in 64 bit blobs, so its just syntactic sugar but it is still useful)
 		case QbeOperandKind::ConstantKind:
 		{
-    		auto err = snprintf(buff, 23, "%lu", this->ulong_constant);
+    		auto err = snprintf(buff, MAX_QBEOPERAND_STR_LENGTH, "%lu", this->ulong_constant);
     		assert(err > 0);
-    		assert(err <= 23);
+    		assert(err <= MAX_QBEOPERAND_STR_LENGTH);
     		return;
 		}break;
 
 		default:
 			assert(false);
 	}
+}
+
+QbeOperand getNextTemp(const char* c_string)
+{
+    static u64 counter = 1;
+
+    assert(strlen(c_string) < 6);
+    assert(c_string[0] == '%');
+
+    // @Improvement: we could snprintf directly into the mystring buffer
+    char qbeTempString[MAX_QBEOPERAND_STR_LENGTH];
+    auto err = snprintf(qbeTempString, sizeof qbeTempString, "%s_%lx", c_string, counter);
+    assert(err > 0);
+    assert(err <= (s64) sizeof qbeTempString);
+    //@Volatile the maximum size of temp is 6 + 17 + 1(null termination)
+    //%sssss_ffffffffffffffff
+
+    counter++;
+    return QbeOperand { 
+        .kind = QbeOperandKind::TempKind, 
+        .temp = {
+            .type = QbeTempType::qbeDouble,
+            .name = MyString::make(qbeTempString),
+        } 
+    };
 }
