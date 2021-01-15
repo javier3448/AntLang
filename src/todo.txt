@@ -37,3 +37,9 @@ the our current qbe ir generation is way too bad, find way to improve it
 A lot of the problems we are having with strings is that we want 1 struct to 
 perfectly work with everything we do. There is no need for that. We can have
 some strings be null terminated, others have length s64 or even s32
+
+[!]
+🤔
+If the identifier fo a temporal can only has a staticaly know max length
+why couldn't we store the name in the struct instead of having a MyString that
+has a heap pointer

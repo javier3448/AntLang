@@ -1,11 +1,9 @@
-// commented because: We dont really need to 'encode' instruction right now. 
+#include "./qbeInstruction.h"
 
-// #include "./qbeInstruction.h"
-
-// const char* InstructionKindString[] = 
-// {
-//     "add",
-//     "sub",
-//     "mul",
-//     "div"
-// };
+const char* QbeInstructionKindString[] = 
+{
+    "add",
+    "sub",
+    "mul",
+    "div"
+};

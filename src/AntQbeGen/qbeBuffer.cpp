@@ -33,8 +33,7 @@ void QbeBuffer::append(const char* c_string)
 // I just want a sprintf that reallocates the buffer when necessary the only
 // non bodgy way of doing this is to implement our own sprintf that 'lexes'
 // the fmt and all
-// For now just doing snprintf and reallocate if it fails its enough
-
+// For now just doing snprintf and reallocate if it fails is enough
 void QbeBuffer::sprintf(const char* fmt, ...)
 {
     va_list args;
@@ -67,7 +66,7 @@ void QbeBuffer::sprintf(const char* fmt, ...)
 // us some code duplication
 // @Improvement?: instead of the instructionName use the instructionKind enum 
 // and let this function be a method of qbeBuffer
-inline void write_simpleArithInstruction(QbeBuffer* qbeBuffer, const char * instructionName, QbeTemp* tempResult, QbeTempType retType, QbeOperand* leftOperand, QbeOperand* rightOperand)
+void QbeBuffer::write_simpleArithInstruction(QbeBuffer* qbeBuffer, QbeInstructionKind instruction, QbeTemp* tempResult, QbeTempType retType, QbeOperand* leftOperand, QbeOperand* rightOperand)
 {
     // Return type must be the same as 
     assert(retType == tempResult->type);
@@ -88,7 +87,7 @@ inline void write_simpleArithInstruction(QbeBuffer* qbeBuffer, const char * inst
         "    %s =%c %s %s, %s\n",
         tempResult->name.buffer,
         retType,
-        instructionName,
+        QbeInstructionKindString[instruction],
         leftOperandStr,
         rightOperandStr
     );
@@ -96,19 +95,19 @@ inline void write_simpleArithInstruction(QbeBuffer* qbeBuffer, const char * inst
 
 void QbeBuffer::write_Add(QbeTemp* tempResult, QbeTempType retType, QbeOperand* leftOperand, QbeOperand* rightOperand)
 {
-    write_simpleArithInstruction(this, "add", tempResult, retType, leftOperand, rightOperand);
+    write_simpleArithInstruction(this, ADD, tempResult, retType, leftOperand, rightOperand);
 }
 void QbeBuffer::write_Sub(QbeTemp* tempResult, QbeTempType retType, QbeOperand* leftOperand, QbeOperand* rightOperand)
 {
-    write_simpleArithInstruction(this, "sub", tempResult, retType, leftOperand, rightOperand);
+    write_simpleArithInstruction(this, SUB, tempResult, retType, leftOperand, rightOperand);
 }
 void QbeBuffer::write_Mul(QbeTemp* tempResult, QbeTempType retType, QbeOperand* leftOperand, QbeOperand* rightOperand)
 {
-    write_simpleArithInstruction(this, "mul", tempResult, retType, leftOperand, rightOperand);
+    write_simpleArithInstruction(this, MUL, tempResult, retType, leftOperand, rightOperand);
 }
 void QbeBuffer::write_Div(QbeTemp* tempResult, QbeTempType retType, QbeOperand* leftOperand, QbeOperand* rightOperand)
 {
-    write_simpleArithInstruction(this, "div", tempResult, retType, leftOperand, rightOperand);
+    write_simpleArithInstruction(this, DIV, tempResult, retType, leftOperand, rightOperand);
 }
 
 void QbeBuffer::write_VoidRet()

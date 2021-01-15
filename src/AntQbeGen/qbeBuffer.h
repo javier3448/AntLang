@@ -3,6 +3,7 @@
 
 #include "../pch.h"
 
+#include "./qbeInstruction.h"
 #include "./qbeValue.h"
 
 struct QbeBuffer
@@ -26,6 +27,7 @@ struct QbeBuffer
     // does sprintf into the buffer and resizes if necessary
     void sprintf(const char* fmt, ...);
 
+    void write_simpleArithInstruction(QbeBuffer* qbeBuffer, QbeInstructionKind instruction, QbeTemp* tempResult, QbeTempType retType, QbeOperand* leftOperand, QbeOperand* rightOperand);
     void write_Add(QbeTemp* tempResult, QbeTempType retType, QbeOperand* leftOperand, QbeOperand* rightOperand);
     void write_Sub(QbeTemp* tempResult, QbeTempType retType, QbeOperand* leftOperand, QbeOperand* rightOperand);
     void write_Mul(QbeTemp* tempResult, QbeTempType retType, QbeOperand* leftOperand, QbeOperand* rightOperand);

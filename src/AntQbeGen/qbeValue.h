@@ -26,8 +26,10 @@ enum QbeTempType : char
 struct QbeTemp 
 {
 	QbeTempType type;
+	// Since the max length of this string is allegedly know at compile time.
+	// we could just have a char array and not touch the heap at all instead of
+	// using mystring
 	MyString name;
-
 };
 
 enum QbeOperandKind 
