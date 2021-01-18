@@ -4,16 +4,12 @@
 #include "../pch.h"
 #include "../mystring.h"
 
-// @Improvement: move QbeTemp and QbeOperand to another file
-struct QbeTemp;
 // @Bodge and bad name, I just want a struct that can represent
 // (immediate | QbeTemp)
 struct QbeOperand;
-// for now qbeConstants will just represented with a u64, later on we might
-// differentiate between the different 'syntactic sugar' for constants even tho
-// they are semantically identical to Qbe 
-// stuct QbeConstant
-
+// @Improvement: move QbeTemp and QbeOperand to another file
+struct QbeTemp;
+struct QbeConstant;
 
 enum QbeTempType : char
 {
@@ -32,12 +28,42 @@ struct QbeTemp
 	MyString name;
 };
 
+// to be able to do constant folding without knowing the type that the entire
+// 'constant expression' will endup being we need to carry arround all possible
+// constant types ()
+// @BAD?: this is struct is pretty big (32 bytes) a way we *might* be able to 
+// to reduce its size is not having _u8, _u16, _u32, and maybe have all those 
+// values be represented by just _64. [!]: to implement that we must be sure
+// that all the overflow, comparissons, and arithmetic are always correct, even
+// when we represent everything in just one field
+// byte a = (0xff + 1) < 1; should end up as true
+// I think as long as we just throw away all the bits we dont when we figure out
+// the type of the expression is smaller that 64 we should be fine?
+// you could just verify that logic pragmatically comparing the values of al the
+// fields thru out a bunch of operations
+// [!] there is no fucking way the throwing away logic works with signs, right
+// [?] should something like 0xfff not be a valid typebyte??????
+struct QbeConstant
+{
+	//mask-like thingy that tell you what possible types can this constant be
+	//@TODO: ascii art that says what bit means what
+	u16 validConstants;
+	u8 _u8;    // 
+	u16 _u16;  // 
+	u32 _u32;  // 
+	u64 _u64;  // 
+	f32 _f32;  //
+	f64 _f64;  //
+};
+
 enum QbeOperandKind 
 {
 	TempKind,
 	ConstantKind
 };
 //@bad: bad name
+// [!]: be careful with how big this struct is, because every generateQbeExpression 
+// will return an instance of it
 struct QbeOperand
 {
 	QbeOperandKind kind;

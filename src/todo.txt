@@ -43,3 +43,7 @@ some strings be null terminated, others have length s64 or even s32
 If the identifier fo a temporal can only has a staticaly know max length
 why couldn't we store the name in the struct instead of having a MyString that
 has a heap pointer
+
+@TODO: Should we have a guy that goes thru the AST and generates both LLVM and 
+Qbe at the same time?
+For now just generate qbe

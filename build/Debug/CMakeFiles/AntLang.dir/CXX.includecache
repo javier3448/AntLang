@@ -6,35 +6,3 @@
 
 #IncludeRegexTransform: 
 
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeValue.cpp
-qbeValue.h
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeValue.h
-
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeValue.h
-../pch.h
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
-../mystring.h
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
-
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
-pch.h
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
-
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
-cstdint
--
-cstring
--
-cstdlib
--
-cstdio
--
-optional
--
-assert.h
--
-string
--
-iostream
--
-

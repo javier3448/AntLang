@@ -68,6 +68,9 @@ void QbeBuffer::sprintf(const char* fmt, ...)
 // and let this function be a method of qbeBuffer
 void QbeBuffer::write_simpleArithInstruction(QbeBuffer* qbeBuffer, QbeInstructionKind instruction, QbeTemp* tempResult, QbeTempType retType, QbeOperand* leftOperand, QbeOperand* rightOperand)
 {
+    // maybe later on when we do typechecking ourselft this assertions wont be 
+    // necessary
+
     // Return type must be the same as 
     assert(retType == tempResult->type);
     // check the params have this types: T(T, T)

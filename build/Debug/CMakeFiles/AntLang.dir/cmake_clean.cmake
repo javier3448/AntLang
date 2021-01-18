@@ -10,7 +10,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o"
-  "CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/token.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o"
   "CMakeFiles/AntLang.dir/src/main.cpp.o"

@@ -29,14 +29,17 @@ void QbeOperand::toString(char * buff)
 	}
 }
 
+// @TODO: add support for different types of temps no just doubles
 QbeOperand getNextTemp(const char* c_string)
 {
     static u64 counter = 1;
 
-    assert(strlen(c_string) < 6);
+    assert(strlen(c_string) < 7);
     assert(c_string[0] == '%');
 
-    // @Improvement: we could snprintf directly into the mystring buffer
+    // @Improvement: we could snprintf directly into the mystring buffer but we 
+    // cant because right now mystring cant have a buffer with size different 
+    // to the string's length
     char qbeTempString[MAX_QBEOPERAND_STR_LENGTH];
     auto err = snprintf(qbeTempString, sizeof qbeTempString, "%s_%lx", c_string, counter);
     assert(err > 0);

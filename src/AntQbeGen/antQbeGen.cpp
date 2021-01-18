@@ -52,36 +52,55 @@ QbeOperand AntQbeGen::compileBinaryExpression(BinaryExpressionForm* biExpr)
     auto leftVal = compileExpression(biExpr->left);
     auto rightVal = compileExpression(biExpr->right);
 
-    // @Notice: how we can add names to the newly generated SSA registers
-    switch(biExpr->_operator.kind){
-        case TokenKind::Plus:
-        {
-            auto tempResult = getNextTemp("%add");
-            qbeBuffer.write_Add(&(tempResult.temp), QbeTempType::qbeDouble, &leftVal, &rightVal);
-            return tempResult;
-        }break;
-
-        case TokenKind::Minus:
-        {
-            auto tempResult = getNextTemp("%sub");
-            qbeBuffer.write_Sub(&(tempResult.temp), QbeTempType::qbeDouble, &leftVal, &rightVal);
-            return tempResult;
-        }break;
-
-        case TokenKind::Division:
-        {
-            auto tempResult = getNextTemp("%div");
-            qbeBuffer.write_Div(&(tempResult.temp), QbeTempType::qbeDouble, &leftVal, &rightVal);
-            return tempResult;
-        }break;
-
-        case TokenKind::Multiplication:
-        {
-            auto tempResult = getNextTemp("%mul");
-            qbeBuffer.write_Mul(&(tempResult.temp), QbeTempType::qbeDouble, &leftVal, &rightVal);
-            return tempResult;
-        }break;
-        default:
+    // WE CHECK IF WE CAN DO CONSTANT FOLDING
+    if(leftVal.kind == QbeOperandKind::ConstantKind
+        &&
+       rightVal.kind == QbeOperandKind::ConstantKind)
+    {
+        // @BAD?: I want the numeric constants to be 'typeless', somewhat similar 
+        // to what golang has. For now the strategy we came up with is to
+        // implement that *requires* us to do constant folding and carry all 
+        // possible results in the constant result. It seems lame that a highlevel
+        // detail of the language depends on constant folding but it will work for now
+        //Then we can do the constant folding
+        
+        // TODO: We need to change the lexer so a number token returns a string
+        // or something more robust that just a float 64. 
         assert(false);
     }
+    else{
+        // @Notice: how we can add names to the newly generated SSA registers
+        switch(biExpr->_operator.kind){
+            case TokenKind::Plus:
+            {
+                auto tempResult = getNextTemp("%add");
+                qbeBuffer.write_Add(&(tempResult.temp), QbeTempType::qbeDouble, &leftVal, &rightVal);
+                return tempResult;
+            }break;
+
+            case TokenKind::Minus:
+            {
+                auto tempResult = getNextTemp("%sub");
+                qbeBuffer.write_Sub(&(tempResult.temp), QbeTempType::qbeDouble, &leftVal, &rightVal);
+                return tempResult;
+            }break;
+
+            case TokenKind::Division:
+            {
+                auto tempResult = getNextTemp("%div");
+                qbeBuffer.write_Div(&(tempResult.temp), QbeTempType::qbeDouble, &leftVal, &rightVal);
+                return tempResult;
+            }break;
+
+            case TokenKind::Multiplication:
+            {
+                auto tempResult = getNextTemp("%mul");
+                qbeBuffer.write_Mul(&(tempResult.temp), QbeTempType::qbeDouble, &leftVal, &rightVal);
+                return tempResult;
+            }break;
+            default:
+            assert(false);
+        }
+    }
+
 }

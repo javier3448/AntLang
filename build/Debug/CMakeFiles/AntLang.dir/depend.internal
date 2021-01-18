@@ -12,6 +12,7 @@ CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/antQbeGen.cpp
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/antQbeGen.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeBuffer.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeInstruction.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeValue.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/astexpression.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.h
@@ -20,11 +21,14 @@ CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeBuffer.cpp
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeBuffer.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeInstruction.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeValue.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeInstruction.cpp
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeInstruction.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeValue.cpp
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/AntQbeGen/qbeValue.h
@@ -57,13 +61,6 @@ CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/parser.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/tokencache.h
- /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
- /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
-CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o
- /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/astexpression.h
- /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/shuntingyard.cpp
- /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/shuntingyard.h
- /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
 CMakeFiles/AntLang.dir/src/Parser/token.cpp.o

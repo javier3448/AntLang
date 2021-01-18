@@ -11,6 +11,7 @@ CMakeFiles/AntLang.dir/src/AntLlvmGen/antLlvmGen.cpp.o: ../../src/pch.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/antQbeGen.cpp
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/antQbeGen.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/qbeBuffer.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/qbeInstruction.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/qbeValue.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/Parser/astexpression.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/Parser/token.h
@@ -19,11 +20,14 @@ CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/pch.h
 
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/AntQbeGen/qbeBuffer.cpp
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/AntQbeGen/qbeBuffer.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/AntQbeGen/qbeInstruction.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/AntQbeGen/qbeValue.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/pch.h
 
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/AntQbeGen/qbeInstruction.cpp
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/AntQbeGen/qbeInstruction.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/pch.h
 
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/AntQbeGen/qbeValue.cpp
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/AntQbeGen/qbeValue.h
@@ -58,13 +62,6 @@ CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/token.h
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/tokencache.h
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/pch.h
-
-CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o: ../../src/Parser/astexpression.h
-CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o: ../../src/Parser/shuntingyard.cpp
-CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o: ../../src/Parser/shuntingyard.h
-CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o: ../../src/Parser/token.h
-CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o: ../../src/mystring.h
-CMakeFiles/AntLang.dir/src/Parser/shuntingyard.cpp.o: ../../src/pch.h
 
 CMakeFiles/AntLang.dir/src/Parser/token.cpp.o: ../../src/Parser/token.cpp
 CMakeFiles/AntLang.dir/src/Parser/token.cpp.o: ../../src/Parser/token.h

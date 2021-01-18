@@ -40,6 +40,7 @@
 
 int main()
 {
+
     cout << "Hello there" << endl;
 
     auto result = Lexer::init("../../src/TestFiles/test.txt");
