@@ -3,12 +3,10 @@
 
 // @TODO: put this in a different file, we wont be using right now but it might
 // be useful later
-
-//Does
 int simpleLexerTester()
 {
-    restart:
-    Lexer::init("../../src/TestFiles/test.txt");
+    //restart:
+    Lexer::init("../../src/TestFiles/new_parser_stuff_for_playing_around_with_typechecking.test");
 
     cout << "=======LEXING=======" << endl;
 
@@ -99,6 +97,18 @@ int simpleLexerTester()
             {
                 cout << "float64" << endl;
             }break;
+            case Key_cast:
+            {
+                cout << "cast" << endl;
+            }break;
+            case Less:
+            {
+                cout << "<" << endl;
+            }break;
+            case Greater:
+            {
+                cout << ">" << endl;
+            }break;
             default:
                 assert(false);
         }
@@ -107,12 +117,13 @@ int simpleLexerTester()
     break_while:
 
     //@bodge as fuck just for qd testing:
-    std::cin.get();
-    goto restart;
+    // std::cin.get();
+    // goto restart;
 
     return 0;
 }
 
+// TODO: do like a toString method for tokens to avoid all this mess
 int lexerTester()
 {
     restart:

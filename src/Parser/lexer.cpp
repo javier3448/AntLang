@@ -171,14 +171,19 @@ inline void Lexer::advanceAndSkip()
 
 // @Improvement: generating keywords feels slow but for now it will do.
 // makes ident or keyword out of whatever is in the lex buffer.
+// @Improvement: It might be a better idea to move this to toke.cpp and pass it 
+// the string, something like 'bool isKeyword(const char* str);'
 Token makeIdentOrKeyword()
 {
-    for (u16 i = 0; i < KEYWORDS_LENGTH; i++)
+    // @Bodge:
+    // [!] We start with 0 and not KEYWORDS_BEG because we alse want to check if 
+    // it is a nativeType
+    for (u16 i = 0; i < KEYWORDS_BEG + KEYWORDS_LEN; i++)
     {
         // unnecessary strlen, because that value is a compile time constant
         // I hope the compiler can optimize it away 
         // @TODO: check in compiler explorer if it can. idk :/
-        const char* keyword = keywords[i];
+        const char* keyword = tokenStringLiterals[i];
         u16 keywordLength = (u16) strlen(keyword);
         if(keywordLength == lexBuffer.length
             &&
@@ -235,10 +240,27 @@ Token Lexer::lexToken()
             advanceAndAppend();
             goto Identing1;
         }
-        //cases where char == TokenKind
-        else if(currChar == '+' || currChar == '-' || currChar == '(' || currChar == ')' || currChar == '*'){
+        // Cases where char == TokenKind
+        // @Improvement: find a cleaner way to this
+        else if(currChar == '+'){
             advanceAndSkip();
-            return Token((TokenKind)currChar);
+            return TokenKind::Plus;
+        }
+        else if(currChar == '-'){
+            advanceAndSkip();
+            return TokenKind::Minus;
+        }
+        else if(currChar == '('){
+            advanceAndSkip();
+            return TokenKind::LeftParen;
+        }
+        else if(currChar == ')'){
+            advanceAndSkip();
+            return TokenKind::RightParen;
+        }
+        else if(currChar == '*'){
+            advanceAndSkip();
+            return TokenKind::Multiplication;
         }
         // cases that the resulting token can be the char itself or somthing else
         // like '<' and '<='. ie, cases that dont warrant their own state
@@ -250,7 +272,7 @@ Token Lexer::lexToken()
                 return Token(TokenKind::LessEqual);
             }
             else{
-                return Token((TokenKind)'<');
+                return Token(TokenKind::Less);
             }
         }
         else if(currChar == '>'){
@@ -261,7 +283,7 @@ Token Lexer::lexToken()
                 return Token(TokenKind::GreaterEqual);
             }
             else{
-                return Token((TokenKind)'>');
+                return Token(TokenKind::Greater);
             }
         }
         else if(currChar == '='){
@@ -272,7 +294,7 @@ Token Lexer::lexToken()
                 return Token(TokenKind::EqualEqual);
             }
             else{
-                return Token((TokenKind)'=');
+                return Token(TokenKind::Equal);
             }
         }
         else if(currChar == '!'){
@@ -283,7 +305,7 @@ Token Lexer::lexToken()
                 return Token(TokenKind::NotEqual);
             }
             else{
-                return Token((TokenKind)'!');
+                return Token(TokenKind::Not);
             }
         }
         else if(currChar == '&'){
@@ -294,7 +316,7 @@ Token Lexer::lexToken()
                 return Token(TokenKind::And);
             }
             else{
-                return Token((TokenKind)'&');
+                return Token(TokenKind::BitAnd);
             }
         }
         else if(currChar == '|'){
@@ -305,7 +327,7 @@ Token Lexer::lexToken()
                 return Token(TokenKind::Or);
             }
             else{
-                return Token((TokenKind)'|');
+                return Token(TokenKind::BitOr);
             }
         }
         else if(currChar == '/'){
@@ -337,7 +359,7 @@ Token Lexer::lexToken()
             goto MultilineComment;
         }
         else{
-            return Token((TokenKind)'/');
+            return Token(TokenKind::Division);
         }
     }assert(false && "We can only leave a LexState by 'goto State;' or returning");
 

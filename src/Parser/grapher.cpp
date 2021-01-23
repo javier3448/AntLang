@@ -13,7 +13,10 @@ GraphvizNode Grapher::graphExpression(AstExpression *expr)
             label = expr->numberLiteral.string.toStdString();
         break;
         case BinaryExpression:
-            label = std::string(1, (char)expr->binaryForm._operator.kind);
+            label = std::string(expr->binaryForm._operator.stringRepresentation());
+        case CastExpression:
+            //[!] Only works for nativeTypes
+            label = std::string("Cast expression ") + expr->castForm.typeExpression._type.stringRepresentation();
         break;
     }
 
@@ -36,6 +39,16 @@ GraphvizNode Grapher::graphExpression(AstExpression *expr)
 
             code += name + "->" + leftNode.name + ";\n" +
                     name + "->" + rightNode.name + ";\n";
+
+            return GraphvizNode{name, code};
+        }break;
+
+        case CastExpression:{
+            auto expNode = graphExpression(expr->castForm.expression);
+
+            code += expNode.code;
+
+            code += name + "->" + expNode.name + ";\n";
 
             return GraphvizNode{name, code};
         }break;

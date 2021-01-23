@@ -29,120 +29,32 @@
 
 int main()
 {
-    //restart:
     Lexer::init("../../src/TestFiles/new_parser_stuff_for_playing_around_with_typechecking.test");
 
-    cout << "=======LEXING=======" << endl;
+    auto expr = Parser::parseExpression();
 
-    //@REMEMBER: right now we are leaking the myString of every single token
-    //this whole function is just to qd test the lexer
-    auto token = Lexer::getNextToken();
+    auto graphvizCode = "digraph G {\n" +  Grapher::graphExpression(expr).code  + "\n}\n";
 
-    while(true){
-        switch (token.kind) {
-            case Identifier:
-            {
-                cout << "Identifier: " << token.string << endl;
-            }break;
-            case Number:
-            {
-                cout << "Number: " << token.string << endl;
-            }break;
-            case Error:
-            {
-                cout << "Error: " << token.string << endl;
-            }break;
-            case Plus:
-            {
-                cout << "Plus: +" << endl;
-            }break;
-            case Minus:
-            {
-                cout << "Minus: -" << endl;
-            }break;
-            case Eof:
-            {
-                cout << "Eof: EOF"  << endl;
-                goto break_while;
-            }break;
-            case LeftParen:
-            {
-                cout << "("  << endl;
-            }break;
-            case RightParen:
-            {
-                cout << ")"  << endl;
-            }break;
-            case Division:
-            {
-                cout << "/"  << endl;
-            }break;
-            case Multiplication:
-            {
-                cout << "*"  << endl;
-            }break;
-            case Key_u64:
-            {
-                cout << "u64" << endl;
-            }break;
-            case Key_s64:
-            {
-                cout << "s64" << endl;
-            }break;
-            case Key_u32:
-            {
-                cout << "u32" << endl;
-            }break;
-            case Key_s32:
-            {
-                cout << "s32" << endl;
-            }break;
-            case Key_u16:
-            {
-                cout << "u16" << endl;
-            }break;
-            case Key_s16:
-            {
-                cout << "s16" << endl;
-            }break;
-            case Key_u8:
-            {
-                cout << "u8:" << endl;
-            }break;
-            case Key_s8:
-            {
-                cout << "s8:" << endl;
-            }break;
-            case Key_float32:
-            {
-                cout << "float32" << endl;
-            }break;
-            case Key_float64:
-            {
-                cout << "float64" << endl;
-            }break;
-            case Key_cast:
-            {
-                cout << "cast" << endl;
-            }break;
-            case Less:
-            {
-                cout << "<" << endl;
-            }break;
-            case Greater:
-            {
-                cout << ">" << endl;
-            }break;
-            default:
-                assert(false);
-        }
-        token = Lexer::getNextToken();
+    //@DEBUG: just to generate save and compile a .dot file
+    std::FILE* f = std::fopen("../../src/TestFiles/Graphviz/test.dot", "wb");
+
+    if(f == nullptr){
+        cout << "Couldnt generate the test graphviz image: n";
+        cout << strerror(errno) << endl;
+        exit(1);
     }
-    break_while:
+    //@TODO: report error if something goes wrong
+    fprintf(f, "%s", graphvizCode.c_str());
+    fclose(f);
 
-    //@bodge as fuck just for qd testing:
-    // std::cin.get();
-    // goto restart;
+    auto compileDot = "dot -Tpng "
+                      "../../src/TestFiles/Graphviz/test.dot "
+                      "-o "
+                      "../../src/TestFiles/Graphviz/test.png";
+    auto displayImage = "nohup display ../../src/TestFiles/Graphviz/test.png &";
+
+    system(compileDot);
+    system(displayImage);
 
     return 0;
 }

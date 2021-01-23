@@ -70,16 +70,63 @@ AstExpression *Parser::parseMostPrecedentExpression()
             result->hasParenthesis = true;
             return result;
         }break;
+        case Key_cast:
+        {
+            //@REMEMBER: to 'consume' the keyword we just peeked before
+            Lexer::getNextToken();
+
+            auto peekedToken = Lexer::peekToken();
+            if(peekedToken->kind != TokenKind::Less){
+                cout << "Missing opening '<' got: " << peekedToken->stringRepresentation() << "instead \n";
+                assert(false);
+            }
+            Lexer::getNextToken();
+
+
+            AstTypeExpression typeExpr = parseTypeExpression();
+
+            peekedToken = Lexer::peekToken();
+            if(peekedToken->kind != TokenKind::Greater){
+                cout << "Missing closing '>' got: " << peekedToken->stringRepresentation() << "instead \n";
+                assert(false);
+            }
+            Lexer::getNextToken();
+
+            AstExpression* expr = parseExpression();
+
+            auto castExpression = (AstExpression*)malloc(sizeof(AstExpression));
+            castExpression->makeCastExpression(typeExpr, expr);
+
+            return castExpression;
+        }break;
         default:
         {
             //@SERIOUS TODO:
             //Find a much much better way of reporting errors
-            cout << "Not a valid token to start expression: " << Lexer::getNextToken().kind << "\n";
+            auto badToken = Lexer::peekToken();
+            cout << "Not a valid token to start expression: " << (s32) badToken->kind << "\n";
             //@debug: I dont want to think about how to report errors and
             //all that right now, so, for now we just fucking crash :/
             assert(false);
         }break;
     }
+}
+
+AstTypeExpression Parser::parseTypeExpression()
+{
+    auto peekedToken = Lexer::peekToken();
+    if(peekedToken->kind == TokenKind::Identifier)
+    {
+        cout << "Custom types not implemented yet!\n";
+        assert(false);
+    }
+    else if(isNativeType(peekedToken->kind))
+    {
+        AstTypeExpression typeExpr = { ._type = Lexer::getNextToken()};
+        return typeExpr;
+    }
+    cout << "Not a valid typeExpr\n";
+    assert(false);
 }
 
 inline s16 getOperatorPrecedence(TokenKind kind)
@@ -103,6 +150,7 @@ inline s16 getPrecedence(AstExpression* astExpression)
 
     switch (astExpression->kind) {
     case NumberLiteral:
+    case CastExpression:
         return INT8_MAX;
     case BinaryExpression:
         return getOperatorPrecedence(astExpression->binaryForm._operator.kind);

@@ -1,17 +1,12 @@
 digraph G {
 "expr0" [
-label = "+",
+label = "Cast expression s64",
 shape = "box",
 ];
 "expr1" [
-label = "5.3",
-shape = "box",
-];
-"expr2" [
-label = "5",
+label = "10",
 shape = "box",
 ];
 "expr0"->"expr1";
-"expr0"->"expr2";
 
 }

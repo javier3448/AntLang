@@ -13,8 +13,19 @@ or whatever. Useful resources when we get there:
 *A microsoft patent that seems interesting but I dont really understand what it is
 		https://patents.google.com/patent/US7086041B2/en
 
+@TODO EVENTUALLY:
+Time the performance just to get a rough idea of how things are going later on 
+we will use all them fancy tools to profile but for now a simple timer is fine
+
+@ We need a more consistent way of 'constructing' structs, maybe just a function 
+that takes a pointer to the struct to be constructed, the same a method but I think it 
+looks a bit better, IDK
+
+@SERIOUS TODO:
+Find a much much better way of reporting errors.
+For now we just cout something and then assert(false)
+
 @TODO LATER LEXER: //Big quality of life changes!
-Find a better way to deal with EOF in the lexer
 refactor the lexer, try to make less of a literal 'state machine' and something
 more readable even if the flow of it is not as efficient as it would be if it 
 were a state machine
@@ -27,20 +38,6 @@ and leave the lexer for stuff that is not a symbol or a keyword.
 :think: There are sequences of chars that can only appear in a specific token, for 
 example: 'case' can appear inside the identifier: 'casey' but '<=' cant appear 
 anywhere else, *maybe* we can take advantage of that
-(what matters is that it cant be the beggining of any other token)
-Reconsider using the char as an enum for simbols, maybe do the "index to array 
-of their (const char*) representations like we did with QbeInstructions"
-IT IS WAY TOO MUCH WORK (AND ERROR PRONE) TO ADD A NEW OPERATOR/KEYWORD BECAUSE
-WE HAVE TO MANTAIN A BUNCH OF ASSERTS AND DEFINITIONS (THE ENUMS AND FUNCS) TO DO IT
-FIND A BETTER WAY, MAYBE GROUP THEM TOGETHER IN A WAY WE CAN ITERATE THROUGH THEM
-EASYLY (Do someting like: from 0 to 100 is for keywords, from 101 to 200 is for
-operators, etc) 
-Maybe take inspiration from how we do keywords, which are relatively easy to add
-And don't compile if we dont add the keyword in all the paces we should (as far
-as the lexer is concerned)
-
-@TODO much much later:
-Nested comments, they are not that important we can think about them way later
 
 @TODO:
 write a macro that asserts something and prints a message when the assertion fails.

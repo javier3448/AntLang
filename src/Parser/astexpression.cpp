@@ -18,3 +18,9 @@ void AstExpression::makeBinaryExpression(AstExpression *left, Token biOperator, 
     this->hasParenthesis = false;
 }
 
+void AstExpression::makeCastExpression(AstTypeExpression typeExpression, AstExpression *expression)
+{
+	this->kind = AstExpressionKind::CastExpression;
+	this->castForm.typeExpression = typeExpression;
+	this->castForm.expression = expression;
+}
