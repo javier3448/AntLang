@@ -74,12 +74,8 @@ CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/Parser/tokencache.
 CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/pch.h
 
-CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/AntLlvmGen/antLlvmGen.h
-CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/AntQbeGen/antQbeGen.h
-CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/AntQbeGen/qbeBuffer.h
-CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/AntQbeGen/qbeInstruction.h
-CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/AntQbeGen/qbeValue.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/astexpression.h
+CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/grapher.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/lexer.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/parser.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/token.h

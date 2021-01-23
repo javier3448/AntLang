@@ -9,7 +9,7 @@ struct AstExpression;
 struct BinaryExpressionForm;
 
 enum AstExpressionKind : char{
-    IntegerLiteral = 0,
+    NumberLiteral = 0,
     BinaryExpression = 1,
 };
 
@@ -24,7 +24,7 @@ struct AstExpression
 {
     AstExpressionKind kind;
     union{
-        Token intLiteral;
+        Token numberLiteral;
         BinaryExpressionForm binaryForm;
     };
     //@Improvement: Find a better solution to communicate that the expression is

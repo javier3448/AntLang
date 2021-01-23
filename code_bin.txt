@@ -1,14 +1,122 @@
 // This is just a file where I put code that might be useful later on 
 // but its kinda getting in the way 
 
-//@TODO: poner esto en un mejor lugar. Me da cosa borrarlo porque talvez nos
-//sirva pero por ahora definitivamente no lo vamos a usar
+// @TODO: put this in a different file, we wont be using right now but it might
+// be useful later
+
+//Does
+int simpleLexerTester()
+{
+    restart:
+    Lexer::init("../../src/TestFiles/test.txt");
+
+    cout << "=======LEXING=======" << endl;
+
+    //@REMEMBER: right now we are leaking the myString of every single token
+    //this whole function is just to qd test the lexer
+    auto token = Lexer::getNextToken();
+
+    while(true){
+        switch (token.kind) {
+            case Identifier:
+            {
+                cout << "Identifier: " << token.string << endl;
+            }break;
+            case Number:
+            {
+                cout << "Number: " << token.string << endl;
+            }break;
+            case Error:
+            {
+                cout << "Error: " << token.string << endl;
+            }break;
+            case Plus:
+            {
+                cout << "Plus: +" << endl;
+            }break;
+            case Minus:
+            {
+                cout << "Minus: -" << endl;
+            }break;
+            case Eof:
+            {
+                cout << "Eof: EOF"  << endl;
+                goto break_while;
+            }break;
+            case LeftParen:
+            {
+                cout << "("  << endl;
+            }break;
+            case RightParen:
+            {
+                cout << ")"  << endl;
+            }break;
+            case Division:
+            {
+                cout << "/"  << endl;
+            }break;
+            case Multiplication:
+            {
+                cout << "*"  << endl;
+            }break;
+            case Key_u64:
+            {
+                cout << "u64" << endl;
+            }break;
+            case Key_s64:
+            {
+                cout << "s64" << endl;
+            }break;
+            case Key_u32:
+            {
+                cout << "u32" << endl;
+            }break;
+            case Key_s32:
+            {
+                cout << "s32" << endl;
+            }break;
+            case Key_u16:
+            {
+                cout << "u16" << endl;
+            }break;
+            case Key_s16:
+            {
+                cout << "s16" << endl;
+            }break;
+            case Key_u8:
+            {
+                cout << "u8:" << endl;
+            }break;
+            case Key_s8:
+            {
+                cout << "s8:" << endl;
+            }break;
+            case Key_float32:
+            {
+                cout << "float32" << endl;
+            }break;
+            case Key_float64:
+            {
+                cout << "float64" << endl;
+            }break;
+            default:
+                assert(false);
+        }
+        token = Lexer::getNextToken();
+    }
+    break_while:
+
+    //@bodge as fuck just for qd testing:
+    std::cin.get();
+    goto restart;
+
+    return 0;
+}
+
 int lexerTester()
 {
-    assert(false);
-
     restart:
-    auto result = Lexer::init("../AntLang/TestFiles/test.txt");
+    auto result = Lexer::init("../../src/TestFiles/test.txt");
     if(result.has_value()){
         cout << result.value() << endl;
         exit(1);
@@ -93,11 +201,7 @@ int lexerTester()
 //sirva pero por ahora definitivamente no lo vamos a usar
 int parserTester()
 {
-    auto result = Lexer::init("../AntLang/TestFiles/test.txt");
-    if(result.has_value()){
-        cout << result.value() << endl;
-        exit(1);
-    }
+    Lexer::init("../../src/TestFiles/new_number_lits.test");
 
     auto expr = Parser::parseExpression();
 
@@ -105,7 +209,7 @@ int parserTester()
 
 
     //@DEBUG: just to generate save and compile a .dot file
-    std::FILE* f = std::fopen("../AntLang/TestFiles/Graphviz/test.dot", "wb");
+    std::FILE* f = std::fopen("../../src/TestFiles/Graphviz/test.dot", "wb");
 
     if(f == nullptr){
         cout << "Couldnt generate the test graphviz image: n";
@@ -117,13 +221,39 @@ int parserTester()
     fclose(f);
 
     auto compileDot = "dot -Tpng "
-                      "../AntLang/TestFiles/Graphviz/test.dot "
+                      "../../src/TestFiles/Graphviz/test.dot "
                       "-o "
-                      "../AntLang/TestFiles/Graphviz/test.png";
-    auto displayImage = "nohup display ../AntLang/TestFiles/Graphviz/test.png";
+                      "../../src/TestFiles/Graphviz/test.png";
+    auto displayImage = "nohup display ../../src/TestFiles/Graphviz/test.png &";
 
     system(compileDot);
+    // TODO: change it so it doesnt wait for image display window to close to
+    // continue this main
     system(displayImage);
+
+    return 0;
+}
+
+// Qbe tester as of 18/01:
+int testQbe()
+{
+    cout << "Hello there" << endl;
+
+    auto result = Lexer::init("../../src/TestFiles/test.txt");
+    if(result.has_value()){
+        cout << result.value() << endl;
+        exit(1);
+    }
+
+    auto expr = Parser::parseExpression();
+
+    AntQbeGen::init();
+    AntQbeGen::compileTopLevelExpression(expr);
+
+    //@debug
+    cout << qbeBuffer.buffer << endl;
+
+    //TODO: print the qbe instructions
 
     return 0;
 }

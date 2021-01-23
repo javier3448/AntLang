@@ -6,31 +6,27 @@
 #include "../Parser/tokencache.h"
 #include "../mystring.h"
 
+// @TODO: find a better way to handle end of file, it looks awkward in the
+// state machine
+// -> maybe handle it the same way something like fread_char does, return an int 
+// bigger than char instead of char and decide on a special value to represent EOF
+
+// THIS LEXER IS STUPID AND USES null TO SIGNAL EOF.
+// SO THERE IS BASICALY 'myUB' when a source file has a null char anywhere
+
 namespace Lexer
 {
-    //all the 'private' stuff
-    //@Improvement, I dont know how to say something is private to a namespace
-    //in c++, the only way I am aware of is putting it inside the cpp but I would
-    //like for this header to have all the declarations because its easier to
-    //read that imo. oh well :/
-    extern MyString hllSource;
+    extern MyString hllSourceDif;
     //points to the first unLexed character in hllSource
     extern s64 lexPointer;
 
-    //A constant array is perfectly fine for know, I doubt we will ever cache more
-    //than 16 tokens, but if we do we just change this to std::vector or our own
-    //dynamic array
+    // A tokenCache data structure to implement the peekToken and getNextToken
+    // functions
+    // A 'static' array is perfectly fine for know, I doubt we will ever cache more
+    // than 16 tokens
     extern TokenCache tokenCache;
 
-    //returns const char* to string literal containing the error message, returns
-    //nullptr if no error occured
-    //@TODO: make a better way of error handling, honestly we need to put some
-    //serious thought into how we are going to comunicate errors, we can't just
-    //stop compiling after we find the first error. But maybe we cant construct
-    //a good error message as soon as we know there is an error, we might have
-    //to go back in the call tree to make a better error
-    std::optional<const char*> init(const char* path);
-
+    void init(const char* path);
 
     //Unlike peekChar this actually caches the tokens so we can get them right away
     //later
@@ -41,9 +37,10 @@ namespace Lexer
     //'Transfers ownership' i.e. it pops it out of the cache if it is in cache
     Token getNextToken();
 
-    //****Private stuff****
 
-    //lexes a token from lexPointer onward
+    // THE FOLLOWING FUNCS SHOULD NOT BE USED OUTSIDE THIS NAMESPACE
+
+    // lexes a token from lexPointer onward
     Token lexToken();
     char peekChar(s64 amount = 0);
     void advanceAndAppend();

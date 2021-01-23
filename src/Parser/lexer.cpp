@@ -55,19 +55,20 @@ struct LexBuffer{
 };
 
 //we only call the constructor here because c++ gets mad otherwise
-MyString Lexer::hllSource{0, nullptr};
+MyString Lexer::hllSourceDif{0, nullptr};
 s64 Lexer::lexPointer = 0;
 
 // @[!!!]
 // @UB: if the contents in the file: 'path' contain null chars
 //      An easy way to avoid that would be to have a different string struct
 //      for lexing, one that can take null chars and is not null terminated
-std::optional<const char*> Lexer::init(const char* path)
+void Lexer::init(const char* path)
 {
     std::FILE* f = std::fopen(path, "rb");
 
     if(f == nullptr){
-        return {strerror(errno)};
+        printf("%s", strerror(errno));
+        assert(false);
     }
 
     //@[?]C++: Why don't I need the std namespace when using fseek? I am
@@ -82,20 +83,19 @@ std::optional<const char*> Lexer::init(const char* path)
     fread(buffer, 1, size, f);
 
     //we 'construct' the MyString
-    hllSource.length = size;
-    hllSource.buffer = buffer;
+    hllSourceDif.length = size;
+    hllSourceDif.buffer = buffer;
 
     //@debug
-    cout << hllSource.toStdString() << endl;
+    cout << hllSourceDif.toStdString() << endl;
 
     //reset the thing that traverses the hllSource
     lexPointer = 0;
-
-    return {};
 }
 
 enum State{
     First,
+    // @bad names :/
     Identing1,
     Identing2,
     Numing
@@ -127,17 +127,31 @@ auto lexBuffer = LexBuffer();
 //in mem that tells them is they are a valid final or if they should return
 //an error token
 
-//@Improvement?: make it so we peek advance 'n' characters
-//works for negative as well but only asserts we dont peek out of bounds
-//in debug build
+// @Improvement?: make it so we peek advance 'n' characters
+// works for negative as well but only asserts we dont peek out of bounds
+// in debug build
+// Only return nullchar if we reach EOF, if we find a nullchar anywhere in the 
+// source file we panic
 inline char Lexer::peekChar(s64 ammount)
 {
-    assert((lexPointer + ammount <= hllSource.length ||
-            lexPointer + ammount < 0)
+    assert((lexPointer + ammount <= hllSourceDif.length &&
+            lexPointer + ammount >= 0)
            &&
            "lexPointer is out of bounds!");
 
-    return hllSource[lexPointer + ammount];
+    // [!]
+    // the only place we accept null is as the end char of MyString, because
+    // MyString's buffer is null terminated.
+    // thats why this if goes *before* assert
+    if(lexPointer + ammount == hllSourceDif.length){
+        return '\0';
+    }
+
+    assert(hllSourceDif[lexPointer + ammount] != '\0'
+            &&
+           "nullchar found in source!");
+
+    return hllSourceDif[lexPointer + ammount];
 }
 
 //@Improvement?: make it so we can advance 'n' characters
@@ -145,7 +159,7 @@ inline char Lexer::peekChar(s64 ammount)
 //the pointer by 1
 inline void Lexer::advanceAndAppend()
 {
-    lexBuffer.append(hllSource[lexPointer]);
+    lexBuffer.append(hllSourceDif[lexPointer]);
     lexPointer += 1;
 }
 
@@ -155,20 +169,37 @@ inline void Lexer::advanceAndSkip()
     lexPointer += 1;
 }
 
+// @Improvement: generating keywords feels slow but for now it will do.
+// makes ident or keyword out of whatever is in the lex buffer.
+Token makeIdentOrKeyword()
+{
+    for (u16 i = 0; i < KEYWORDS_LENGTH; i++)
+    {
+        // unnecessary strlen, because that value is a compile time constant
+        // I hope the compiler can optimize it away 
+        // @TODO: check in compiler explorer if it can. idk :/
+        const char* keyword = keywords[i];
+        u16 keywordLength = (u16) strlen(keyword);
+        if(keywordLength == lexBuffer.length
+            &&
+            (memcmp(keyword, lexBuffer.buffer, keywordLength) == 0))
+        {
+            // @TODO: Find a way in which the value of the enum TokenKind of a 
+            // keyword easily maps to the index in the keywords array
+            return Token((TokenKind)i);
+        }
+    }
+    return Token(TokenKind::Identifier, MyString::make(lexBuffer.length, lexBuffer.buffer));
+}
+
+
 //@TO LEARN: how does UTF8 works for real, and does it affect us here??
 Token Lexer::lexToken()
 {
     //@BUG: we fail assert if the last thing in the source file is an ignored char
     //like a comment or a whitespace
-    assert((lexPointer <= hllSource.length) &&
+    assert((lexPointer <= hllSourceDif.length) &&
            "lexPointer is out of bounds!");
-
-    //@debug
-//    static s64 count = 1;
-//    cout << "*********************************************\n";
-//    cout << "this is the: " << count << " time we run lexToken() \n";
-//    cout << "*********************************************\n";
-//    count++;
 
     lexBuffer.empty();
     goto First;
@@ -179,26 +210,20 @@ Token Lexer::lexToken()
     //@TODO: make a drawing of the state machine and put it here in ASCII or
     //something
     //@NOTE:
-    //asserts between states because we can only leave a state by explicitely
-    //going to another one or returning a function
+    //asserts between states because we can only leave a state by explicitly
+    //going to another one or returning from function
 
     First:
     {
-        //special case if end of file
-        if(lexPointer == hllSource.length)
+        char currChar = peekChar();
+        if(currChar == '\0')
         {
-            //we still need to advance to leave the lexPointer in an 'out of
-            //bounds' state so next time we call lexToken the assertion can
-            //throw an error
-            advanceAndSkip();
             return Token{TokenKind::Eof};
         }
-
-        char currChar = peekChar();
-        if(isDigit(currChar))
+        else if(isDigit(currChar))
         {
             advanceAndAppend();
-            goto Numing;
+            goto Numing1;
         }
         else if(isLetter(currChar))
         {
@@ -214,6 +239,74 @@ Token Lexer::lexToken()
         else if(currChar == '+' || currChar == '-' || currChar == '(' || currChar == ')' || currChar == '*'){
             advanceAndSkip();
             return Token((TokenKind)currChar);
+        }
+        // cases that the resulting token can be the char itself or somthing else
+        // like '<' and '<='. ie, cases that dont warrant their own state
+        else if(currChar == '<'){
+            advanceAndSkip();
+            auto nextChar = peekChar(1);
+            if(nextChar == '='){
+                advanceAndSkip();
+                return Token(TokenKind::LessEqual);
+            }
+            else{
+                return Token((TokenKind)'<');
+            }
+        }
+        else if(currChar == '>'){
+            advanceAndSkip();
+            auto nextChar = peekChar(1);
+            if(nextChar == '='){
+                advanceAndSkip();
+                return Token(TokenKind::GreaterEqual);
+            }
+            else{
+                return Token((TokenKind)'>');
+            }
+        }
+        else if(currChar == '='){
+            advanceAndSkip();
+            auto nextChar = peekChar(1);
+            if(nextChar == '='){
+                advanceAndSkip();
+                return Token(TokenKind::EqualEqual);
+            }
+            else{
+                return Token((TokenKind)'=');
+            }
+        }
+        else if(currChar == '!'){
+            advanceAndSkip();
+            auto nextChar = peekChar(1);
+            if(nextChar == '='){
+                advanceAndSkip();
+                return Token(TokenKind::NotEqual);
+            }
+            else{
+                return Token((TokenKind)'!');
+            }
+        }
+        else if(currChar == '&'){
+            advanceAndSkip();
+            auto nextChar = peekChar(1);
+            if(nextChar == '&'){
+                advanceAndSkip();
+                return Token(TokenKind::And);
+            }
+            else{
+                return Token((TokenKind)'&');
+            }
+        }
+        else if(currChar == '|'){
+            advanceAndSkip();
+            auto nextChar = peekChar(1);
+            if(nextChar == '|'){
+                advanceAndSkip();
+                return Token(TokenKind::Or);
+            }
+            else{
+                return Token((TokenKind)'|');
+            }
         }
         else if(currChar == '/'){
             advanceAndSkip();
@@ -234,35 +327,31 @@ Token Lexer::lexToken()
     //make a line comment
     Slash:
     {
-        //special case if end of file
-        if(lexPointer == hllSource.length){
-            return Token((TokenKind)'/');
-        }
         char currChar = peekChar();
         if(currChar == '/'){
             advanceAndSkip();
             goto LineComment;
         }
+        else if(currChar == '*'){
+            advanceAndSkip();
+            goto MultilineComment;
+        }
         else{
             return Token((TokenKind)'/');
         }
     }assert(false && "We can only leave a LexState by 'goto State;' or returning");
 
-
     //Its like a special case for ignore. 'an ignore char that only stops
     //ignoring untill it finds end of line or EOF
     LineComment:
     {
-        //special case if end of file
-        if(lexPointer == hllSource.length){
-            //we stop ignoring and let 'First state' figure out what is the
-            //real nextToken
-            goto First;
-        }
         char currChar = peekChar();
-
         if(currChar == '\n' || currChar == '\r'){
             advanceAndSkip();
+            goto First;
+        }
+        else if(currChar == '\0'){
+            //Special case if 'EOF' we dont advance the character
             goto First;
         }
         else{
@@ -271,15 +360,40 @@ Token Lexer::lexToken()
         }
     }assert(false && "We can only leave a LexState by 'goto State;' or returning");
 
+    // For now we won't support nested comments because I am not sure if I like 
+    // them, but to implement them we would only need to keep track of how many
+    // time does '/*' and '*/' appear inside the comment. ez
+    MultilineComment:
+    {
+        // @Cheating:
+        // special case if end of file
+        // I dont want to create a whole other state just to handle a '*' that is
+        // not followed by a '/' so we will check both, by using a double peek
+        // char
+        // Another way to think about it is that this state will lex in a '2 char step'
+        // WHICH MEANS THAT WE SHOULD HAVE AT LEAST 2 CHARS LEFT IN hllSource
+        // ELSE THIS IS A ERROR TOKEN
+        if(lexPointer >= hllSourceDif.length - 1){
+            // @TODO: this is a unclosed comment error
+            return Token(TokenKind::Error, MyString::make("unclosed multine comment"));
+        }
+        char currChar1 = peekChar(0);
+        char currChar2 = peekChar(1);
+
+        if(currChar1 == '*' && currChar2 == '/'){
+            advanceAndSkip();
+            advanceAndSkip();
+            goto First;
+        }
+        else{
+            advanceAndSkip();
+            advanceAndSkip();
+            goto MultilineComment;
+        }
+    }assert(false && "We can only leave a LexState by 'goto State;' or returning");
+
     Identing1:
     {
-        //special case if end of file
-        if(lexPointer == hllSource.length){
-            //@Volatile: finish Identing1
-            //By this point we know the first char is either a letter or a
-            //'_'. A '_' alone is not a valid identifier so we must return
-            return Token(TokenKind::Error, MyString::make(lexBuffer.length, lexBuffer.buffer));
-        }
         char currChar = peekChar();
 
         if(currChar == '_'){
@@ -297,10 +411,6 @@ Token Lexer::lexToken()
 
     Identing2:
     {
-        //special case if end of file
-        if(lexPointer == hllSource.length){
-            return Token(TokenKind::Identifier, MyString::make(lexBuffer.length, lexBuffer.buffer));
-        }
         char currChar = peekChar();
 
         if(isLetter(currChar) || isDigit(currChar) || currChar == '_'){
@@ -308,38 +418,53 @@ Token Lexer::lexToken()
             goto Identing2;
         }
         else{
-            return Token(TokenKind::Identifier, MyString::make(lexBuffer.length, lexBuffer.buffer));
+            // @Bodge: For now to lex all keywords we just check if any ident we
+            // generate is in a big old list of keywords if so we return the keyword
+            // not the ident instead
+            return makeIdentOrKeyword();
         }
     }assert(false && "We can only leave a LexState by 'goto State;' or returning");
 
-    Numing:
+    Numing1:
     {
-        //@TODO: atrapar si la cadena representa un numero demasiado
-        //grande para s64
-
-        //special case if end of file
-        if(lexPointer == hllSource.length){
-            //@TODO: dont convert to stdString here! find a way to parse
-            //to integer only using your MyString
-            //@Bodge:
-            auto myString = MyString::make(lexBuffer.length, lexBuffer.buffer);
-            auto stdString = myString.toStdString();
-            return Token(TokenKind::Integer, std::stoll(stdString.c_str(), nullptr, 10));
+        char currChar = peekChar();
+        if(isDigit(currChar)){
+            advanceAndAppend();
+            goto Numing1;
         }
-        char currChar = hllSource[lexPointer];
+        else if(currChar == '.'){
+            advanceAndAppend();
+            goto Numing2;
+        }
+        else{
+            return Token(TokenKind::Number, MyString::make(lexBuffer.length, lexBuffer.buffer));
+        }
+    }assert(false && "We can only leave a LexState by 'goto State;' or returning");
+
+    // In this state we already lexed the '.'
+    Numing2:
+    {
+        char currChar = peekChar();
+        if(isDigit(currChar)){
+            advanceAndAppend();
+            goto Numing3;
+        }
+        else{
+            return Token(TokenKind::Error, MyString::make(lexBuffer.length, lexBuffer.buffer));
+        }
+    }assert(false && "We can only leave a LexState by 'goto State;' or returning");
+
+    // In this state we already lexed the '.' AND we know there is at least one digit after it
+    Numing3:
+    {
+        char currChar = peekChar();
         //special case if end of file
         if(isDigit(currChar)){
             advanceAndAppend();
-            goto Numing;
+            goto Numing2;
         }
-        //@TODO: support for float literals
         else{
-            //@TODO: dont convert to stdString here! find a way to parse
-            //to integer only using your MyString
-            //@Bodge:
-            auto myString = MyString::make(lexBuffer.length, lexBuffer.buffer);
-            auto stdString = myString.toStdString();
-            return Token(TokenKind::Integer, std::stoll(stdString.c_str(), nullptr, 10));
+            return Token(TokenKind::Number, MyString::make(lexBuffer.length, lexBuffer.buffer));
         }
     }assert(false && "We can only leave a LexState by 'goto State;' or returning");
 }

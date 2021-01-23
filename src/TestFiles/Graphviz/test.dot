@@ -4,83 +4,13 @@ label = "+",
 shape = "box",
 ];
 "expr1" [
-label = "5",
+label = "5.3",
 shape = "box",
 ];
 "expr2" [
-label = "*",
-shape = "box",
-];
-"expr3" [
-label = "-",
-shape = "box",
-];
-"expr4" [
-label = "*",
-shape = "box",
-];
-"expr5" [
-label = "10",
-shape = "box",
-];
-"expr6" [
-label = "/",
-shape = "box",
-];
-"expr7" [
-label = "20",
-shape = "box",
-];
-"expr8" [
-label = "+",
-shape = "box",
-];
-"expr9" [
 label = "5",
 shape = "box",
 ];
-"expr10" [
-label = "*",
-shape = "box",
-];
-"expr11" [
-label = "2",
-shape = "box",
-];
-"expr12" [
-label = "3",
-shape = "box",
-];
-"expr10"->"expr11";
-"expr10"->"expr12";
-"expr8"->"expr9";
-"expr8"->"expr10";
-"expr6"->"expr7";
-"expr6"->"expr8";
-"expr4"->"expr5";
-"expr4"->"expr6";
-"expr13" [
-label = "8",
-shape = "box",
-];
-"expr3"->"expr4";
-"expr3"->"expr13";
-"expr14" [
-label = "*",
-shape = "box",
-];
-"expr15" [
-label = "32",
-shape = "box",
-];
-"expr16" [
-label = "32",
-shape = "box",
-];
-"expr14"->"expr15";
-"expr14"->"expr16";
-"expr2"->"expr3";
-"expr2"->"expr14";
 "expr0"->"expr1";
 "expr0"->"expr2";
 

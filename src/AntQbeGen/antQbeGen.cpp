@@ -30,11 +30,14 @@ void AntQbeGen::compileTopLevelExpression(AstExpression* expr)
 QbeOperand AntQbeGen::compileExpression(AstExpression* astExpr)
 {
     switch(astExpr->kind){
-        case AstExpressionKind::IntegerLiteral:
+        case AstExpressionKind::NumberLiteral:
         {
             return QbeOperand{
                 .kind = QbeOperandKind::ConstantKind,
-                .double_constant = (double) astExpr->intLiteral.integer
+                // @TEMP:
+                // @NOCHECKIN:
+                //.double_constant = (double) astExpr->numberLiteral.string
+                .double_constant = 0
             };
         }break;
 

@@ -2,10 +2,10 @@
 
 #include <limits.h>
 
-void AstExpression::makeIntLiteralExpression(Token intLiteral)
+void AstExpression::makeIntLiteralExpression(Token numberLiteral)
 {
-    this->kind = AstExpressionKind::IntegerLiteral;
-    this->intLiteral = intLiteral;
+    this->kind = AstExpressionKind::NumberLiteral;
+    this->numberLiteral = numberLiteral;
     this->hasParenthesis = false;
 }
 

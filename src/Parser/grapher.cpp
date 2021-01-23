@@ -9,8 +9,8 @@ GraphvizNode Grapher::graphExpression(AstExpression *expr)
 
     std::string label;
     switch (expr->kind) {
-        case IntegerLiteral:
-            label = std::to_string(expr->intLiteral.integer);
+        case NumberLiteral:
+            label = expr->numberLiteral.string.toStdString();
         break;
         case BinaryExpression:
             label = std::string(1, (char)expr->binaryForm._operator.kind);
@@ -24,7 +24,7 @@ GraphvizNode Grapher::graphExpression(AstExpression *expr)
                               "];\n";
 
     switch (expr->kind) {
-        case IntegerLiteral:
+        case NumberLiteral:
             return GraphvizNode{name, code};
         break;
 

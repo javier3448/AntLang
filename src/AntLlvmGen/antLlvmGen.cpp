@@ -27,9 +27,9 @@ using namespace llvm;
 
 void AntLlvmGen::init()
 {
-  theContext = std::make_unique<LLVMContext>();
-  theModule = std::make_unique<Module>("my cool jit", *theContext);
-  builder = std::make_unique<IRBuilder<>>(*theContext);
+    theContext = std::make_unique<LLVMContext>();
+    theModule = std::make_unique<Module>("my cool jit", *theContext);
+    builder = std::make_unique<IRBuilder<>>(*theContext);
 }
 
 // @debug?:
@@ -66,7 +66,7 @@ Value* AntLlvmGen::compileExpression(AstExpression* astExpr)
 {
 
     switch(astExpr->kind){
-        case AstExpressionKind::IntegerLiteral:
+        case AstExpressionKind::NumberLiteral:
         {
             // @debug:
             cout << "compiling expression kind: IntLiteral" << endl;
@@ -74,7 +74,9 @@ Value* AntLlvmGen::compileExpression(AstExpression* astExpr)
             // the casting to double. Even tho our parser only parses integers,
             // everything is a float64 in the eyes of our generated llvm ir
 
-            return ConstantFP::get(*theContext, APFloat((double) astExpr->intLiteral.integer));
+            // @Improvement: I think LLVM provides a way to instantiate an APFloat
+            // from a string. If so, use that
+            return ConstantFP::get(*theContext, APFloat(std::stod(astExpr->numberLiteral.string.toStdString())));
         }break;
 
         case AstExpressionKind::BinaryExpression:

@@ -1,20 +1,38 @@
 #include "./token.h"
 
-bool isOperatorKind(TokenKind kind)
+const char* keywords[11] = 
 {
-    return kind == TokenKind::Plus ||
-           kind == TokenKind::Minus ||
-           kind == TokenKind::Division ||
-           kind == TokenKind::Multiplication;
-}
+    "u64",
+    "s64",
+    "u32",
+    "s32",
+    "u16",
+    "s16",
+    "u8",
+    "s8",
+    "float32",
+    "float64",
+    "cast"
+};
 
 bool isBiOperatorKind(TokenKind kind)
 {
-
+   // @BAD: find a better, to add more tokens, it is way too much work right now
     return kind == TokenKind::Plus ||
            kind == TokenKind::Minus ||
            kind == TokenKind::Division ||
-           kind == TokenKind::Multiplication;
+           kind == TokenKind::Multiplication ||
+           kind == TokenKind::LessEqual ||
+           kind == TokenKind::GreaterEqual ||
+           kind == TokenKind::EqualEqual ||
+           kind == TokenKind::NotEqual ||
+           kind == TokenKind::And ||
+           kind == TokenKind::Or ||
+           kind == TokenKind::Less ||
+           kind == TokenKind::Greater ||
+           kind == TokenKind::Equal ||
+           kind == TokenKind::BitAnd ||
+           kind == TokenKind::BitOr;
 }
 
 Token::Token()
@@ -24,24 +42,39 @@ Token::Token()
 
 Token::Token(TokenKind kind)
 {
-   assert((kind == TokenKind::Eof ||
-           kind == TokenKind::Plus ||
-           kind == TokenKind::Minus ||
-           kind == TokenKind::Division ||
-           kind == TokenKind::LeftParen ||
-           kind == TokenKind::RightParen ||
-           kind == TokenKind::Multiplication)
-          &&
-          "A token can only contain a 'void' if .kind == Eof|Plus|Minus");
+   // Only some tokenKinds can have 'void' as their second member
+   // @BAD: find a better, to add more tokens, it is way too much work right now
+   assert(kind == TokenKind::Eof ||
+          kind == TokenKind::LessEqual ||
+          kind == TokenKind::GreaterEqual ||
+          kind == TokenKind::EqualEqual ||
+          kind == TokenKind::NotEqual ||
+          kind == TokenKind::And ||
+          kind == TokenKind::Or ||
+          kind == TokenKind::Plus ||
+          kind == TokenKind::Minus ||
+          kind == TokenKind::Division ||
+          kind == TokenKind::Multiplication ||
+          kind == TokenKind::Less ||
+          kind == TokenKind::Greater ||
+          kind == TokenKind::Equal ||
+          kind == TokenKind::Not ||
+          kind == TokenKind::BitAnd ||
+          kind == TokenKind::BitOr ||
+          kind == TokenKind::LeftParen ||
+          kind == TokenKind::RightParen ||
+          (kind > 0 && kind < KEYWORDS_LENGTH) // for any keyword
+          );
 
-   this->kind = kind;
+
+    this->kind = kind;
 }
 
 
 Token::Token(TokenKind kind, MyString string)
 {
    assert((kind == TokenKind::Identifier ||
-           kind == TokenKind::Real ||
+           kind == TokenKind::Number ||
            kind == TokenKind::Error)
           &&
           "A token can only contain a MyString if .kind == Identifier|Real|Error");
@@ -49,17 +82,6 @@ Token::Token(TokenKind kind, MyString string)
    this->kind = kind;
    this->string = string;
 }
-
-Token::Token(TokenKind kind, u64 integer){
-
-   assert((kind == TokenKind::Integer)
-          &&
-          "A token can only contain a MyString if .kind == Identifier|Integer|Real");
-
-   this->kind = kind;
-   this->integer = integer;
-}
-
 
 void Token::destroy()
 {

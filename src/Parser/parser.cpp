@@ -22,7 +22,7 @@ AstExpression *Parser::parseExpression()
 
     auto leftExpr = parseMostPrecedentExpression();
 
-    if(isOperatorKind(Lexer::peekToken()->kind)){
+    if(isBiOperatorKind(Lexer::peekToken()->kind)){
         auto biOperator = Lexer::getNextToken();
 
         auto rightExpr = parseExpression();
@@ -41,7 +41,7 @@ AstExpression *Parser::parseExpression()
 AstExpression *Parser::parseMostPrecedentExpression()
 {
     switch (Lexer::peekToken()->kind) {
-        case Integer:
+        case Number:
         {
             auto result = (AstExpression*)malloc(sizeof(AstExpression));
             result->makeIntLiteralExpression(Lexer::getNextToken());
@@ -102,7 +102,7 @@ inline s16 getPrecedence(AstExpression* astExpression)
         return INT8_MAX;
 
     switch (astExpression->kind) {
-    case IntegerLiteral:
+    case NumberLiteral:
         return INT8_MAX;
     case BinaryExpression:
         return getOperatorPrecedence(astExpression->binaryForm._operator.kind);

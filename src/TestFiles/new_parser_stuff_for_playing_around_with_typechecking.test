@@ -1,0 +1,88 @@
+//Adding type support to our basic expression
+
+cast<s64>(10)
+//true && false
+
+// 10.1_s8 should be semantic error
+
+// 🤔 having numbers in number type names will be awkward and hard to read if you
+// are using the 10_s64 syntax
+
+// s8    //NOT YET
+// s16   //NOT YET
+// u8    //NOT YET 
+// u16   //NOT YET 
+// u32   //NOT YET 
+// u64   //NOT YET 
+// f32   //NOT YET 
+
+// the types we are currently working with:
+// s32
+// s64
+// f64
+// bool
+
+// OPERATORS:
+// +
+// -
+// *
+// /
+// ==
+// !=
+// <
+// >
+// <=
+// >=
+// &&
+// ||
+ 
+// fuck it we will implement the sencible defaults right away :(((( because 
+// we cant even do a '<' without them 
+
+// Default priority:
+// s64
+// s32
+// float64
+// float32
+// [!]: I dont know how on fucking earth will we deal with signed and unsigned 
+// defaults
+
+// Some test that got my mind going and gave me direction
+
+/*
+auto c = 5 + 5; //(ambiguous type, it would default to s64)
+
+f64 a = 5 + 5;//(f64)
+// type of '5': (f64)
+// type of '5': (f64)
+
+auto b = 5.3 + 5;//(f64)
+// type of '5.3': (f64 | f32)
+// type of '5': (f64 | f32)
+
+f64 c = 5 + 5;//(f64)
+// type of '5': (f64)
+// type of '5': (f64)
+
+f32 d = 5 + 5; //(f32)
+// type of '5': (f64)
+// type of '5': (f64)
+
+auto d = 5 < 5; (bool)
+// type of '5': (s64)
+// type of '5': (s64)
+
+auto d = 5.5 < 5; (bool)
+// type of '5.5': (f64)
+// type of '5': (f64)
+
+*/
+
+// auto a = 5 + (10 * (20 / (5 + 2 * 3)) - 8) * 32 * 32 (any int size (8|16|32|64) any sign or float32 or float64)
+// auto b = 3 + 3.3; // type of b could be (float32 | float64)
+// s32 a = 3.3; // should be error
+// aFunctionThatTakesAFloat64(1); // type of 1 is float64
+
+// @Design challenge: a good and intuitive behaviour when operating numbers of 
+// different types, think of what typeargs are allowed with what operations and
+// what should the result be

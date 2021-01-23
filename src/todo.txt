@@ -2,6 +2,46 @@
 Write the maximum length of a string representation of QbeOperand in a constant 
 BE MINDFUL OF THE MAX LENGTH OF QBE CONSTANTS TOO
 
+@TODO LATER:
+Implement a better type system, one that can infer types from templates or generics
+or whatever. Useful resources when we get there:
+*Wand Algorithm
+*https://en.wikipedia.org/wiki/Hindley%E2%80%93Milner_type_system#Algorithm_W
+*Algorithm W
+*[!] paper about local type inferance
+        https://www.cis.upenn.edu/~bcpierce/papers/lti-toplas.pdf
+*A microsoft patent that seems interesting but I dont really understand what it is
+		https://patents.google.com/patent/US7086041B2/en
+
+@TODO LATER LEXER: //Big quality of life changes!
+Find a better way to deal with EOF in the lexer
+refactor the lexer, try to make less of a literal 'state machine' and something
+more readable even if the flow of it is not as efficient as it would be if it 
+were a state machine
+Maybe we should allow peeking by string not by char
+Use `peekChar` instead of lexBuffer[lexPointer]
+Maybe add a function that returns the next n chars in string or some error code
+if there arent enough chars left in the hllSource
+[!]Maybe check for all symbols, keywords, punctuation and operators separately 
+and leave the lexer for stuff that is not a symbol or a keyword. 
+:think: There are sequences of chars that can only appear in a specific token, for 
+example: 'case' can appear inside the identifier: 'casey' but '<=' cant appear 
+anywhere else, *maybe* we can take advantage of that
+(what matters is that it cant be the beggining of any other token)
+Reconsider using the char as an enum for simbols, maybe do the "index to array 
+of their (const char*) representations like we did with QbeInstructions"
+IT IS WAY TOO MUCH WORK (AND ERROR PRONE) TO ADD A NEW OPERATOR/KEYWORD BECAUSE
+WE HAVE TO MANTAIN A BUNCH OF ASSERTS AND DEFINITIONS (THE ENUMS AND FUNCS) TO DO IT
+FIND A BETTER WAY, MAYBE GROUP THEM TOGETHER IN A WAY WE CAN ITERATE THROUGH THEM
+EASYLY (Do someting like: from 0 to 100 is for keywords, from 101 to 200 is for
+operators, etc) 
+Maybe take inspiration from how we do keywords, which are relatively easy to add
+And don't compile if we dont add the keyword in all the paces we should (as far
+as the lexer is concerned)
+
+@TODO much much later:
+Nested comments, they are not that important we can think about them way later
+
 @TODO:
 write a macro that asserts something and prints a message when the assertion fails.
 this would be a good excercise to learn a more about c macros
@@ -9,6 +49,12 @@ this would be a good excercise to learn a more about c macros
 @TODO:
 Use templates or whatnot to make a malloc that is easier to use, so I dont have to
 write the type like 3 times everytime I use malloc
+
+@TODO: make a better way of error handling, honestly we need to put some
+serious thought into how we are going to comunicate errors, we can't just
+stop compiling after we find the first error. But maybe we cant construct
+a good error message as soon as we know there is an error, we might have
+to go back in the call tree to make a better error
 
 @Improvement?????:
 Abbreviate Expression to expr through out all the 'codebase'

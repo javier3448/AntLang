@@ -4,94 +4,94 @@
 #include "../pch.h"
 #include "../mystring.h"
 
+extern const char* keywords[11];
 
-//@[?] C++: why dont I need to specify the 'namespace' of the enum when I dont add
-//the 'class' modifier to the enum definition
-//@[?] C++: do I need to define the enum in a .cpp too?
+constexpr u16 KEYWORDS_LENGTH = sizeof keywords / sizeof keywords[0];
+
 enum TokenKind : char{
-    Identifier = 0,
-    Integer = 1,
-    Real = 2,
-    Error = 4,
-    Eof = 5,
+    // Keywords:
+    // The underlying value represents an offset to the array: 'keywords' where
+    // the string representation of said keyword is stored
+    Key_u64 = 0,
+    Key_s64 = 1,
+    Key_u32 = 2,
+    Key_s32 = 3,
+    Key_u16 = 4,
+    Key_s16 = 5,
+    Key_u8 = 6,
+    Key_s8 = 7,
+    Key_float32 = 8,
+    Key_float64 = 9,
+    Key_cast = 10,
 
-    //Binary Operators:
+    Identifier = 11,
+    Number = 12,
+    Error = 13,
+    Eof = 14,
+
+    LessEqual = 15,
+    GreaterEqual = 16,
+    EqualEqual = 17,
+    NotEqual = 18,
+    And = 19,
+    Or = 20,
+
+    // @Improvement, this is kinda stupid honestly, we dont really win that much
+    // and tokens and their string representation becomes becomes weird
+    // Tokens that can be represented using just one char
     Plus = '+',
     Minus = '-',
     Division = '/',
     Multiplication = '*',
 
+    Less = '<',
+    Greater = '>',
+    Equal = '=',
+    Not = '!',
+    BitAnd = '&',
+    BitOr = '|',
 
     LeftParen = '(',
     RightParen = ')',
 };
 
+
 //@C++: should be inline but I dont know how to inline accross different
 //compilation units or whatever
 //[!]: warning: this is used in assertions as well
-bool isOperatorKind(TokenKind kind);
-
 bool isBiOperatorKind(TokenKind kind);
 
 //@Improvement?: this is basically a tagged union, people say that that is a
 //std::variant in c++, should we use that here???
 struct Token{
-   TokenKind kind;
+    TokenKind kind;
 
-   //@TODO: read more about floats
-   //@TODO: add a way to support 'scientific notation' in real literals
-   //@Impovement: we should support bigger floats and ints or at the very
-   //least, u128 and float128
-   //@Discussion:
-   //when should i convert from the string we lex to the actual number
-   //there is quite a bit of weirdness and modifiers that might be easier to
-   //deal with at parsing like 0xaffff, 0b11_1_1_1111 and something like -1
-   //as well
-   //we could deal with that later by just passing the string and have someone
-   //else later on deal with it
-   //the thing is that I kinda have to say the type of the number literal in
-   //certain situations like if the integer is too long and doesnt fit in
-   //a s32 or whatever, that sounds like something we should deal about later
-   //but some stuff is easy and faster to figure when lexing like if it has to
-   //be real or not.
-   //problem: (float32)(string_to_float64("10.2")) is not the same as
-   //string_to_float32("10.2")
-   //so we definitely need serious type info in that case. So we have to
-   //pass the string there
-   //however:
-   //as long as we check the 64bit int is bellow a certain value when before
-   //doing the (int32) casting we can say that:
-   //(int32)(string_to_int64("10")) is the same as string_to_int32("10")
-   //so we dont need to pass the string around in this case
+    // We will store the numeric tokens in a simple string because we need type
+    // info to convert to their actual value for example:
+    // "1.2" float32 is: 0x3ff3333333333333
+    // "1.2" float64 is: 0x3f99999a 
+    // So the "1.2" in:
+    // `float32 a = 1.2;`
+    // and
+    // `float64 b = 1.2;`
+    // mean two very different things
+    MyString string;
 
-   // @Improvement?: I think LLVM wants me to keep my float lits as strings 
-   // We say that because ConstantFP::get doesnt accept (LlvmContext, double) 
-   // and APFloat can be constructed using a string. SO it might be wiser to 
-   // store the 'number string' in the token instead of a float
-   //
-   union{
-       MyString string;
-       s64 integer;
-       //a float token are not converted until later so they will contain a
-       //string
-   };
+    //doesnt do anything, is useful becuase the TokenCache needs to
+    //initialize its tokenBuffer because this is c++ (I think)
+    //so we need a default constructor
+    Token();
 
-   //doesnt do anything, is useful becuase the TokenCache needs to
-   //initialize its tokenBuffer because this is c++ (I think)
-   //so we need a default constructor
-   Token();
+    //A bunch of constructors because c++ doesnt let us initialize things like in
+    //C99, oh well :/
+    Token(TokenKind kind);
 
-   //A bunch of constructors because c++ doesnt let us initialize things like in
-   //C99, oh well :/
-   Token(TokenKind kind);
+    Token(TokenKind kind, MyString string);
 
-   Token(TokenKind kind, MyString string);
-   Token(TokenKind kind, u64 integer);
-
-   //not a destructor because we dont want to deal with 'copy constructor
-   //operator' doing expensive copies when we want to fucking return by value
-   //@TODO: see if that is a valid concern!!
-   void destroy();
+    //not a destructor because we dont want to deal with 'copy constructor
+    //operator' doing expensive copies when we want to fucking return by value
+    //@TODO: see if that is a valid concern!!
+    void destroy();
 };
 
 

@@ -1,9 +1,0 @@
-//Adding type support to our basic expression
-5 + (10 * (20 / (5 + 2 * 3)) - 8) * 32 * 32 //In the first test we will for
-// var a = 5 + (10 * (20 / (5 + 2 * 3)) - 8) * 32 * 32 (any int size (8|16|32|64) any sign or float32 or float64)
-// var b = 3 + 3.3; // type of b could be (float32 | float64)
-// int32 a = 3.3; // should be error
-// aFunctionThatTakesAFloat64(1); // type of 1 is float64
-
-// Something lame I just realized is that we probably have to overflow ints,
-// smaller than 32 bits because qbe only has int32 and int64 as 'fundamental types'

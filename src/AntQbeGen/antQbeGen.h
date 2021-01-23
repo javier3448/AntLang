@@ -6,8 +6,6 @@
 #include "./qbeValue.h"
 #include "./qbeBuffer.h"
 
-#include <vector>
-
 // @TERMINOLOGY: in all the 'codebase' gen = generator. ... obvs
 extern QbeBuffer qbeBuffer;
 
