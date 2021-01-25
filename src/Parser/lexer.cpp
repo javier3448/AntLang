@@ -266,7 +266,7 @@ Token Lexer::lexToken()
         // like '<' and '<='. ie, cases that dont warrant their own state
         else if(currChar == '<'){
             advanceAndSkip();
-            auto nextChar = peekChar(1);
+            auto nextChar = peekChar();
             if(nextChar == '='){
                 advanceAndSkip();
                 return Token(TokenKind::LessEqual);
@@ -277,7 +277,7 @@ Token Lexer::lexToken()
         }
         else if(currChar == '>'){
             advanceAndSkip();
-            auto nextChar = peekChar(1);
+            auto nextChar = peekChar();
             if(nextChar == '='){
                 advanceAndSkip();
                 return Token(TokenKind::GreaterEqual);
@@ -288,7 +288,7 @@ Token Lexer::lexToken()
         }
         else if(currChar == '='){
             advanceAndSkip();
-            auto nextChar = peekChar(1);
+            auto nextChar = peekChar();
             if(nextChar == '='){
                 advanceAndSkip();
                 return Token(TokenKind::EqualEqual);
@@ -299,7 +299,7 @@ Token Lexer::lexToken()
         }
         else if(currChar == '!'){
             advanceAndSkip();
-            auto nextChar = peekChar(1);
+            auto nextChar = peekChar();
             if(nextChar == '='){
                 advanceAndSkip();
                 return Token(TokenKind::NotEqual);
@@ -310,7 +310,7 @@ Token Lexer::lexToken()
         }
         else if(currChar == '&'){
             advanceAndSkip();
-            auto nextChar = peekChar(1);
+            auto nextChar = peekChar();
             if(nextChar == '&'){
                 advanceAndSkip();
                 return Token(TokenKind::And);
@@ -321,7 +321,7 @@ Token Lexer::lexToken()
         }
         else if(currChar == '|'){
             advanceAndSkip();
-            auto nextChar = peekChar(1);
+            auto nextChar = peekChar();
             if(nextChar == '|'){
                 advanceAndSkip();
                 return Token(TokenKind::Or);

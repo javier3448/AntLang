@@ -1,12 +1,47 @@
 digraph G {
 "expr0" [
-label = "Cast expression s64",
+label = "Plus",
 shape = "box",
 ];
 "expr1" [
+label = "Multiplication",
+shape = "box",
+];
+"expr2" [
+label = "And",
+shape = "box",
+];
+"expr3" [
+label = "Less",
+shape = "box",
+];
+"expr4" [
+label = "10",
+shape = "box",
+];
+"expr5" [
+label = "20",
+shape = "box",
+];
+"expr3"->"expr4";
+"expr3"->"expr5";
+"expr6" [
+label = "30",
+shape = "box",
+];
+"expr2"->"expr3";
+"expr2"->"expr6";
+"expr7" [
+label = "20",
+shape = "box",
+];
+"expr1"->"expr2";
+"expr1"->"expr7";
+"expr8" [
 label = "10",
 shape = "box",
 ];
 "expr0"->"expr1";
+"expr0"->"expr8";
 
 }

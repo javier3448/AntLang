@@ -31,6 +31,7 @@ const char* tokenStringLiterals [TOKEN_STRING_LITERALS_LEN] =
     "Multiplication",
     "Less",    // can be used as a punctuation/grouping
     "Greater", // can be used as a punctuation/grouping
+    // @BUG @TODO: equal is *not* a binary operator
     "Equal",
     "BitOr",
     "BitAnd",

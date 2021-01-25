@@ -20,21 +20,41 @@
 ./astexpression.h
 /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/astexpression.h
 
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/grapher.cpp
-./grapher.h
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/grapher.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/lexer.h
+../pch.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
+../Parser/token.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.h
+../Parser/tokencache.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/tokencache.h
+../mystring.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
 
-/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/grapher.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/parser.cpp
+./parser.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/parser.h
+./lexer.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/lexer.h
+
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/parser.h
 ../pch.h
 /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
 ./astexpression.h
 /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/astexpression.h
+./asttypeexpression.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/asttypeexpression.h
 
 /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.h
 ../pch.h
 /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
 ../mystring.h
 /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
+
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/tokencache.h
+../pch.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
+./token.h
+/home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.h
 
 /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
 pch.h

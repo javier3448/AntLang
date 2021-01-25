@@ -34,8 +34,8 @@ QbeOperand AntQbeGen::compileExpression(AstExpression* astExpr)
         {
             return QbeOperand{
                 .kind = QbeOperandKind::ConstantKind,
-                // @TEMP:
-                // @NOCHECKIN:
+                // @TODO when we come back to code gen
+                // @BIG TEMP:
                 //.double_constant = (double) astExpr->numberLiteral.string
                 .double_constant = 0
             };

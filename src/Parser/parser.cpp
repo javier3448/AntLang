@@ -38,6 +38,10 @@ AstExpression *Parser::parseExpression()
 }
 
 
+// @DANGER: according to our precedence spreadsheet, this is a bunch of baloney
+// there should be 'precedence differences' between '.', '*'(dereferencer), cast<type> and so on
+// :/ ... I guess the only most precedent expression should be identifier, literals,
+// parethesised expr idfk :(
 AstExpression *Parser::parseMostPrecedentExpression()
 {
     switch (Lexer::peekToken()->kind) {
@@ -132,12 +136,35 @@ AstTypeExpression Parser::parseTypeExpression()
 inline s16 getOperatorPrecedence(TokenKind kind)
 {
     switch (kind) {
+    case Or:
+        return 30;
+    case And:
+        return 40;
+
+    case BitOr:
+        return 50;
+    case BitAnd:
+        return 70;
+
+    case EqualEqual:
+    case NotEqual:
+        return 80;
+
+    case LessEqual:
+    case GreaterEqual:
+    case Less:
+    case Greater:
+        return 90;
+
     case Plus:
     case Minus:
         return 110;
+
     case Division:
     case Multiplication:
         return 120;
+
+
     default:
         assert(false && "Binary operator not implemented yet!");
     }
@@ -146,12 +173,12 @@ inline s16 getOperatorPrecedence(TokenKind kind)
 inline s16 getPrecedence(AstExpression* astExpression)
 {
     if(astExpression->hasParenthesis)
-        return INT8_MAX;
+        return INT16_MAX;
 
     switch (astExpression->kind) {
     case NumberLiteral:
     case CastExpression:
-        return INT8_MAX;
+        return INT16_MAX;
     case BinaryExpression:
         return getOperatorPrecedence(astExpression->binaryForm._operator.kind);
     default:
@@ -161,6 +188,8 @@ inline s16 getPrecedence(AstExpression* astExpression)
 
 //TODO: write some of the assumptions we made about the tree to make this algo
 //ONLY WORKS FOR BinaryExpressions
+//TODO: write a faster ways to solve precedences because this is recursive and
+//visits the nodes multiple times
 AstExpression *Parser::applyPrecedenceRules(AstExpression* binaryExpression)
 {
     assert(binaryExpression->kind == BinaryExpression);
@@ -181,7 +210,12 @@ AstExpression *Parser::applyPrecedenceRules(AstExpression* binaryExpression)
 
         binaryExpression->binaryForm.right = oldRightChild->binaryForm.left;
 
-        oldRightChild->binaryForm.left = binaryExpression;
+        // Super gross and slow, I dont like this solution to precedence rules 
+        // anymore
+        // binaryExpression now has children (binaryExpr.right = oldRigth.left)
+        // that might have lower precedence than itself. So we must check precedences
+        // there again
+        oldRightChild->binaryForm.left = applyPrecedenceRules(binaryExpression);
 
         return oldRightChild;
     }

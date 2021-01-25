@@ -54,9 +54,11 @@ enum TokenKind : s16{
     Plus,
     Minus,
     Division,
+    // @TODO: add modulus operator
     Multiplication,
     Less,    // can be used as punctuation/grouping
     Greater, // can be used as punctuation/grouping
+    // @BUG @TODO: equal is *not* a binary operator
     Equal,
     BitOr,
     BitAnd,
