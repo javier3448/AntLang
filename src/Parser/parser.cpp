@@ -20,35 +20,59 @@ AstExpression *Parser::parseExpression()
 
     //Token* peekedToken = Lexer::peekToken();
 
-    auto leftExpr = parseMostPrecedentExpression();
+    auto firstPeekedToken = Lexer::peekToken();
+    // special weird case because castExpression is a unaryExpression but the struct
+    // it also has typeExpression in its struct
+    if(firstPeekedToken->kind == TokenKind::Key_cast)
+    {
+        auto castKeyword = Lexer::getNextToken();
+        auto typeExpr = parseTypeExpression();
+        auto subExpr = parseExpression();
 
-    if(isBiOperatorKind(Lexer::peekToken()->kind)){
-        auto biOperator = Lexer::getNextToken();
+        auto castExpr = (AstExpression*)malloc(sizeof(AstExpression));
+        castExpr->makeCastExpression(castKeyword, typeExpr, subExpr);
 
-        auto rightExpr = parseExpression();
-
-        auto binaryExpr = (AstExpression*)malloc(sizeof(AstExpression));
-        binaryExpr->makeBinaryExpression(leftExpr, biOperator, rightExpr);
-
-        return  applyPrecedenceRules(binaryExpr);
+        return applyPrecedenceRules(castExpr);
     }
-    else{
-        return leftExpr;
+    else if(isUnaryOperatorKind(firstPeekedToken->kind))
+    {
+        auto unaryOperator = Lexer::getNextToken();
+        auto subExpr = parseExpression();
+
+        auto unaryExpr = (AstExpression*)malloc(sizeof(AstExpression));
+        unaryExpr->makeUnaryExpression(unaryOperator, subExpr);
+
+        return applyPrecedenceRules(unaryExpr);
     }
+    else //Must be binaryExpr or just 1 mostPrecedenctExpression
+    {
+        auto leftExpr = parseMostPrecedentExpression();
+
+        if(isBiOperatorKind(Lexer::peekToken()->kind)){
+            auto biOperator = Lexer::getNextToken();
+
+            auto rightExpr = parseExpression();
+
+            auto binaryExpr = (AstExpression*)malloc(sizeof(AstExpression));
+            binaryExpr->makeBinaryExpression(leftExpr, biOperator, rightExpr);
+
+            return  applyPrecedenceRules(binaryExpr);
+        }
+        else{
+            return leftExpr;
+        }
+    }
+
 }
 
 
-// @DANGER: according to our precedence spreadsheet, this is a bunch of baloney
-// there should be 'precedence differences' between '.', '*'(dereferencer), cast<type> and so on
-// :/ ... I guess the only most precedent expression should be identifier, literals,
-// parethesised expr idfk :(
 AstExpression *Parser::parseMostPrecedentExpression()
 {
     switch (Lexer::peekToken()->kind) {
         case Number:
         {
             auto result = (AstExpression*)malloc(sizeof(AstExpression));
-            result->makeIntLiteralExpression(Lexer::getNextToken());
+            result->makeNumberLiteralExpression(Lexer::getNextToken());
 
             return result;
         }break;
@@ -74,43 +98,10 @@ AstExpression *Parser::parseMostPrecedentExpression()
             result->hasParenthesis = true;
             return result;
         }break;
-        case Key_cast:
-        {
-            //@REMEMBER: to 'consume' the keyword we just peeked before
-            Lexer::getNextToken();
-
-            auto peekedToken = Lexer::peekToken();
-            if(peekedToken->kind != TokenKind::Less){
-                cout << "Missing opening '<' got: " << peekedToken->stringRepresentation() << "instead \n";
-                assert(false);
-            }
-            Lexer::getNextToken();
-
-
-            AstTypeExpression typeExpr = parseTypeExpression();
-
-            peekedToken = Lexer::peekToken();
-            if(peekedToken->kind != TokenKind::Greater){
-                cout << "Missing closing '>' got: " << peekedToken->stringRepresentation() << "instead \n";
-                assert(false);
-            }
-            Lexer::getNextToken();
-
-            AstExpression* expr = parseExpression();
-
-            auto castExpression = (AstExpression*)malloc(sizeof(AstExpression));
-            castExpression->makeCastExpression(typeExpr, expr);
-
-            return castExpression;
-        }break;
         default:
         {
-            //@SERIOUS TODO:
-            //Find a much much better way of reporting errors
             auto badToken = Lexer::peekToken();
             cout << "Not a valid token to start expression: " << (s32) badToken->kind << "\n";
-            //@debug: I dont want to think about how to report errors and
-            //all that right now, so, for now we just fucking crash :/
             assert(false);
         }break;
     }
@@ -133,7 +124,7 @@ AstTypeExpression Parser::parseTypeExpression()
     assert(false);
 }
 
-inline s16 getOperatorPrecedence(TokenKind kind)
+inline s16 getBinaryOperatorPrecedence(TokenKind kind)
 {
     switch (kind) {
     case Or:
@@ -170,6 +161,25 @@ inline s16 getOperatorPrecedence(TokenKind kind)
     }
 }
 
+// I guess they all just happened to be 130 but it wont be like that but I wont 
+// remove this code in case I decide to change the precedences
+inline s16 getUnaryOperatorPrecedence(TokenKind kind)
+{
+    switch (kind) {
+    case Not:
+    case BitNot:
+    case Minus:
+    case Key_cast:
+    case Multiplication:
+    case And:
+    case Key_sizeof:
+        return 130;
+
+    default:
+        assert(false && "Binary operator not implemented yet!");
+    }
+}
+
 inline s16 getPrecedence(AstExpression* astExpression)
 {
     if(astExpression->hasParenthesis)
@@ -177,51 +187,132 @@ inline s16 getPrecedence(AstExpression* astExpression)
 
     switch (astExpression->kind) {
     case NumberLiteral:
-    case CastExpression:
         return INT16_MAX;
+    case CastExpression:
+        return getUnaryOperatorPrecedence(astExpression->castForm._operator.kind);
+    case UnaryExpression:
+        return getUnaryOperatorPrecedence(astExpression->unaryForm._operator.kind);
     case BinaryExpression:
-        return getOperatorPrecedence(astExpression->binaryForm._operator.kind);
+        return getBinaryOperatorPrecedence(astExpression->binaryForm._operator.kind);
     default:
         assert(false && "astExpressionKind not implemented yet!");
     }
 }
 
-//TODO: write some of the assumptions we made about the tree to make this algo
-//ONLY WORKS FOR BinaryExpressions
+// @TODO: DONT BE LAZY ACTUALLY THINK ABOUT HOW CAN WE EFFECTIVELY DO THE BRACHING
+// NEED FOR (BinaryForm | UnaryForm | CastForm) IN applyPredenceRules, RIGHT NOW
+// DO THE TRIPLE SWITCH MORE THAN WE NEED TO, AND WE SEPARATE FUNCTION WHEN WE DONT
+// NEED TO
+
+// this is horrible
+
+// This function is only used in applyPrecedence rues
+inline AstExpression** getLeftChildOrOnlyChild(AstExpression* expr)
+{
+    // its ok to use the & in these guys, because expr itself is heap allocated 
+    switch(expr->kind){
+        case AstExpressionKind::BinaryExpression:
+            return &(expr->binaryForm.left);
+        case AstExpressionKind::UnaryExpression:
+            return &(expr->unaryForm.subExpression);
+        case AstExpressionKind::CastExpression:
+            return &(expr->castForm.expression);
+        default:
+            assert(false
+                   &&
+                   "");
+    }
+}
+
 //TODO: write a faster ways to solve precedences because this is recursive and
 //visits the nodes multiple times
-AstExpression *Parser::applyPrecedenceRules(AstExpression* binaryExpression)
+            // Super gross and slow, I dont like this solution to precedence rules 
+            // anymore
+AstExpression *Parser::applyPrecedenceRules(AstExpression* expression)
 {
-    assert(binaryExpression->kind == BinaryExpression);
+    if(expression->kind == AstExpressionKind::BinaryExpression)
+    {
+        auto& binaryExpression = expression;
 
-    //@[!] we a asume that leftOperand of a binaryExpression will always be
-    //infinitely precedent
+        auto thisNodePrecedence = getBinaryOperatorPrecedence(binaryExpression->binaryForm._operator.kind);
+        auto rightChildNodePrecedence = getPrecedence(binaryExpression->binaryForm.right);
 
-    auto thisNodePrecedence = getOperatorPrecedence(binaryExpression->binaryForm._operator.kind);
-    auto rightChildNodePrecedence = getPrecedence(binaryExpression->binaryForm.right);
+        if(thisNodePrecedence > rightChildNodePrecedence){
+            //'left rotation'
+            auto oldRightChild = binaryExpression->binaryForm.right;
 
-    if(thisNodePrecedence > rightChildNodePrecedence){
-        //'left rotation'
-        auto oldRightChild = binaryExpression->binaryForm.right;
+            AstExpression** leftOrOnlyChildOfRight = getLeftChildOrOnlyChild(oldRightChild);
 
-        //For know the only way a we can get inside this 'if' is if the right
-        //child is another binaryExpression
-        assert(oldRightChild->kind == BinaryExpression);
+            binaryExpression->binaryForm.right = *leftOrOnlyChildOfRight;
 
-        binaryExpression->binaryForm.right = oldRightChild->binaryForm.left;
+            // binaryExpression now has children (binaryExpr.right = oldRigth.left)
+            // that might have lower precedence than itself. So we must check precedences
+            // there again
+            *leftOrOnlyChildOfRight =(binaryExpression);
 
-        // Super gross and slow, I dont like this solution to precedence rules 
-        // anymore
-        // binaryExpression now has children (binaryExpr.right = oldRigth.left)
-        // that might have lower precedence than itself. So we must check precedences
-        // there again
-        oldRightChild->binaryForm.left = applyPrecedenceRules(binaryExpression);
-
-        return oldRightChild;
+            return oldRightChild;
+        }
+        else{
+            return binaryExpression;
+        }
     }
-    else{
-        return binaryExpression;
+    else if(expression->kind == AstExpressionKind::UnaryExpression)
+    {
+        auto& unaryExpression = expression;
+
+        auto thisNodePrecedence = getUnaryOperatorPrecedence(unaryExpression->unaryForm._operator.kind);
+        auto childPrecedence = getPrecedence(unaryExpression->unaryForm.subExpression);
+
+        if(thisNodePrecedence > childPrecedence){
+            //'left rotation'
+            auto oldChild = unaryExpression->unaryForm.subExpression;
+
+            AstExpression** leftOrOnlyChildOfChild = getLeftChildOrOnlyChild(oldChild);
+
+            unaryExpression->unaryForm.subExpression = *leftOrOnlyChildOfChild;
+
+            // binaryExpression now has children (binaryExpr.right = oldRigth.left)
+            // that might have lower precedence than itself. So we must check precedences
+            // there again
+            *leftOrOnlyChildOfChild =(unaryExpression);
+
+            return oldChild;
+        }
+        else{
+            return unaryExpression;
+        } 
     }
+    else if(expression->kind == AstExpressionKind::CastExpression)
+    {
+        auto& castExpression = expression;
+
+        auto thisNodePrecedence = getUnaryOperatorPrecedence(castExpression->castForm._operator.kind);
+        auto childPrecedence = getPrecedence(castExpression->castForm.expression);
+
+        if(thisNodePrecedence > childPrecedence){
+            //'left rotation'
+            auto oldChild = castExpression->castForm.expression;
+
+            AstExpression** leftOrOnlyChildOfChild = getLeftChildOrOnlyChild(oldChild);
+
+            castExpression->castForm.expression = *leftOrOnlyChildOfChild;
+
+            // binaryExpression now has children (binaryExpr.right = oldRigth.left)
+            // that might have lower precedence than itself. So we must check precedences
+            // there again
+            *leftOrOnlyChildOfChild =(castExpression);
+
+            return oldChild;
+        }
+        else{
+            return castExpression;
+        } 
+    }
+    else
+    {
+        assert(false && "Expression form not implemented yet in applyPrecedenceRules");
+    }
+
 
 
 }

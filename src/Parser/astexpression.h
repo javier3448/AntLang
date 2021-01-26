@@ -7,12 +7,21 @@
 #include "./asttypeexpression.h"
 
 struct AstExpression;
+// @🤔: All this 'forms' have a token, we could use that token to determine what
+// form does the expression take instead of using an aditional enum ExpressionKind
 struct BinaryExpressionForm;
+struct UnaryExpressionForm;
+struct CastExpressionForm;
 
+// @Improvement find a better way of expressing the different 'forms' an expression
+// can take because there are some weirdness in the current one like how CastExprForm
+// has an operator even tho we know it will always be the keyword: 'cast' and 
+// castExpressionForm is (semantically) a unary expression as well
 enum AstExpressionKind : char{
-    NumberLiteral = 0,
-    BinaryExpression = 1,
-    CastExpression = 2,
+    NumberLiteral,
+    BinaryExpression,
+    UnaryExpression,
+    CastExpression,
 };
 
 struct BinaryExpressionForm
@@ -22,11 +31,17 @@ struct BinaryExpressionForm
     AstExpression* right;
 };
 
+struct UnaryExpressionForm
+{
+    Token _operator;
+    AstExpression* subExpression;
+};
+
+// Even tho castExpr is in a different struct, semantically, it is still a unary
+// expression
 struct CastExpressionForm
 {
-    // (Identifier | (some)keyword)
-    // if AstTypeExpression becomes too big it might be a good idea to make this
-    // into a pointer, idk we will see then
+    Token _operator;
     AstTypeExpression typeExpression;
     AstExpression* expression;
 };
@@ -37,6 +52,7 @@ struct AstExpression
     union{
         Token numberLiteral;
         BinaryExpressionForm binaryForm;
+        UnaryExpressionForm unaryForm;
         CastExpressionForm castForm;
     };
     //@Improvement: Find a better solution to communicate that the expression is
@@ -44,11 +60,10 @@ struct AstExpression
     //Bodgy flag that we will only use when rearrenging the tree because precedences
     bool hasParenthesis;
 
-    s16 getPrecedence();
-
-    void makeIntLiteralExpression(Token intLiteral);
+    void makeNumberLiteralExpression(Token intLiteral);
     void makeBinaryExpression(AstExpression* left, Token biOperator, AstExpression* right);
-    void makeCastExpression(AstTypeExpression typeExpression, AstExpression* expression);
+    void makeUnaryExpression(Token _operator, AstExpression* subExpr);
+    void makeCastExpression(Token castKeyword, AstTypeExpression typeExpression, AstExpression *expression);
 };
 
 #endif // ASTEXPRESSION_H

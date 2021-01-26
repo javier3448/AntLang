@@ -4,16 +4,20 @@
 #include "../pch.h"
 #include "../mystring.h"
 
+// @'INVARIANT': if we want to know if a tokenKind is of certain 'category' like
+// binaryOperator, keyword etc. We can only do it by using function defined in 
+// token.h
+
 // @Improvement: this is the best solution I was able to figure out to easily add more
 // keywords and operators without relying on asserts to catch bugs :/
 constexpr s16 NATIVE_TYPES_BEG = 0;
 constexpr s16 NATIVE_TYPES_LEN = 10;
 constexpr s16 KEYWORDS_BEG = NATIVE_TYPES_BEG + NATIVE_TYPES_LEN;
-constexpr s16 KEYWORDS_LEN = 1;
+constexpr s16 KEYWORDS_LEN = 2;
 constexpr s16 BI_OPERATORS_BEG = KEYWORDS_BEG + KEYWORDS_LEN;
-constexpr s16 BI_OPERATORS_LEN = 15;
+constexpr s16 BI_OPERATORS_LEN = 16;
 constexpr s16 UNI_OPERATORS_BEG = BI_OPERATORS_BEG + BI_OPERATORS_LEN;
-constexpr s16 UNI_OPERATORS_LEN = 1;
+constexpr s16 UNI_OPERATORS_LEN = 2;
 //@BAD: bad name just because I wanted to include 'Eof' in this category
 constexpr s16 OTHER_BEG = UNI_OPERATORS_BEG + UNI_OPERATORS_LEN;
 constexpr s16 OTHER_LEN = 3;
@@ -41,29 +45,31 @@ enum TokenKind : s16{
     Key_s8,
     Key_float32,
     Key_float64,
+
     // other keywords
-    Key_cast,
+    Key_cast,   // can be used as unary operator
+    Key_sizeof, // can be used as unary operator
 
   // binary Operators
     LessEqual,
     GreaterEqual,
     EqualEqual,
     NotEqual,
-    And,
+    And,     // can be used as unary operator
     Or,
     Plus,
     Minus,
     Division,
-    // @TODO: add modulus operator
-    Multiplication,
-    Less,    // can be used as punctuation/grouping
-    Greater, // can be used as punctuation/grouping
-    // @BUG @TODO: equal is *not* a binary operator
-    Equal,
+    Multiplication,  // can be used as unary operator
+    Modulus,
+    Less,            // can be used as punctuation/grouping
+    Greater,         // can be used as punctuation/grouping
+    Equal,// @BUG @TODO: equal is *not* a binary operator
     BitOr,
-    BitAnd,
+    BitAnd,          // can be used as unary operator
   // unary operators
-    Not = 26,
+    Not,
+    BitNot,
 
   // punctuation/grouping
     LeftParen,
@@ -80,8 +86,16 @@ enum TokenKind : s16{
 //@C++: should be inline but I dont know how to inline accross different
 //compilation units or whatever
 //[!]: warning: this is used in assertions as well
+//@TODO: rename this to isBinaryOperator
 bool isBiOperatorKind(TokenKind kind);
 bool isNativeType(TokenKind kind);
+bool isUnaryOperatorKind(TokenKind kind);
+
+// @TODO: This sabotages our compilation times (I think) and we dont want to use 
+// the std anyway, remove it when we implement our own optional
+// return the keyword or empty if str is not a keyword
+// [!!!] DOES NOT TAKE A C_STRING!!!!
+std::optional<TokenKind> isStringKeyword(const char* buffer, s64 length);
 
 //@Improvement?: this is basically a tagged union, people say that that is a
 //std::variant in c++, should we use that here???

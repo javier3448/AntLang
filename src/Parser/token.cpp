@@ -15,7 +15,10 @@ const char* tokenStringLiterals [TOKEN_STRING_LITERALS_LEN] =
     "float64",
 
     // Other keywords
-    "cast",
+    "cast", // can be used as unary as all, is just that I need a way to continuously
+            // group together all the keywords that initialy get picked up as identifier
+            // by the lexer
+    "sizeof", //can be used as unary as well
 
   // @TODO: write the real string representations
   // binary Operators
@@ -26,18 +29,19 @@ const char* tokenStringLiterals [TOKEN_STRING_LITERALS_LEN] =
     "And",
     "Or",
     "Plus",
-    "Minus",
+    "Minus",   // can be used as unary aswell
     "Division",
     "Multiplication",
+    "Modulus",
     "Less",    // can be used as a punctuation/grouping
     "Greater", // can be used as a punctuation/grouping
-    // @BUG @TODO: equal is *not* a binary operator
     "Equal",
     "BitOr",
     "BitAnd",
 
   // unary operators
     "Not",
+    "BitNot",
 
   // other
     "LeftParen",
@@ -45,10 +49,20 @@ const char* tokenStringLiterals [TOKEN_STRING_LITERALS_LEN] =
     "Eof",
 };
 
+
+// Should be inlined but I dont know how to do that across different source files
+bool isUnaryOperatorKind(TokenKind kind)
+{
+    return kind == TokenKind::Not || 
+           kind == TokenKind::BitNot || 
+           kind == TokenKind::Minus || 
+           kind == TokenKind::Key_cast || 
+           kind == TokenKind::Key_sizeof;
+}
+
 // Should be inlined but I dont know how to do that across different source files
 bool isBiOperatorKind(TokenKind kind)
 {
-   // @BAD: find a better, to add more tokens, it is way too much work right now
     return (s16)kind >= BI_OPERATORS_BEG &&
            (s16)kind < (BI_OPERATORS_BEG + BI_OPERATORS_LEN);
 }
@@ -59,6 +73,29 @@ bool isNativeType(TokenKind kind)
    // @BAD: find a better, to add more tokens, it is way too much work right now
     return (s16)kind >= NATIVE_TYPES_BEG &&
            (s16)kind < (BI_OPERATORS_BEG + NATIVE_TYPES_LEN);
+}
+
+std::optional<TokenKind> isStringKeyword(const char* buffer, s64 length)
+{
+
+    // @Bodge:
+    // [!] We start with 0 and not KEYWORDS_BEG because we alse want to check if 
+    // it is a nativeType
+    for (u16 i = 0; i < KEYWORDS_BEG + KEYWORDS_LEN; i++)
+    {
+        // unnecessary strlen, because that value is a compile time constant
+        // I hope the compiler can optimize it away 
+        // @TODO: check in compiler explorer if it can. idk :/
+        const char* keyword = tokenStringLiterals[i];
+        u16 keywordLength = (u16) strlen(keyword);
+        if(keywordLength == length
+            &&
+            (memcmp(keyword, buffer, keywordLength) == 0))
+        {
+            return (TokenKind)i;
+        }
+    }
+    return { };
 }
 
 Token::Token()

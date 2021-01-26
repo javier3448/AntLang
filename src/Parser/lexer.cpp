@@ -175,26 +175,11 @@ inline void Lexer::advanceAndSkip()
 // the string, something like 'bool isKeyword(const char* str);'
 Token makeIdentOrKeyword()
 {
-    // @Bodge:
-    // [!] We start with 0 and not KEYWORDS_BEG because we alse want to check if 
-    // it is a nativeType
-    for (u16 i = 0; i < KEYWORDS_BEG + KEYWORDS_LEN; i++)
-    {
-        // unnecessary strlen, because that value is a compile time constant
-        // I hope the compiler can optimize it away 
-        // @TODO: check in compiler explorer if it can. idk :/
-        const char* keyword = tokenStringLiterals[i];
-        u16 keywordLength = (u16) strlen(keyword);
-        if(keywordLength == lexBuffer.length
-            &&
-            (memcmp(keyword, lexBuffer.buffer, keywordLength) == 0))
-        {
-            // @TODO: Find a way in which the value of the enum TokenKind of a 
-            // keyword easily maps to the index in the keywords array
-            return Token((TokenKind)i);
-        }
-    }
-    return Token(TokenKind::Identifier, MyString::make(lexBuffer.length, lexBuffer.buffer));
+    auto keyWordKind = isStringKeyword(lexBuffer.buffer, lexBuffer.length);
+    if(keyWordKind)
+        return Token(keyWordKind.value());
+    else
+        return Token(TokenKind::Identifier, MyString::make(lexBuffer.length, lexBuffer.buffer));
 }
 
 

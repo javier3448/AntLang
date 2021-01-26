@@ -19,6 +19,10 @@ GraphvizNode Grapher::graphExpression(AstExpression *expr)
             //[!] Only works for nativeTypes
             label = std::string("Cast expression ") + expr->castForm.typeExpression._type.stringRepresentation();
         break;
+        case UnaryExpression:
+            //[!] Only works for nativeTypes
+            label = std::string(expr->unaryForm._operator.stringRepresentation());
+        break;
     }
 
     //Node declaration
@@ -46,6 +50,16 @@ GraphvizNode Grapher::graphExpression(AstExpression *expr)
 
         case CastExpression:{
             auto expNode = graphExpression(expr->castForm.expression);
+
+            code += expNode.code;
+
+            code += name + "->" + expNode.name + ";\n";
+
+            return GraphvizNode{name, code};
+        }break;
+
+        case UnaryExpression:{
+            auto expNode = graphExpression(expr->unaryForm.subExpression);
 
             code += expNode.code;
 

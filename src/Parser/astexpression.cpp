@@ -2,7 +2,7 @@
 
 #include <limits.h>
 
-void AstExpression::makeIntLiteralExpression(Token numberLiteral)
+void AstExpression::makeNumberLiteralExpression(Token numberLiteral)
 {
     this->kind = AstExpressionKind::NumberLiteral;
     this->numberLiteral = numberLiteral;
@@ -18,9 +18,16 @@ void AstExpression::makeBinaryExpression(AstExpression *left, Token biOperator, 
     this->hasParenthesis = false;
 }
 
-void AstExpression::makeCastExpression(AstTypeExpression typeExpression, AstExpression *expression)
+void AstExpression::makeCastExpression(Token castKeyword, AstTypeExpression typeExpression, AstExpression *expression)
 {
 	this->kind = AstExpressionKind::CastExpression;
 	this->castForm.typeExpression = typeExpression;
 	this->castForm.expression = expression;
+}
+
+void AstExpression::makeUnaryExpression(Token _operator, AstExpression *subExpression)
+{
+	this->kind = AstExpressionKind::UnaryExpression;
+	this->unaryForm._operator = _operator;
+	this->unaryForm.subExpression = subExpression;
 }

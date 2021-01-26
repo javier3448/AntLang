@@ -4,44 +4,39 @@ label = "Plus",
 shape = "box",
 ];
 "expr1" [
-label = "Multiplication",
+label = "Minus",
 shape = "box",
 ];
 "expr2" [
-label = "And",
+label = "Minus",
 shape = "box",
 ];
 "expr3" [
-label = "Less",
+label = "Minus",
 shape = "box",
 ];
 "expr4" [
-label = "10",
+label = "Minus",
 shape = "box",
 ];
 "expr5" [
-label = "20",
+label = "Minus",
 shape = "box",
 ];
-"expr3"->"expr4";
-"expr3"->"expr5";
 "expr6" [
-label = "30",
+label = "10",
 shape = "box",
 ];
+"expr5"->"expr6";
+"expr4"->"expr5";
+"expr3"->"expr4";
 "expr2"->"expr3";
-"expr2"->"expr6";
+"expr1"->"expr2";
 "expr7" [
 label = "20",
 shape = "box",
 ];
-"expr1"->"expr2";
-"expr1"->"expr7";
-"expr8" [
-label = "10",
-shape = "box",
-];
 "expr0"->"expr1";
-"expr0"->"expr8";
+"expr0"->"expr7";
 
 }
