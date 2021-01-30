@@ -4,13 +4,12 @@
 #include "../pch.h"
 
 #include "./astexpression.h"
+#include "./aststatement.h"
 #include "./asttypeexpression.h"
 
 namespace Parser
 {
-
-    //Asserts that we pass a token kind that is an operator
-    int Associativity(TokenKind kind);
+	AstStatement* parseStatement();
 
     AstExpression* parseExpression();
     AstExpression* parseMostPrecedentExpression();

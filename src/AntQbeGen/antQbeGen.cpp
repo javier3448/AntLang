@@ -4,9 +4,6 @@
 
 QbeBuffer qbeBuffer = { .length = 0, .size = 0, .buffer = nullptr };
 
-//@Improvement? honestly qbeBuffer could be a globa absolutely everyone
-//uses, instead of passing a pointer to the qbeBuilder functions
-
 // FOR NOW IT CAN ONLY BE CALLED ONCE, OTHERWISE WE MIGHT LEAK MEMORY
 void AntQbeGen::init()
 {
@@ -26,7 +23,6 @@ void AntQbeGen::compileTopLevelExpression(AstExpression* expr)
     qbeBuffer.append("}");
 }
 
-// who the hell 'owns' the Value* we are returning??
 QbeOperand AntQbeGen::compileExpression(AstExpression* astExpr)
 {
     switch(astExpr->kind){
@@ -60,19 +56,9 @@ QbeOperand AntQbeGen::compileBinaryExpression(BinaryExpressionForm* biExpr)
         &&
        rightVal.kind == QbeOperandKind::ConstantKind)
     {
-        // @BAD?: I want the numeric constants to be 'typeless', somewhat similar 
-        // to what golang has. For now the strategy we came up with is to
-        // implement that *requires* us to do constant folding and carry all 
-        // possible results in the constant result. It seems lame that a highlevel
-        // detail of the language depends on constant folding but it will work for now
-        //Then we can do the constant folding
-        
-        // TODO: We need to change the lexer so a number token returns a string
-        // or something more robust that just a float 64. 
         assert(false);
     }
     else{
-        // @Notice: how we can add names to the newly generated SSA registers
         switch(biExpr->_operator.kind){
             case TokenKind::Plus:
             {

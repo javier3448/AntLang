@@ -16,11 +16,9 @@ GraphvizNode Grapher::graphExpression(AstExpression *expr)
             label = std::string(expr->binaryForm._operator.stringRepresentation());
         break;
         case CastExpression:
-            //[!] Only works for nativeTypes
             label = std::string("Cast expression ") + expr->castForm.typeExpression._type.stringRepresentation();
         break;
         case UnaryExpression:
-            //[!] Only works for nativeTypes
             label = std::string(expr->unaryForm._operator.stringRepresentation());
         break;
     }

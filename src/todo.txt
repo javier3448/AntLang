@@ -2,6 +2,16 @@
 Write the maximum length of a string representation of QbeOperand in a constant 
 BE MINDFUL OF THE MAX LENGTH OF QBE CONSTANTS TOO
 
+@TODO: Storing the location of things is a bad idea, it forces you to carry around unnecessary tokens,
+which are actually quite heavy.
+So we need a better doing that, maybe a struct location? that all nodes have, no idea :((((
+
+@TODO quality of life of parse:
+first, first dont use the weird function: 'getLeftChildOrOnlyChild' and type to simplify the braching in a different way
+'construct' the astNodes in a different way, I dont like the .make something They are all heap allocated anyway why not allocated them in the 'make' function and
+return the pointer instead. (I dont know if this sabotages my intentions of trying to use 'custom allocators'
+later, for know I will assume it doesnt) 
+
 @TODO LATER:
 Implement a better type system, one that can infer types from templates or generics
 or whatever. Useful resources when we get there:

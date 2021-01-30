@@ -37,6 +37,14 @@ CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
+CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/astexpression.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/aststatement.cpp
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/aststatement.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/asttypeexpression.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/astexpression.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/asttypeexpression.h
@@ -54,6 +62,7 @@ CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/astexpression.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/aststatement.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/asttypeexpression.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/lexer.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/parser.cpp
@@ -73,8 +82,17 @@ CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/tokencache.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
+CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/astexpression.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/asttypeexpression.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/token.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/TypeChecker/typechecker.cpp
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/TypeChecker/typechecker.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/mystring.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/pch.h
 CMakeFiles/AntLang.dir/src/main.cpp.o
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/astexpression.h
+ /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/aststatement.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/asttypeexpression.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/grapher.h
  /home/javier/Dropbox/MyProjects/MyLanguage/AntLang/src/Parser/lexer.h

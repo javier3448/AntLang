@@ -7,11 +7,13 @@ file(REMOVE_RECURSE
   "CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o"
   "CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o"
+  "CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/token.cpp.o"
   "CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o"
+  "CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o"
   "CMakeFiles/AntLang.dir/src/main.cpp.o"
   "CMakeFiles/AntLang.dir/src/mystring.cpp.o"
 )

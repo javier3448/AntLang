@@ -37,6 +37,14 @@ CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/Parser/token.h
 CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/pch.h
 
+CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Parser/astexpression.h
+CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Parser/aststatement.cpp
+CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Parser/aststatement.h
+CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Parser/asttypeexpression.h
+CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Parser/token.h
+CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/mystring.h
+CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/pch.h
+
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/Parser/astexpression.h
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/Parser/asttypeexpression.h
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/Parser/grapher.cpp
@@ -53,6 +61,7 @@ CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/pch.h
 
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/astexpression.h
+CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/aststatement.h
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/asttypeexpression.h
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/lexer.h
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/parser.cpp
@@ -73,7 +82,16 @@ CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/Parser/tokencache.
 CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/pch.h
 
+CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/Parser/astexpression.h
+CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/Parser/asttypeexpression.h
+CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/Parser/token.h
+CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/TypeChecker/typechecker.cpp
+CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/TypeChecker/typechecker.h
+CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/mystring.h
+CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/pch.h
+
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/astexpression.h
+CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/aststatement.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/asttypeexpression.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/grapher.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/lexer.h

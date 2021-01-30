@@ -6,11 +6,26 @@
 
 #include "./lexer.h"
 
-//@TODO: improve the way we peek and consume tokens. at the very least use better
-//names. maybe a different object to peek tokens, kinda like rust does with
-//inmutable references? idk. Or maybe consume the token via a pointer
-//@idea?
+//@TODO: 
 //consume token.... instead of getNextToken
+
+AstStatement *Parser::parseStatement()
+{
+    auto firstPeekedToken = Lexer::peekToken();
+
+    // All possible tokens that can start an statement: (if, '{', while ...)
+    // if(){
+
+    // }
+    // ...
+    //else{
+        auto expression = parseExpression();
+        // then we check if there is an equals after it, if so it is an assignment,
+        // else look for ';'
+    //}
+    expression = nullptr; // Just to shut up the compiler
+    assert(false);// Just to shut up the compiler
+}
 
 AstExpression *Parser::parseExpression()
 {
