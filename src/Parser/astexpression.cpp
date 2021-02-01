@@ -2,14 +2,14 @@
 
 #include <limits.h>
 
-void AstExpression::makeNumberLiteralExpression(Token numberLiteral)
+void AstExpression::buildNumberLiteralExpression(Token numberLiteral)
 {
     this->kind = AstExpressionKind::NumberLiteral;
     this->numberLiteral = numberLiteral;
     this->hasParenthesis = false;
 }
 
-void AstExpression::makeBinaryExpression(AstExpression *left, Token biOperator, AstExpression *right)
+void AstExpression::buildBinaryExpression(AstExpression *left, Token biOperator, AstExpression *right)
 {
     this->kind = AstExpressionKind::BinaryExpression;
     this->binaryForm.left = left;
@@ -18,16 +18,18 @@ void AstExpression::makeBinaryExpression(AstExpression *left, Token biOperator, 
     this->hasParenthesis = false;
 }
 
-void AstExpression::makeCastExpression(Token castKeyword, AstTypeExpression typeExpression, AstExpression *expression)
+void AstExpression::buildCastExpression(Token castKeyword, AstTypeExpression typeExpression, AstExpression *expression)
 {
 	this->kind = AstExpressionKind::CastExpression;
+    this->castForm._operator = castKeyword;
 	this->castForm.typeExpression = typeExpression;
 	this->castForm.expression = expression;
 }
 
-void AstExpression::makeUnaryExpression(Token _operator, AstExpression *subExpression)
+void AstExpression::buildUnaryExpression(Token _operator, AstExpression *subExpression)
 {
 	this->kind = AstExpressionKind::UnaryExpression;
+    this->unaryForm._operator = _operator;
 	this->unaryForm._operator = _operator;
 	this->unaryForm.subExpression = subExpression;
 }

@@ -60,10 +60,10 @@ struct AstExpression
     //Bodgy flag that we will only use when rearrenging the tree because precedences
     bool hasParenthesis;
 
-    void makeNumberLiteralExpression(Token intLiteral);
-    void makeBinaryExpression(AstExpression* left, Token biOperator, AstExpression* right);
-    void makeUnaryExpression(Token _operator, AstExpression* subExpr);
-    void makeCastExpression(Token castKeyword, AstTypeExpression typeExpression, AstExpression *expression);
+    void buildNumberLiteralExpression(Token intLiteral);
+    void buildBinaryExpression(AstExpression* left, Token biOperator, AstExpression* right);
+    void buildUnaryExpression(Token _operator, AstExpression* subExpr);
+    void buildCastExpression(Token castKeyword, AstTypeExpression typeExpression, AstExpression *expression);
 };
 
 #endif // ASTEXPRESSION_H

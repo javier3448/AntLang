@@ -478,7 +478,7 @@ Token Lexer::lexToken()
 
 TokenCache Lexer::tokenCache{};
 
-Token Lexer::getNextToken()
+Token Lexer::consumeToken()
 {
     if(tokenCache.occupiedSpaces != 0){
         return tokenCache.dequeue();

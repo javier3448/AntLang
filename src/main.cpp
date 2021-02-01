@@ -27,6 +27,7 @@
 //strings
 
 
+#include "./Util/dynamicbuffer.h"
 int main()
 {
     Lexer::init("../../src/TestFiles/new_parser_stuff_for_playing_around_with_typechecking.test");

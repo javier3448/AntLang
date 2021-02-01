@@ -4,8 +4,8 @@
 #include "../pch.h"
 
 #include "./astexpression.h"
-#include "./aststatement.h"
 #include "./asttypeexpression.h"
+#include "./aststatement.h"
 
 namespace Parser
 {

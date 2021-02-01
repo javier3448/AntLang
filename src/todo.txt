@@ -1,6 +1,13 @@
-@TODO SOON:
-Write the maximum length of a string representation of QbeOperand in a constant 
-BE MINDFUL OF THE MAX LENGTH OF QBE CONSTANTS TOO
+@TODO:
+write a macro that asserts something and prints a message when the assertion fails.
+this would be a good excercise to learn a more about c macros
+
+@TODO NOW: add demandToken to the whole parser and implement demandAndGetToken
+with templates
+
+@TODO?: use the word 'size' to name variables that keep the number of elementes 
+and use 'capacity' to name variables that keep how much memory we allocated for 
+the buffer
 
 @TODO: Storing the location of things is a bad idea, it forces you to carry around unnecessary tokens,
 which are actually quite heavy.
@@ -49,9 +56,6 @@ and leave the lexer for stuff that is not a symbol or a keyword.
 example: 'case' can appear inside the identifier: 'casey' but '<=' cant appear 
 anywhere else, *maybe* we can take advantage of that
 
-@TODO:
-write a macro that asserts something and prints a message when the assertion fails.
-this would be a good excercise to learn a more about c macros
 
 @TODO:
 Use templates or whatnot to make a malloc that is easier to use, so I dont have to
@@ -100,3 +104,18 @@ has a heap pointer
 @TODO: Should we have a guy that goes thru the AST and generates both LLVM and 
 Qbe at the same time?
 For now just generate qbe
+
+@IDEA: peekTokens only inside scopes for example:
+{
+	auto peekedToken = Lexer::peekToken();
+	// Do something with token
+	consumeToken();
+}
+
+//We now need to t peek the next token so:
+{
+	auto peekedToken = Lexer::peekToken();
+	// ... 
+	consumeToken();
+}
+So we cant use the peekedtoken pointer after it is invalidaded when we call consumeToken

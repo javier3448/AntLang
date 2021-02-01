@@ -11,54 +11,86 @@ CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/AntQbeGen/qbeVal
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/Parser/astexpression.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/Parser/asttypeexpression.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/Parser/token.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/antQbeGen.cpp.o: ../../src/typedefs.h
 
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/AntQbeGen/qbeBuffer.cpp
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/AntQbeGen/qbeBuffer.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/AntQbeGen/qbeInstruction.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/AntQbeGen/qbeValue.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeBuffer.cpp.o: ../../src/typedefs.h
 
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/AntQbeGen/qbeInstruction.cpp
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/AntQbeGen/qbeInstruction.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeInstruction.cpp.o: ../../src/typedefs.h
 
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/AntQbeGen/qbeValue.cpp
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/AntQbeGen/qbeValue.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/AntQbeGen/qbeValue.cpp.o: ../../src/typedefs.h
 
 CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/Parser/astexpression.cpp
 CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/Parser/astexpression.h
 CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/Parser/asttypeexpression.h
 CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/Parser/token.h
+CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/Parser/astexpression.cpp.o: ../../src/typedefs.h
 
 CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Parser/astexpression.h
 CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Parser/aststatement.cpp
 CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Parser/aststatement.h
 CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Parser/asttypeexpression.h
 CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Parser/token.h
+CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/Parser/aststatement.cpp.o: ../../src/typedefs.h
 
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/Parser/astexpression.h
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/Parser/asttypeexpression.h
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/Parser/grapher.cpp
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/Parser/grapher.h
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/Parser/token.h
+CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/Parser/grapher.cpp.o: ../../src/typedefs.h
 
 CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/Parser/lexer.cpp
 CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/Parser/lexer.h
 CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/Parser/token.h
 CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/Parser/tokencache.h
+CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/Parser/lexer.cpp.o: ../../src/typedefs.h
 
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/astexpression.h
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/aststatement.h
@@ -68,27 +100,43 @@ CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/parser.cpp
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/parser.h
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/token.h
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Parser/tokencache.h
+CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/Parser/parser.cpp.o: ../../src/typedefs.h
 
 CMakeFiles/AntLang.dir/src/Parser/token.cpp.o: ../../src/Parser/token.cpp
 CMakeFiles/AntLang.dir/src/Parser/token.cpp.o: ../../src/Parser/token.h
+CMakeFiles/AntLang.dir/src/Parser/token.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/Parser/token.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/Parser/token.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/Parser/token.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/Parser/token.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/Parser/token.cpp.o: ../../src/typedefs.h
 
 CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/Parser/token.h
 CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/Parser/tokencache.cpp
 CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/Parser/tokencache.h
+CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/Parser/tokencache.cpp.o: ../../src/typedefs.h
 
 CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/Parser/astexpression.h
 CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/Parser/asttypeexpression.h
 CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/Parser/token.h
 CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/TypeChecker/typechecker.cpp
 CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/TypeChecker/typechecker.h
+CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/TypeChecker/typechecker.cpp.o: ../../src/typedefs.h
 
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/astexpression.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/aststatement.h
@@ -98,11 +146,20 @@ CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/lexer.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/parser.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/token.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Parser/tokencache.h
+CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Util/dynamicbuffer.h
+CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/main.cpp
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/main.cpp.o: ../../src/typedefs.h
 
+CMakeFiles/AntLang.dir/src/mystring.cpp.o: ../../src/Util/optional.h
+CMakeFiles/AntLang.dir/src/mystring.cpp.o: ../../src/Util/tupple2.h
+CMakeFiles/AntLang.dir/src/mystring.cpp.o: ../../src/Util/tupple3.h
 CMakeFiles/AntLang.dir/src/mystring.cpp.o: ../../src/mystring.cpp
 CMakeFiles/AntLang.dir/src/mystring.cpp.o: ../../src/mystring.h
 CMakeFiles/AntLang.dir/src/mystring.cpp.o: ../../src/pch.h
+CMakeFiles/AntLang.dir/src/mystring.cpp.o: ../../src/typedefs.h
 

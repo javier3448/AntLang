@@ -7,25 +7,62 @@
 #include "./lexer.h"
 
 //@TODO: 
-//consume token.... instead of getNextToken
+//consume token.... instead of consumeToken
 
 AstStatement *Parser::parseStatement()
 {
-    auto firstPeekedToken = Lexer::peekToken();
 
-    // All possible tokens that can start an statement: (if, '{', while ...)
+    // All possible tokens that can start an statement but not an expression: 
+    // (if, '{', while ...)
+    // auto firstPeekedToken = Lexer::peekToken();
     // if(){
 
     // }
     // ...
     //else{
         auto expression = parseExpression();
+
+        auto secondPeekedToken = Lexer::peekToken();
+        if(secondPeekedToken->kind == TokenKind::SemiColon){
+            Lexer::consumeToken();
+            auto result = (AstStatement*)malloc(sizeof(AstStatement));
+            result->makeSingleExpressionStatement(expression);
+            return result;
+        }
+        // else if(secondPeekedToken->kind == TokenKind::Equal){
+
+        // }
+        else{
+            cout << "Bad statment: expecting ';' or '=' after expression. Got " << (s32) secondPeekedToken->kind << "instead\n";
+            assert(false);
+        }
         // then we check if there is an equals after it, if so it is an assignment,
         // else look for ';'
     //}
-    expression = nullptr; // Just to shut up the compiler
-    assert(false);// Just to shut up the compiler
 }
+
+typedef Optional<Token> OptToken;
+// @TODO: move to header
+// Checks if next token is of kind tokenKind and returns it, if not we return empty 
+// @Improvement?: we dont gain much with this function because we still need an
+// if in the caller to handle and report the error, we could pass the error message
+// to this function and report it here or report all errors of this kind in the 
+// same way. But I think that wouldn't generate good error messages in the long 
+// term.
+// the only thing we gain with this function is that it handles the weirdness of
+// having to peek the token first and if it is what we want we have to 
+// Lexer::consumeToken
+OptToken demandToken(TokenKind tokenKind)
+{
+    auto peekToken = Lexer::peekToken();
+    if(peekToken->kind != tokenKind){
+        return OptToken::make_empty();
+    }
+    else{
+        return OptToken::make(Lexer::consumeToken());
+    }
+}
+
 
 AstExpression *Parser::parseExpression()
 {
@@ -40,22 +77,36 @@ AstExpression *Parser::parseExpression()
     // it also has typeExpression in its struct
     if(firstPeekedToken->kind == TokenKind::Key_cast)
     {
-        auto castKeyword = Lexer::getNextToken();
+        auto castKeyword = Lexer::consumeToken(); // We consume the 'cast' token
+
+        auto lessToken = demandToken(TokenKind::Less);
+        if(!lessToken){
+            cout << "Not valid cast expression: expecting '<' got " << lessToken.val.stringRepresentation() << "\n:";
+            assert(false);
+        }
+
         auto typeExpr = parseTypeExpression();
+
+        auto greaterToken = demandToken(TokenKind::Greater);
+        if(!greaterToken){
+            cout << "Not valid cast expression: expecting '>' got " << greaterToken.val.stringRepresentation() << "\n:";
+            assert(false);
+        }
+
         auto subExpr = parseExpression();
 
         auto castExpr = (AstExpression*)malloc(sizeof(AstExpression));
-        castExpr->makeCastExpression(castKeyword, typeExpr, subExpr);
+        castExpr->buildCastExpression(castKeyword, typeExpr, subExpr);
 
         return applyPrecedenceRules(castExpr);
     }
     else if(isUnaryOperatorKind(firstPeekedToken->kind))
     {
-        auto unaryOperator = Lexer::getNextToken();
+        auto unaryOperator = Lexer::consumeToken();
         auto subExpr = parseExpression();
 
         auto unaryExpr = (AstExpression*)malloc(sizeof(AstExpression));
-        unaryExpr->makeUnaryExpression(unaryOperator, subExpr);
+        unaryExpr->buildUnaryExpression(unaryOperator, subExpr);
 
         return applyPrecedenceRules(unaryExpr);
     }
@@ -64,12 +115,12 @@ AstExpression *Parser::parseExpression()
         auto leftExpr = parseMostPrecedentExpression();
 
         if(isBiOperatorKind(Lexer::peekToken()->kind)){
-            auto biOperator = Lexer::getNextToken();
+            auto biOperator = Lexer::consumeToken();
 
             auto rightExpr = parseExpression();
 
             auto binaryExpr = (AstExpression*)malloc(sizeof(AstExpression));
-            binaryExpr->makeBinaryExpression(leftExpr, biOperator, rightExpr);
+            binaryExpr->buildBinaryExpression(leftExpr, biOperator, rightExpr);
 
             return  applyPrecedenceRules(binaryExpr);
         }
@@ -87,7 +138,7 @@ AstExpression *Parser::parseMostPrecedentExpression()
         case Number:
         {
             auto result = (AstExpression*)malloc(sizeof(AstExpression));
-            result->makeNumberLiteralExpression(Lexer::getNextToken());
+            result->buildNumberLiteralExpression(Lexer::consumeToken());
 
             return result;
         }break;
@@ -95,7 +146,7 @@ AstExpression *Parser::parseMostPrecedentExpression()
         {
             //@REMEMBER: to 'consume' the left paren we just peeked before
             //parsing the expression inside
-            Lexer::getNextToken();
+            Lexer::consumeToken();
 
             AstExpression* result = parseExpression();
 
@@ -108,7 +159,7 @@ AstExpression *Parser::parseMostPrecedentExpression()
                 //all that right now, so, for now we just fucking crash :/
                 assert(false);
             }
-            Lexer::getNextToken();
+            Lexer::consumeToken();
 
             result->hasParenthesis = true;
             return result;
@@ -116,7 +167,7 @@ AstExpression *Parser::parseMostPrecedentExpression()
         default:
         {
             auto badToken = Lexer::peekToken();
-            cout << "Not a valid token to start expression: " << (s32) badToken->kind << "\n";
+            cout << "Not a valid token to start expression: " << badToken->stringRepresentation() << "\n";
             assert(false);
         }break;
     }
@@ -132,7 +183,7 @@ AstTypeExpression Parser::parseTypeExpression()
     }
     else if(isNativeType(peekedToken->kind))
     {
-        AstTypeExpression typeExpr = { ._type = Lexer::getNextToken()};
+        AstTypeExpression typeExpr = { ._type = Lexer::consumeToken()};
         return typeExpr;
     }
     cout << "Not a valid typeExpr\n";
@@ -172,7 +223,7 @@ inline s16 getBinaryOperatorPrecedence(TokenKind kind)
 
 
     default:
-        assert(false && "Binary operator not implemented yet!");
+        assert(false);
     }
 }
 
@@ -191,7 +242,7 @@ inline s16 getUnaryOperatorPrecedence(TokenKind kind)
         return 130;
 
     default:
-        assert(false && "Binary operator not implemented yet!");
+        assert(false);
     }
 }
 
@@ -263,7 +314,7 @@ AstExpression *Parser::applyPrecedenceRules(AstExpression* expression)
             // binaryExpression now has children (binaryExpr.right = oldRigth.left)
             // that might have lower precedence than itself. So we must check precedences
             // there again
-            *leftOrOnlyChildOfRight =(binaryExpression);
+            *leftOrOnlyChildOfRight = applyPrecedenceRules(binaryExpression);
 
             return oldRightChild;
         }
@@ -289,7 +340,7 @@ AstExpression *Parser::applyPrecedenceRules(AstExpression* expression)
             // binaryExpression now has children (binaryExpr.right = oldRigth.left)
             // that might have lower precedence than itself. So we must check precedences
             // there again
-            *leftOrOnlyChildOfChild =(unaryExpression);
+            *leftOrOnlyChildOfChild = applyPrecedenceRules(unaryExpression);
 
             return oldChild;
         }
@@ -315,7 +366,7 @@ AstExpression *Parser::applyPrecedenceRules(AstExpression* expression)
             // binaryExpression now has children (binaryExpr.right = oldRigth.left)
             // that might have lower precedence than itself. So we must check precedences
             // there again
-            *leftOrOnlyChildOfChild =(castExpression);
+            *leftOrOnlyChildOfChild = applyPrecedenceRules(castExpression);
 
             return oldChild;
         }

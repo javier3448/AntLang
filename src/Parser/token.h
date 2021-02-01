@@ -20,7 +20,7 @@ constexpr s16 UNI_OPERATORS_BEG = BI_OPERATORS_BEG + BI_OPERATORS_LEN;
 constexpr s16 UNI_OPERATORS_LEN = 2;
 //@BAD: bad name just because I wanted to include 'Eof' in this category
 constexpr s16 OTHER_BEG = UNI_OPERATORS_BEG + UNI_OPERATORS_LEN;
-constexpr s16 OTHER_LEN = 3;
+constexpr s16 OTHER_LEN = 4;
 
 constexpr s16 TOKEN_STRING_LITERALS_LEN = NATIVE_TYPES_LEN + KEYWORDS_LEN + BI_OPERATORS_LEN + UNI_OPERATORS_LEN + OTHER_LEN;
 
@@ -71,9 +71,10 @@ enum TokenKind : s16{
     Not,
     BitNot,
 
-  // punctuation/grouping
+  // (Other) punctuation/grouping
     LeftParen,
     RightParen,
+    SemiColon,
     Eof,
 
 // TOKENS THAT *DONT* HAVE THEIR STRING REPRESENTATIONS IN 'tokenStringLiterals'

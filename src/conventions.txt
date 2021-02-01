@@ -1,0 +1,20 @@
+@CONVENTION: for the word we will use to describe the different kinds
+of ''construction'' we can have:
+*make        return object in stack
+*new         return heap pointer
+*build       caller passes mem address to construct over
+
+// Why dont I want to use the std?
+// *it takes a *really* long time to compile
+// *it makes me lazy and I dont worry about where things live in memory. I say that
+// *because last time I just used a bunch of std::strings and vectors all over the
+//  place and I called malloc a lot more than I needed to
+// *I (mostly) don't like destructors and constructors anymore, they might make 
+//  unnecessary copies and mallocs all over the place, which presents a ton of
+//  traps for 'young players'
+
+@TODO: convention for writting Rust-like Enums
+
+some abreviations
+opt: optional
+dyn: dynamic

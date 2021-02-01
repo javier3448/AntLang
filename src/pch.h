@@ -5,9 +5,8 @@
 //But still we need a header for basically every other file with some usefull 
 //definitions and includes
 
-#include <cstdint> // int8_t, etc
-#include <cstring> // malloc, realloc, free
-#include <cstdlib>
+#include <cstring> 
+#include <cstdlib> // malloc, realloc, free ...
 #include <cstdio>
 #include <optional>
 #include <assert.h>
@@ -15,6 +14,12 @@
 //For printf debugging:
 #include <string>
 #include <iostream>
+
+#include "typedefs.h"
+
+#include "./Util/optional.h"
+#include "./Util/tupple2.h"
+#include "./Util/tupple3.h"
 
 using std::cout;
 using std::endl;
@@ -24,26 +29,6 @@ using std::endl;
 using std::malloc;
 using std::free;
 
-// Numbers from Dmitriy Compiler Programming
 
-typedef int8_t  s8;
-typedef int16_t s16;
-typedef int32_t s32;
-typedef int64_t s64;
-
-typedef uint8_t  u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef uint64_t u64;
-
-typedef uint8_t  u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef uint64_t u64;
-
-// The size of float and double is plataform dependent I guess... And I couldnt
-// easily find a way to do these typedef is a non plataform dependent. Who cares
-typedef float f32;
-typedef double f64;
 
 #endif

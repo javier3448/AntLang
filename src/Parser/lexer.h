@@ -20,7 +20,7 @@ namespace Lexer
     //points to the first unLexed character in hllSource
     extern s64 lexPointer;
 
-    // A tokenCache data structure to implement the peekToken and getNextToken
+    // A tokenCache data structure to implement the peekToken and consumeToken
     // functions
     // A 'static' array is perfectly fine for know, I doubt we will ever cache more
     // than 16 tokens
@@ -35,7 +35,7 @@ namespace Lexer
     Token* peekToken(s64 amount = 0);
 
     //'Transfers ownership' i.e. it pops it out of the cache if it is in cache
-    Token getNextToken();
+    Token consumeToken();
 
 
     // THE FOLLOWING FUNCS SHOULD NOT BE USED OUTSIDE THIS NAMESPACE

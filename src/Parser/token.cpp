@@ -43,9 +43,10 @@ const char* tokenStringLiterals [TOKEN_STRING_LITERALS_LEN] =
     "Not",
     "BitNot",
 
-  // other
+  // other (punctuation/grouping)
     "LeftParen",
     "RightParen",
+    "SemiColon",
     "Eof",
 };
 
