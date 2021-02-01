@@ -1,17 +1,8 @@
-To build this
-cd into 'build' directory
-run 'make'
+I am just trying to understand how do programming languages work by making one.
+It aims to a C like language with minor improvements like: no headers, better 
+numeric constants, type inference, and templates.
 
-If we want to change the build process
-cd into 'build' directory
-run ccmake ../
-change the configurations
+It is still in its early days, barely a parser right now.
 
-We *might* need to do this before running ccmake:
-Change the CMakeLists.txt if necessary. 
-Delete everything inside build
-
-TO BUILD FOR REAL:
-cd into build/Debug
-run: cmake -DCMAKE_BUILD_TYPE=Debug ../..
-then run: make
+The name is just temporary, this project is not related with any other 
+AntLang out there in the wild.

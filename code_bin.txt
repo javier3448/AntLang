@@ -1,6 +1,25 @@
 // This is just a file where I put code that might be useful later on 
 // but its kinda getting in the way 
 
+BUILD PROCESS:
+To generate the makefile
+cd into 'build' directory
+run `ccmake ../`
+Change the configurations if wanted.
+
+To build this
+cd into 'build' directory
+run 'make'
+We *might* need to do this before running ccmake:
+Change the CMakeLists.txt if necessary. 
+Delete everything inside build
+
+TO BUILD FOR REAL:
+cd into build/Debug
+run: cmake -DCMAKE_BUILD_TYPE=Debug ../..
+then run: make
+
+
 // @TODO: put this in a different file, we wont be using right now but it might
 // be useful later
 int simpleLexerTester()
