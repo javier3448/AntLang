@@ -10,6 +10,8 @@
 namespace Parser
 {
 	AstStatement* parseStatement();
+	AstStatement* parseDeclaration();
+	AstStatement* parseAssignmentOrSingleExprStatment();
 
     AstExpression* parseExpression();
     AstExpression* parseMostPrecedentExpression();

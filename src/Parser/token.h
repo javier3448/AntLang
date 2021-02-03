@@ -13,14 +13,14 @@
 constexpr s16 NATIVE_TYPES_BEG = 0;
 constexpr s16 NATIVE_TYPES_LEN = 10;
 constexpr s16 KEYWORDS_BEG = NATIVE_TYPES_BEG + NATIVE_TYPES_LEN;
-constexpr s16 KEYWORDS_LEN = 2;
+constexpr s16 KEYWORDS_LEN = 3;
 constexpr s16 BI_OPERATORS_BEG = KEYWORDS_BEG + KEYWORDS_LEN;
-constexpr s16 BI_OPERATORS_LEN = 16;
+constexpr s16 BI_OPERATORS_LEN = 15;
 constexpr s16 UNI_OPERATORS_BEG = BI_OPERATORS_BEG + BI_OPERATORS_LEN;
 constexpr s16 UNI_OPERATORS_LEN = 2;
 //@BAD: bad name just because I wanted to include 'Eof' in this category
 constexpr s16 OTHER_BEG = UNI_OPERATORS_BEG + UNI_OPERATORS_LEN;
-constexpr s16 OTHER_LEN = 4;
+constexpr s16 OTHER_LEN = 5;
 
 constexpr s16 TOKEN_STRING_LITERALS_LEN = NATIVE_TYPES_LEN + KEYWORDS_LEN + BI_OPERATORS_LEN + UNI_OPERATORS_LEN + OTHER_LEN;
 
@@ -49,6 +49,7 @@ enum TokenKind : s16{
     // other keywords
     Key_cast,   // can be used as unary operator
     Key_sizeof, // can be used as unary operator
+    Key_auto,
 
   // binary Operators
     LessEqual,
@@ -64,7 +65,6 @@ enum TokenKind : s16{
     Modulus,
     Less,            // can be used as punctuation/grouping
     Greater,         // can be used as punctuation/grouping
-    Equal,// @BUG @TODO: equal is *not* a binary operator
     BitOr,
     BitAnd,          // can be used as unary operator
   // unary operators
@@ -75,6 +75,7 @@ enum TokenKind : s16{
     LeftParen,
     RightParen,
     SemiColon,
+    Equal,
     Eof,
 
 // TOKENS THAT *DONT* HAVE THEIR STRING REPRESENTATIONS IN 'tokenStringLiterals'
@@ -88,6 +89,7 @@ enum TokenKind : s16{
 //compilation units or whatever
 //[!]: warning: this is used in assertions as well
 //@TODO: rename this to isBinaryOperator
+// They should all be inlined but I dont know how to do that across different source files
 bool isBiOperatorKind(TokenKind kind);
 bool isNativeType(TokenKind kind);
 bool isUnaryOperatorKind(TokenKind kind);

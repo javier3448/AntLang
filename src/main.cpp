@@ -26,11 +26,13 @@
 //because I want to eventually be able to be smarter about the way I allocate
 //strings
 
-
-#include "./Util/dynamicbuffer.h"
 int main()
 {
     Lexer::init("../../src/TestFiles/new_parser_stuff_for_playing_around_with_typechecking.test");
+
+    auto statement = Parser::parseStatement();
+
+    return 0;
 
     auto expr = Parser::parseExpression();
 

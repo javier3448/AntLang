@@ -247,6 +247,10 @@ Token Lexer::lexToken()
             advanceAndSkip();
             return TokenKind::Multiplication;
         }
+        else if(currChar == ';'){
+            advanceAndSkip();
+            return TokenKind::SemiColon;
+        }
         // cases that the resulting token can be the char itself or somthing else
         // like '<' and '<='. ie, cases that dont warrant their own state
         else if(currChar == '<'){

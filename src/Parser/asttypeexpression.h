@@ -12,7 +12,7 @@ struct AstTypeExpression;
 // it will be more complicated
 struct AstTypeExpression
 {
-	// _type.kind = (a native type | identifier)
+	// _type.kind = (a native type | keyword auto | identifier)
 	Token _type;
 };
 

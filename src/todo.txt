@@ -1,9 +1,25 @@
+@BIG BIG LEAK:
+IF A TOKEN IS RETURNED WITH Lexer::consumeToken AND WE DONT MOVE IT TO AN ASTNODE
+AND IT HAS AN UNDERLYING MyString WE LEAK MEMORY!!!
+
+@TODO SOON: BLOCKS ANY ERROR MESSAGES EFFORTS
+Dont use tokens inside the astNodes, also, be sure to delete their myString if they
+you dont move that string into an AstNode
+
+@TODO TODAY:
+Read about it and start with just writting a func: inferType(Expr) or something idfk
+DEAL WITH TYPE INFERANCE AND THE TYPER BEFORE WE DEAL WITH ERROR RECOVERY
+
+@TODO?:
+change 'form' to 'shape' ?
+
+@BIG TODO: figure out a way to precisely keep the location of astNodes, maybe a
+pointer to a list of their tokens, kinda like a literal syntax tree. 
+*(This TODO blocks all out error recovery TODOs)*
+
 @TODO:
 write a macro that asserts something and prints a message when the assertion fails.
 this would be a good excercise to learn a more about c macros
-
-@TODO NOW: add demandToken to the whole parser and implement demandAndGetToken
-with templates
 
 @TODO?: use the word 'size' to name variables that keep the number of elementes 
 and use 'capacity' to name variables that keep how much memory we allocated for 
@@ -28,7 +44,7 @@ or whatever. Useful resources when we get there:
 *[!] paper about local type inferance
         https://www.cis.upenn.edu/~bcpierce/papers/lti-toplas.pdf
 *A microsoft patent that seems interesting but I dont really understand what it is
-		https://patents.google.com/patent/US7086041B2/en
+        https://patents.google.com/patent/US7086041B2/en
 
 @TODO EVENTUALLY:
 Time the performance just to get a rough idea of how things are going later on 
@@ -107,15 +123,15 @@ For now just generate qbe
 
 @IDEA: peekTokens only inside scopes for example:
 {
-	auto peekedToken = Lexer::peekToken();
-	// Do something with token
-	consumeToken();
+    auto peekedToken = Lexer::peekToken();
+    // Do something with token
+    consumeToken();
 }
 
 //We now need to t peek the next token so:
 {
-	auto peekedToken = Lexer::peekToken();
-	// ... 
-	consumeToken();
+    auto peekedToken = Lexer::peekToken();
+    // ... 
+    consumeToken();
 }
 So we cant use the peekedtoken pointer after it is invalidaded when we call consumeToken

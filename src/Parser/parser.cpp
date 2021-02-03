@@ -1,87 +1,137 @@
 #include "./parser.h"
 
-//This is throwing linking error, I dont know why and I am very scared.
-//There must be something we are not including in cmake (maybe the macros??)
-//#include "llvm/ADT/APFloat.h"
-
 #include "./lexer.h"
 
-//@TODO: 
-//consume token.... instead of consumeToken
+// Only used for the function `demandToken` only works in the context of:
+// return the value of the token if the next token is the one we wanted or return
+// a pointer to the token that was next and its not the one we wanted.
+// @Bad names?
+struct PromisedToken{
+    bool isCompliant;
+    union {
+        Token  compliantToken;
+        Token* defiantToken;
+    };
 
+    operator bool()
+    {
+        return isCompliant;
+    };
+};
+
+PromisedToken demandToken(TokenKind tokenKind);
+
+// QdGrammar of Statement at this point:
+// Statement = Expression '=' Expression ';' (1)
+// Statement = typeExpression ident '=' Expression ';' (2)
+// Statement = Expression ';' (3)
 AstStatement *Parser::parseStatement()
 {
+    auto firstPeekedToken = Lexer::peekToken();
+    if(firstPeekedToken->kind == TokenKind::Identifier){
+        // This branch takes care of the ambiguity
 
-    // All possible tokens that can start an statement but not an expression: 
-    // (if, '{', while ...)
-    // auto firstPeekedToken = Lexer::peekToken();
-    // if(){
+        // We have an ambiguity problem here because the beginning of (2) and (3)
+        // can be an identifier, typeExpression can be a custom type and expression 
+        // can be something like: `myVariable + 10`
 
-    // }
-    // ...
-    //else{
-        auto expression = parseExpression();
+        // if peekAhead(1) is ('<' | ident) then this statement must be (2) (ie. Declaration)
+        // else it has to be (1) or (3)
 
-        auto secondPeekedToken = Lexer::peekToken();
-        if(secondPeekedToken->kind == TokenKind::SemiColon){
-            Lexer::consumeToken();
-            auto result = (AstStatement*)malloc(sizeof(AstStatement));
-            result->makeSingleExpressionStatement(expression);
-            return result;
+        // That solution is very hairy and it breaks easily if we change the language
+
+        auto secondPeekedToken = Lexer::peekToken(1);
+
+        if(secondPeekedToken->kind == TokenKind::Less || 
+           secondPeekedToken->kind == TokenKind::Identifier)
+        {
+            return parseDeclaration();
         }
-        // else if(secondPeekedToken->kind == TokenKind::Equal){
-
-        // }
         else{
-            cout << "Bad statment: expecting ';' or '=' after expression. Got " << (s32) secondPeekedToken->kind << "instead\n";
-            assert(false);
+            return parseAssignmentOrSingleExprStatment();
         }
-        // then we check if there is an equals after it, if so it is an assignment,
-        // else look for ';'
-    //}
-}
-
-typedef Optional<Token> OptToken;
-// @TODO: move to header
-// Checks if next token is of kind tokenKind and returns it, if not we return empty 
-// @Improvement?: we dont gain much with this function because we still need an
-// if in the caller to handle and report the error, we could pass the error message
-// to this function and report it here or report all errors of this kind in the 
-// same way. But I think that wouldn't generate good error messages in the long 
-// term.
-// the only thing we gain with this function is that it handles the weirdness of
-// having to peek the token first and if it is what we want we have to 
-// Lexer::consumeToken
-OptToken demandToken(TokenKind tokenKind)
-{
-    auto peekToken = Lexer::peekToken();
-    if(peekToken->kind != tokenKind){
-        return OptToken::make_empty();
+    }
+    else if(isNativeType(firstPeekedToken->kind) ||
+            firstPeekedToken->kind == TokenKind::Key_auto)
+    {
+        // Must be declaration statement
+        return parseDeclaration();
     }
     else{
-        return OptToken::make(Lexer::consumeToken());
+        return parseAssignmentOrSingleExprStatment();
+    }
+}
+
+AstStatement* Parser::parseDeclaration(){
+    auto typeExpr = parseTypeExpression();
+
+    auto ident = demandToken(TokenKind::Identifier);
+    if(!ident){
+        cout << "Not a valid declaration, expected identifier after typeExpr, got" << ident.defiantToken->stringRepresentation() << "\n";
+        assert(false);
+    }
+
+    auto equals = demandToken(TokenKind::Equal);
+    if(!equals){
+        cout << "Not a valid declaration, expected '=' after identifier, got " << equals.defiantToken->stringRepresentation() << "\n";
+        assert(false);
+    }
+
+    auto expr = parseExpression();
+
+    auto semiColon = demandToken(TokenKind::SemiColon);
+    if(!semiColon){
+        cout << "Not a valid declaration, expected ';' after expression, got " << semiColon.defiantToken->stringRepresentation() << "\n";
+        assert(false);
+    }
+
+    return new_Declaration(typeExpr, ident.compliantToken, expr);
+}
+
+AstStatement* Parser::parseAssignmentOrSingleExprStatment(){
+    auto leftExpression = parseExpression();
+
+    auto peekedToken = Lexer::peekToken();
+    if(peekedToken->kind == TokenKind::SemiColon){
+        Lexer::consumeToken();
+        return new_SingleExpressionStatement(leftExpression);
+    }
+    else if(peekedToken->kind == TokenKind::Equal){
+        // It must be assignment
+        
+        Lexer::consumeToken(); //Consume the '='
+
+        auto rightExpression = parseExpression();
+
+        auto semiColon = demandToken(TokenKind::SemiColon);
+        if(!semiColon){
+            cout << "Not a valid assignment, expected ';' after expression, got" << semiColon.defiantToken->stringRepresentation() << "\n";
+            assert(false);
+        }
+
+        return new_Assignment(leftExpression, rightExpression);
+    }
+    else{
+        cout << "Bad statment: expecting ';' or '=' after expression. Got " <<  peekedToken->stringRepresentation() << "instead\n";
+        assert(false);
     }
 }
 
 
 AstExpression *Parser::parseExpression()
 {
-    //peek token...
-    //switch them all and be recursive and all that???
-    //lastly do the operator precedence thing where we are 'recurring' back?
+    //we  do the operator precedence tree rotations when we 'recurse back' ~(when we go our way up the recursive stack)
 
-    //Token* peekedToken = Lexer::peekToken();
-
-    auto firstPeekedToken = Lexer::peekToken();
-    // special weird case because castExpression is a unaryExpression but the struct
-    // it also has typeExpression in its struct
-    if(firstPeekedToken->kind == TokenKind::Key_cast)
+    auto peekedToken = Lexer::peekToken();
+    // Special weird case because castExpression is a unaryExpression but the struct
+    // and the way we parse it is very different to any other unary expression
+    if(peekedToken->kind == TokenKind::Key_cast)
     {
         auto castKeyword = Lexer::consumeToken(); // We consume the 'cast' token
 
         auto lessToken = demandToken(TokenKind::Less);
         if(!lessToken){
-            cout << "Not valid cast expression: expecting '<' got " << lessToken.val.stringRepresentation() << "\n:";
+            cout << "Not valid cast expression: expecting '<' got " << lessToken.defiantToken->stringRepresentation() << "\n:";
             assert(false);
         }
 
@@ -89,24 +139,22 @@ AstExpression *Parser::parseExpression()
 
         auto greaterToken = demandToken(TokenKind::Greater);
         if(!greaterToken){
-            cout << "Not valid cast expression: expecting '>' got " << greaterToken.val.stringRepresentation() << "\n:";
+            cout << "Not valid cast expression: expecting '>' got " << greaterToken.defiantToken->stringRepresentation() << "\n:";
             assert(false);
         }
 
         auto subExpr = parseExpression();
 
-        auto castExpr = (AstExpression*)malloc(sizeof(AstExpression));
-        castExpr->buildCastExpression(castKeyword, typeExpr, subExpr);
+        auto castExpr = new_CastExpression(castKeyword, typeExpr, subExpr);
 
         return applyPrecedenceRules(castExpr);
     }
-    else if(isUnaryOperatorKind(firstPeekedToken->kind))
+    else if(isUnaryOperatorKind(peekedToken->kind))
     {
         auto unaryOperator = Lexer::consumeToken();
         auto subExpr = parseExpression();
 
-        auto unaryExpr = (AstExpression*)malloc(sizeof(AstExpression));
-        unaryExpr->buildUnaryExpression(unaryOperator, subExpr);
+        auto unaryExpr = new_UnaryExpression(unaryOperator, subExpr);
 
         return applyPrecedenceRules(unaryExpr);
     }
@@ -119,8 +167,7 @@ AstExpression *Parser::parseExpression()
 
             auto rightExpr = parseExpression();
 
-            auto binaryExpr = (AstExpression*)malloc(sizeof(AstExpression));
-            binaryExpr->buildBinaryExpression(leftExpr, biOperator, rightExpr);
+            auto binaryExpr = new_BinaryExpression(leftExpr, biOperator, rightExpr);
 
             return  applyPrecedenceRules(binaryExpr);
         }
@@ -134,40 +181,32 @@ AstExpression *Parser::parseExpression()
 
 AstExpression *Parser::parseMostPrecedentExpression()
 {
-    switch (Lexer::peekToken()->kind) {
+    auto peekedToken = Lexer::peekToken();
+    switch (peekedToken->kind) {
         case Number:
-        {
-            auto result = (AstExpression*)malloc(sizeof(AstExpression));
-            result->buildNumberLiteralExpression(Lexer::consumeToken());
+            return new_NumberLiteralExpression(Lexer::consumeToken());
 
-            return result;
-        }break;
+        case Identifier:
+            return new_IdentifierExpression(Lexer::consumeToken());
+
         case LeftParen:
         {
-            //@REMEMBER: to 'consume' the left paren we just peeked before
-            //parsing the expression inside
-            Lexer::consumeToken();
+            Lexer::consumeToken(); // consume leftParen token
 
             AstExpression* result = parseExpression();
 
-            auto peekedToken = Lexer::peekToken();
-            if(peekedToken->kind != RightParen){
-                //@SERIOUS TODO:
-                //Find a much much better way of reporting errors
-                cout << "Missing closing parenthesis\n";
-                //@debug: I dont want to think about how to report errors and
-                //all that right now, so, for now we just fucking crash :/
+            auto rightParen = demandToken(TokenKind::RightParen);
+            if(!rightParen){
+                cout << "Missing closing parenthesis got " << rightParen.defiantToken->stringRepresentation() << "\n";
                 assert(false);
             }
-            Lexer::consumeToken();
 
             result->hasParenthesis = true;
             return result;
         }break;
         default:
         {
-            auto badToken = Lexer::peekToken();
-            cout << "Not a valid token to start expression: " << badToken->stringRepresentation() << "\n";
+            cout << "Not a valid token to start expression: " << peekedToken->stringRepresentation() << "\n";
             assert(false);
         }break;
     }
@@ -227,8 +266,8 @@ inline s16 getBinaryOperatorPrecedence(TokenKind kind)
     }
 }
 
-// I guess they all just happened to be 130 but it wont be like that but I wont 
-// remove this code in case I decide to change the precedences
+// I guess the precedence of every unary operator just happens to be 130 
+// I wont remove this code in case I decide to change the precedences
 inline s16 getUnaryOperatorPrecedence(TokenKind kind)
 {
     switch (kind) {
@@ -252,13 +291,13 @@ inline s16 getPrecedence(AstExpression* astExpression)
         return INT16_MAX;
 
     switch (astExpression->kind) {
-    case NumberLiteral:
+    case NumberLiteralKind:
         return INT16_MAX;
-    case CastExpression:
+    case CastKind:
         return getUnaryOperatorPrecedence(astExpression->castForm._operator.kind);
-    case UnaryExpression:
+    case UnaryKind:
         return getUnaryOperatorPrecedence(astExpression->unaryForm._operator.kind);
-    case BinaryExpression:
+    case BinaryKind:
         return getBinaryOperatorPrecedence(astExpression->binaryForm._operator.kind);
     default:
         assert(false && "astExpressionKind not implemented yet!");
@@ -266,22 +305,21 @@ inline s16 getPrecedence(AstExpression* astExpression)
 }
 
 // @TODO: DONT BE LAZY ACTUALLY THINK ABOUT HOW CAN WE EFFECTIVELY DO THE BRACHING
-// NEED FOR (BinaryForm | UnaryForm | CastForm) IN applyPredenceRules, RIGHT NOW
-// DO THE TRIPLE SWITCH MORE THAN WE NEED TO, AND WE SEPARATE FUNCTION WHEN WE DONT
-// NEED TO
+// NEEDED FOR (BinaryForm | UnaryForm | CastForm) IN applyPredenceRules, RIGHT NOW
+// WE DO THE TRIPLE SWITCH MORE THAN WE NEED TO (we just do it in different funcs)
 
 // this is horrible
 
-// This function is only used in applyPrecedence rues
+// This function is only used in applyPrecedence rules
 inline AstExpression** getLeftChildOrOnlyChild(AstExpression* expr)
 {
     // its ok to use the & in these guys, because expr itself is heap allocated 
     switch(expr->kind){
-        case AstExpressionKind::BinaryExpression:
+        case AstExpressionKind::BinaryKind:
             return &(expr->binaryForm.left);
-        case AstExpressionKind::UnaryExpression:
+        case AstExpressionKind::UnaryKind:
             return &(expr->unaryForm.subExpression);
-        case AstExpressionKind::CastExpression:
+        case AstExpressionKind::CastKind:
             return &(expr->castForm.expression);
         default:
             assert(false
@@ -290,13 +328,13 @@ inline AstExpression** getLeftChildOrOnlyChild(AstExpression* expr)
     }
 }
 
-//TODO: write a faster ways to solve precedences because this is recursive and
-//visits the nodes multiple times
-            // Super gross and slow, I dont like this solution to precedence rules 
-            // anymore
+// @TODO: write faster ways to solve precedences because this is recursive and
+// visits the nodes multiple times
+// Super gross and slow, I dont like this solution to precedence rules 
+// anymore
 AstExpression *Parser::applyPrecedenceRules(AstExpression* expression)
 {
-    if(expression->kind == AstExpressionKind::BinaryExpression)
+    if(expression->kind == AstExpressionKind::BinaryKind)
     {
         auto& binaryExpression = expression;
 
@@ -322,7 +360,7 @@ AstExpression *Parser::applyPrecedenceRules(AstExpression* expression)
             return binaryExpression;
         }
     }
-    else if(expression->kind == AstExpressionKind::UnaryExpression)
+    else if(expression->kind == AstExpressionKind::UnaryKind)
     {
         auto& unaryExpression = expression;
 
@@ -337,7 +375,7 @@ AstExpression *Parser::applyPrecedenceRules(AstExpression* expression)
 
             unaryExpression->unaryForm.subExpression = *leftOrOnlyChildOfChild;
 
-            // binaryExpression now has children (binaryExpr.right = oldRigth.left)
+            // unaryExpression now has children (unary.right = leftOrOnlyChild)
             // that might have lower precedence than itself. So we must check precedences
             // there again
             *leftOrOnlyChildOfChild = applyPrecedenceRules(unaryExpression);
@@ -348,7 +386,7 @@ AstExpression *Parser::applyPrecedenceRules(AstExpression* expression)
             return unaryExpression;
         } 
     }
-    else if(expression->kind == AstExpressionKind::CastExpression)
+    else if(expression->kind == AstExpressionKind::CastKind)
     {
         auto& castExpression = expression;
 
@@ -363,7 +401,7 @@ AstExpression *Parser::applyPrecedenceRules(AstExpression* expression)
 
             castExpression->castForm.expression = *leftOrOnlyChildOfChild;
 
-            // binaryExpression now has children (binaryExpr.right = oldRigth.left)
+            // unaryExpression now has children (unary.right = leftOrOnlyChild)
             // that might have lower precedence than itself. So we must check precedences
             // there again
             *leftOrOnlyChildOfChild = applyPrecedenceRules(castExpression);
@@ -378,7 +416,30 @@ AstExpression *Parser::applyPrecedenceRules(AstExpression* expression)
     {
         assert(false && "Expression form not implemented yet in applyPrecedenceRules");
     }
-
-
-
 }
+
+
+// @Improvement?: we dont gain much with this function because we still need an
+// if in the caller to handle and report the error, we could pass the error message
+// to this function and report it here or report all errors of here But I think 
+// that wouldn't generate good error messages in the long term.
+// the only thing we gain with this function is that it handles the weirdness of
+// having to peek the token first and if it is what we want we have to 
+// Lexer::consumeToken
+PromisedToken demandToken(TokenKind tokenKind)
+{
+    auto peekedToken = Lexer::peekToken();
+    if(peekedToken->kind != tokenKind){
+        return PromisedToken{ 
+                 .isCompliant = false, 
+                 .defiantToken = peekedToken 
+             };
+    }
+    else{
+        return PromisedToken{
+                 .isCompliant = true, 
+                 .compliantToken = Lexer::consumeToken() 
+               };
+    }
+}
+

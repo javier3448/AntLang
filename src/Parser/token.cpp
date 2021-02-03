@@ -19,6 +19,7 @@ const char* tokenStringLiterals [TOKEN_STRING_LITERALS_LEN] =
             // group together all the keywords that initialy get picked up as identifier
             // by the lexer
     "sizeof", //can be used as unary as well
+    "auto", 
 
   // @TODO: write the real string representations
   // binary Operators
@@ -35,7 +36,6 @@ const char* tokenStringLiterals [TOKEN_STRING_LITERALS_LEN] =
     "Modulus",
     "Less",    // can be used as a punctuation/grouping
     "Greater", // can be used as a punctuation/grouping
-    "Equal",
     "BitOr",
     "BitAnd",
 
@@ -47,11 +47,11 @@ const char* tokenStringLiterals [TOKEN_STRING_LITERALS_LEN] =
     "LeftParen",
     "RightParen",
     "SemiColon",
+    "Equal",
     "Eof",
 };
 
 
-// Should be inlined but I dont know how to do that across different source files
 bool isUnaryOperatorKind(TokenKind kind)
 {
     return kind == TokenKind::Not || 
@@ -61,19 +61,16 @@ bool isUnaryOperatorKind(TokenKind kind)
            kind == TokenKind::Key_sizeof;
 }
 
-// Should be inlined but I dont know how to do that across different source files
 bool isBiOperatorKind(TokenKind kind)
 {
     return (s16)kind >= BI_OPERATORS_BEG &&
            (s16)kind < (BI_OPERATORS_BEG + BI_OPERATORS_LEN);
 }
 
-// Should be inlined but I dont know how to do that across different source files
 bool isNativeType(TokenKind kind)
 {
-   // @BAD: find a better, to add more tokens, it is way too much work right now
     return (s16)kind >= NATIVE_TYPES_BEG &&
-           (s16)kind < (BI_OPERATORS_BEG + NATIVE_TYPES_LEN);
+           (s16)kind < (NATIVE_TYPES_BEG + NATIVE_TYPES_LEN);
 }
 
 std::optional<TokenKind> isStringKeyword(const char* buffer, s64 length)

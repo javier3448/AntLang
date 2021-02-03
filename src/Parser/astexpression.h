@@ -18,20 +18,21 @@ struct CastExpressionForm;
 // has an operator even tho we know it will always be the keyword: 'cast' and 
 // castExpressionForm is (semantically) a unary expression as well
 enum AstExpressionKind : char{
-    NumberLiteral,
-    BinaryExpression,
-    UnaryExpression,
-    CastExpression,
+    NumberLiteralKind,
+    IdentifierKind,
+    BinaryKind,
+    UnaryKind,
+    CastKind,
 };
 
-struct BinaryExpressionForm
+struct BinaryForm
 {
     AstExpression* left;
     Token _operator;
     AstExpression* right;
 };
 
-struct UnaryExpressionForm
+struct UnaryForm
 {
     Token _operator;
     AstExpression* subExpression;
@@ -39,31 +40,43 @@ struct UnaryExpressionForm
 
 // Even tho castExpr is in a different struct, semantically, it is still a unary
 // expression
-struct CastExpressionForm
+struct CastForm
 {
     Token _operator;
     AstTypeExpression typeExpression;
     AstExpression* expression;
 };
 
+struct NumberLiteralForm
+{
+    Token number;
+};
+
+struct IdentifierForm
+{
+    Token identifier;
+};
+
 struct AstExpression
 {
     AstExpressionKind kind;
     union{
-        Token numberLiteral;
-        BinaryExpressionForm binaryForm;
-        UnaryExpressionForm unaryForm;
-        CastExpressionForm castForm;
+        NumberLiteralForm numberLiteralForm;
+        IdentifierForm identifierForm;
+        BinaryForm binaryForm;
+        UnaryForm unaryForm;
+        CastForm castForm;
     };
     //@Improvement: Find a better solution to communicate that the expression is
     //parenthesized
     //Bodgy flag that we will only use when rearrenging the tree because precedences
     bool hasParenthesis;
-
-    void buildNumberLiteralExpression(Token intLiteral);
-    void buildBinaryExpression(AstExpression* left, Token biOperator, AstExpression* right);
-    void buildUnaryExpression(Token _operator, AstExpression* subExpr);
-    void buildCastExpression(Token castKeyword, AstTypeExpression typeExpression, AstExpression *expression);
 };
+
+AstExpression* new_NumberLiteralExpression(Token intLiteral);
+AstExpression* new_IdentifierExpression(Token identifier);
+AstExpression* new_BinaryExpression(AstExpression* left, Token biOperator, AstExpression* right);
+AstExpression* new_UnaryExpression(Token _operator, AstExpression* subExpr);
+AstExpression* new_CastExpression(Token castKeyword, AstTypeExpression typeExpression, AstExpression *expression);
 
 #endif // ASTEXPRESSION_H

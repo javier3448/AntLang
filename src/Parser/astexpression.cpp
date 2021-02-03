@@ -2,34 +2,51 @@
 
 #include <limits.h>
 
-void AstExpression::buildNumberLiteralExpression(Token numberLiteral)
+AstExpression* new_NumberLiteralExpression(Token numberLiteral)
 {
-    this->kind = AstExpressionKind::NumberLiteral;
-    this->numberLiteral = numberLiteral;
-    this->hasParenthesis = false;
+	auto result = (AstExpression*)malloc(sizeof(AstExpression));
+    result->kind = AstExpressionKind::NumberLiteralKind;
+    result->numberLiteralForm.number = numberLiteral;
+    result->hasParenthesis = false;
+    return result;
 }
 
-void AstExpression::buildBinaryExpression(AstExpression *left, Token biOperator, AstExpression *right)
+AstExpression* new_IdentifierExpression(Token identifier)
 {
-    this->kind = AstExpressionKind::BinaryExpression;
-    this->binaryForm.left = left;
-    this->binaryForm._operator = biOperator;
-    this->binaryForm.right = right;
-    this->hasParenthesis = false;
+	auto result = (AstExpression*)malloc(sizeof(AstExpression));
+    result->kind = AstExpressionKind::IdentifierKind;
+    result->identifierForm.identifier= identifier;
+    result->hasParenthesis = false;
+    return result;
 }
 
-void AstExpression::buildCastExpression(Token castKeyword, AstTypeExpression typeExpression, AstExpression *expression)
+AstExpression* new_BinaryExpression(AstExpression *left, Token biOperator, AstExpression *right)
 {
-	this->kind = AstExpressionKind::CastExpression;
-    this->castForm._operator = castKeyword;
-	this->castForm.typeExpression = typeExpression;
-	this->castForm.expression = expression;
+	auto result = (AstExpression*)malloc(sizeof(AstExpression));
+    result->kind = AstExpressionKind::BinaryKind;
+    result->binaryForm.left = left;
+    result->binaryForm._operator = biOperator;
+    result->binaryForm.right = right;
+    result->hasParenthesis = false;
+    return result;
 }
 
-void AstExpression::buildUnaryExpression(Token _operator, AstExpression *subExpression)
+AstExpression* new_CastExpression(Token castKeyword, AstTypeExpression typeExpression, AstExpression *expression)
 {
-	this->kind = AstExpressionKind::UnaryExpression;
-    this->unaryForm._operator = _operator;
-	this->unaryForm._operator = _operator;
-	this->unaryForm.subExpression = subExpression;
+	auto result = (AstExpression*)malloc(sizeof(AstExpression));
+	result->kind = AstExpressionKind::CastKind;
+    result->castForm._operator = castKeyword;
+	result->castForm.typeExpression = typeExpression;
+	result->castForm.expression = expression;
+	return result;
+}
+
+AstExpression* new_UnaryExpression(Token _operator, AstExpression *subExpression)
+{
+	auto result = (AstExpression*)malloc(sizeof(AstExpression));
+	result->kind = AstExpressionKind::UnaryKind;
+    result->unaryForm._operator = _operator;
+	result->unaryForm._operator = _operator;
+	result->unaryForm.subExpression = subExpression;
+	return result;
 }

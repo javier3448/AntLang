@@ -18,3 +18,8 @@ of ''construction'' we can have:
 some abreviations
 opt: optional
 dyn: dynamic
+
+
+@Candidates for abbreviations:
+ident: identifier
+literal: lit

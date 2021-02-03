@@ -9,16 +9,19 @@ GraphvizNode Grapher::graphExpression(AstExpression *expr)
 
     std::string label;
     switch (expr->kind) {
-        case NumberLiteral:
-            label = expr->numberLiteral.string.toStdString();
+        case NumberLiteralKind:
+            label = expr->numberLiteralForm.number.string.toStdString();
         break;
-        case BinaryExpression:
+        case IdentifierKind:
+            label = expr->identifierForm.identifier.string.toStdString();
+        break;
+        case BinaryKind:
             label = std::string(expr->binaryForm._operator.stringRepresentation());
         break;
-        case CastExpression:
+        case CastKind:
             label = std::string("Cast expression ") + expr->castForm.typeExpression._type.stringRepresentation();
         break;
-        case UnaryExpression:
+        case UnaryKind:
             label = std::string(expr->unaryForm._operator.stringRepresentation());
         break;
     }
@@ -30,11 +33,15 @@ GraphvizNode Grapher::graphExpression(AstExpression *expr)
                               "];\n";
 
     switch (expr->kind) {
-        case NumberLiteral:
+        case NumberLiteralKind:
             return GraphvizNode{name, code};
         break;
 
-        case BinaryExpression:{
+        case IdentifierKind:
+            return GraphvizNode{name, code};
+        break;
+
+        case BinaryKind:{
             auto leftNode = graphExpression(expr->binaryForm.left);
             auto rightNode = graphExpression(expr->binaryForm.right);
 
@@ -46,7 +53,7 @@ GraphvizNode Grapher::graphExpression(AstExpression *expr)
             return GraphvizNode{name, code};
         }break;
 
-        case CastExpression:{
+        case CastKind:{
             auto expNode = graphExpression(expr->castForm.expression);
 
             code += expNode.code;
@@ -56,7 +63,7 @@ GraphvizNode Grapher::graphExpression(AstExpression *expr)
             return GraphvizNode{name, code};
         }break;
 
-        case UnaryExpression:{
+        case UnaryKind:{
             auto expNode = graphExpression(expr->unaryForm.subExpression);
 
             code += expNode.code;

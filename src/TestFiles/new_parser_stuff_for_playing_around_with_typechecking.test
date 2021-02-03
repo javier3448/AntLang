@@ -1,10 +1,9 @@
 //Adding type support to our basic expression
 
 //10 < 20 && 30 * 20 + 10
-cast<s64>(10) + 20 * 2 < 1;
+a = cast<s64>(10) + 20 * 2 < 1;
+// b = a + true;
 //true && false
-
-// 10.1_s8 should be semantic error
 
 // 🤔 having numbers in number type names will be awkward and hard to read if you
 // are using the 10_s64 syntax

@@ -15,7 +15,7 @@ namespace AntQbeGen
 	void init();
 	void compileTopLevelExpression(AstExpression* expr);
 	QbeOperand compileExpression(AstExpression* expr);
-	QbeOperand compileBinaryExpression(BinaryExpressionForm* biExpr);
+	QbeOperand compileBinaryExpression(BinaryForm* biExpr);
 }
 
 #endif

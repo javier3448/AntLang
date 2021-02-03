@@ -26,7 +26,7 @@ void AntQbeGen::compileTopLevelExpression(AstExpression* expr)
 QbeOperand AntQbeGen::compileExpression(AstExpression* astExpr)
 {
     switch(astExpr->kind){
-        case AstExpressionKind::NumberLiteral:
+        case AstExpressionKind::NumberLiteralKind:
         {
             return QbeOperand{
                 .kind = QbeOperandKind::ConstantKind,
@@ -37,7 +37,7 @@ QbeOperand AntQbeGen::compileExpression(AstExpression* astExpr)
             };
         }break;
 
-        case AstExpressionKind::BinaryExpression:
+        case AstExpressionKind::BinaryKind:
         {
             return compileBinaryExpression(&astExpr->binaryForm);
         }break;
@@ -46,7 +46,7 @@ QbeOperand AntQbeGen::compileExpression(AstExpression* astExpr)
     }
 }
 
-QbeOperand AntQbeGen::compileBinaryExpression(BinaryExpressionForm* biExpr)
+QbeOperand AntQbeGen::compileBinaryExpression(BinaryForm* biExpr)
 {
     auto leftVal = compileExpression(biExpr->left);
     auto rightVal = compileExpression(biExpr->right);
