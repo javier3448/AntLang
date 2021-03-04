@@ -87,9 +87,7 @@ enum TokenKind : s16{
 
 //@C++: should be inline but I dont know how to inline accross different
 //compilation units or whatever
-//[!]: warning: this is used in assertions as well
-//@TODO: rename this to isBinaryOperator
-// They should all be inlined but I dont know how to do that across different source files
+//[!] warning: this is used in assertions as well
 bool isBiOperatorKind(TokenKind kind);
 bool isNativeType(TokenKind kind);
 bool isUnaryOperatorKind(TokenKind kind);
@@ -98,10 +96,8 @@ bool isUnaryOperatorKind(TokenKind kind);
 // the std anyway, remove it when we implement our own optional
 // return the keyword or empty if str is not a keyword
 // [!!!] DOES NOT TAKE A C_STRING!!!!
-std::optional<TokenKind> isStringKeyword(const char* buffer, s64 length);
+Optional<TokenKind> isStringKeyword(const char* buffer, s64 length);
 
-//@Improvement?: this is basically a tagged union, people say that that is a
-//std::variant in c++, should we use that here???
 struct Token{
     TokenKind kind;
 

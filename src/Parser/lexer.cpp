@@ -177,7 +177,7 @@ Token makeIdentOrKeyword()
 {
     auto keyWordKind = isStringKeyword(lexBuffer.buffer, lexBuffer.length);
     if(keyWordKind)
-        return Token(keyWordKind.value());
+        return Token(keyWordKind.val);
     else
         return Token(TokenKind::Identifier, MyString::make(lexBuffer.length, lexBuffer.buffer));
 }

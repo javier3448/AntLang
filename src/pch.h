@@ -8,7 +8,6 @@
 #include <cstring> 
 #include <cstdlib> // malloc, realloc, free ...
 #include <cstdio>
-#include <optional>
 #include <assert.h>
 
 //For printf debugging:

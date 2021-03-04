@@ -73,7 +73,7 @@ bool isNativeType(TokenKind kind)
            (s16)kind < (NATIVE_TYPES_BEG + NATIVE_TYPES_LEN);
 }
 
-std::optional<TokenKind> isStringKeyword(const char* buffer, s64 length)
+Optional<TokenKind> isStringKeyword(const char* buffer, s64 length)
 {
 
     // @Bodge:

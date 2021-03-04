@@ -13,13 +13,40 @@ of ''construction'' we can have:
 //  unnecessary copies and mallocs all over the place, which presents a ton of
 //  traps for 'young players'
 
-@TODO: convention for writting Rust-like Enums
+@CONVETION: convention for writting TaggedEnums
 
-some abreviations
-opt: optional
-dyn: dynamic
+enum TaggedEnumKind { 
+    Name1Kind,
+    Name2Kind,
+    Name3Kind,
+    ...
+};
 
+struct Name1Form
+{
+	...
+};
 
-@Candidates for abbreviations:
-ident: identifier
-literal: lit
+struct Name2Form
+{
+	...
+};
+
+struct Name3Form
+{
+	...
+};
+
+...
+
+struct TaggedEnumKind
+{
+    RustEnumKind kind;
+    union{
+        Name1Form name1Form;
+        Name2Form name2Form;
+        Name3Form name3Form;
+        ...
+    };
+    ...
+};
