@@ -90,10 +90,10 @@ Optional<TokenKind> isStringKeyword(const char* buffer, s64 length)
             &&
             (memcmp(keyword, buffer, keywordLength) == 0))
         {
-            return (TokenKind)i;
+            return Optional<TokenKind>::make((TokenKind)i);
         }
     }
-    return { };
+    return Optional<TokenKind>::make_empty();
 }
 
 Token::Token()
