@@ -8,20 +8,20 @@ TokenCache::TokenCache()
 
 //void TokenCache::enqueue(Token* token)
 //{
-//    assert(occupiedSpaces < BUFFER_SIZE && "Token cache has surpassed its maximum static capacity");
+//    assert(occupiedSpaces < ArrayCount(tokenBuffer) && "Token cache has surpassed its maximum static capacity");
 
 //    std::memcpy(&(tokenBuffer[freeOffset]), token, sizeof(Token));
-//    freeOffset = (freeOffset + 1) % BUFFER_SIZE;
+//    freeOffset = (freeOffset + 1) % ArrayCount(tokenBuffer);
 
 //    occupiedSpaces++;
 //}
 
 void TokenCache::enqueue(Token token)
 {
-    assert(occupiedSpaces < BUFFER_SIZE && "Token cache has surpassed its maximum static capacity");
+    assert(occupiedSpaces < ArrayCount(tokenBuffer) && "Token cache has surpassed its maximum static capacity");
 
     std::memcpy(&(tokenBuffer[freeOffset]), &token, sizeof(Token));
-    freeOffset = (freeOffset + 1) % BUFFER_SIZE;
+    freeOffset = (freeOffset + 1) % ArrayCount(tokenBuffer);
 
     occupiedSpaces++;
 }
@@ -39,7 +39,7 @@ Token TokenCache::dequeue()
     Token* resultToken = (Token*)alloca(sizeof(Token));
 
     std::memcpy(resultToken, &(tokenBuffer[targetOffset]), sizeof(Token));
-    targetOffset = (targetOffset + 1) % BUFFER_SIZE;
+    targetOffset = (targetOffset + 1) % ArrayCount(tokenBuffer);
 
     occupiedSpaces--;
 

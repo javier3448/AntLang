@@ -23,7 +23,13 @@
 using std::cout;
 using std::endl;
 
-//TODO?: macro o algo para hacer un println sencillo para debugging
+// @TODO? add macro or something for a simple println for debugging
+
+// Stolen macros
+
+// Only works on arrays with static sizes obviously, still extremely useful
+#define ArrayCount(a) (sizeof(a)/sizeof(*(a)))
+
 
 using std::malloc;
 using std::free;

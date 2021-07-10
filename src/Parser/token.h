@@ -9,7 +9,7 @@
 // token.h
 
 // @Improvement: this is the best solution I was able to figure out to easily add more
-// keywords and operators without relying on asserts to catch bugs :/
+// keywords and operators without relying on asserts too much to catch bugs :/
 constexpr s16 NATIVE_TYPES_BEG = 0;
 constexpr s16 NATIVE_TYPES_LEN = 10;
 constexpr s16 KEYWORDS_BEG = NATIVE_TYPES_BEG + NATIVE_TYPES_LEN;
@@ -22,13 +22,13 @@ constexpr s16 UNI_OPERATORS_LEN = 2;
 constexpr s16 OTHER_BEG = UNI_OPERATORS_BEG + UNI_OPERATORS_LEN;
 constexpr s16 OTHER_LEN = 5;
 
-constexpr s16 TOKEN_STRING_LITERALS_LEN = NATIVE_TYPES_LEN + KEYWORDS_LEN + BI_OPERATORS_LEN + UNI_OPERATORS_LEN + OTHER_LEN;
+// tokenStringLiterals
+// Tokens that have a string representation that doesn't depend on their
+// value carry their string literal representation in the enum itself, example
+// tokenStringLiterals[(s16)aToken.kind]; // works for any .kind that is not: 
+// `Identifier`, `Number`, `Error`
 
-// All the tokens that a string representation that does not depend on the value
-// they carry will have their string literal representation stored in here
-// to get it:
-// tokenStringLiterals[(s16)aToken.kind]; 
-extern const char* tokenStringLiterals[TOKEN_STRING_LITERALS_LEN];
+extern const char* tokenStringLiterals[NATIVE_TYPES_LEN + KEYWORDS_LEN + BI_OPERATORS_LEN + UNI_OPERATORS_LEN + OTHER_LEN];
 
 enum TokenKind : s16{
 // TOKENS FOR WHICH ITS UNDERLYING VALUE REPRESENTS AN OFFSET TO THE ARRAY: 'tokenStringLiterals' 
@@ -112,6 +112,7 @@ struct Token{
     // mean two very different things
     MyString string;
 
+    // @TODO: get rid of all constructors, use simple functions like in astexpression.h
     //doesnt do anything, is useful becuase the TokenCache needs to
     //initialize its tokenBuffer because this is c++ (I think)
     //so we need a default constructor

@@ -1,6 +1,6 @@
 #include "./token.h"
 
-const char* tokenStringLiterals [TOKEN_STRING_LITERALS_LEN] = 
+const char* tokenStringLiterals [] = 
 {
   // native types
     "u64",
@@ -103,7 +103,7 @@ Token::Token()
 
 Token::Token(TokenKind kind)
 {
-    assert(kind > 0 && kind < TOKEN_STRING_LITERALS_LEN);
+    assert(kind > 0 && kind < ArrayCount(tokenStringLiterals));
     this->kind = kind;
 }
 
@@ -123,7 +123,7 @@ Token::Token(TokenKind kind, MyString string)
 inline bool hasStringLiteral(TokenKind kind)
 {
     return (s16)kind > 0 && 
-           (s16)kind < TOKEN_STRING_LITERALS_LEN;
+           (s16)kind < ArrayCount(tokenStringLiterals);
 }
 
 const char* Token::stringRepresentation()

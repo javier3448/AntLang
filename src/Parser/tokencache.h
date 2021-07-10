@@ -8,10 +8,7 @@
 //peeking and getting
 struct TokenCache
 {
-
-    static constexpr s8 BUFFER_SIZE = 16;
-
-    Token tokenBuffer[BUFFER_SIZE];
+    Token tokenBuffer[16];
     s8 occupiedSpaces = 0;
     //First available space. Some people call it 'rear'
     s8 freeOffset = 0;
